@@ -1,8 +1,8 @@
-body { font-family: Arial, sans-serif; text-align: center; }
-form { display: inline-block; text-align: left; }
+.body-submit { font-family: Arial, sans-serif; text-align: center; }
+.form-join { display: inline-block; text-align: left; }
 .form-group { margin-bottom: 10px; }
-label { display: block; margin-bottom: 5px; }
-input, select { width: 200px; padding: 5px; }
-.btn_submit {
+.label-join { display: block; margin-bottom: 5px; }
+.input-join { width: 200px; padding: 5px; }
+.btn-submit {
     background-color: brown; color: white; padding: 10px; border: none; cursor: pointer;
 }
