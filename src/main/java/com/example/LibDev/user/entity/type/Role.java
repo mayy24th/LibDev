@@ -10,6 +10,6 @@ public enum Role {
     USER("ROLE_USER","정회원")
     ;
 
-    private final String name;
+    private final String key;
     private final String value;
 }
