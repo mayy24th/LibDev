@@ -34,7 +34,7 @@ public class Book extends BaseEntity {
     @Column(name = "published_date")
     private LocalDate publishedDate;
 
-    @Column(unique = true, length = 20)
+    @Column(unique = true, length = 50)
     private String isbn;
 
     @Column(columnDefinition = "TEXT")
