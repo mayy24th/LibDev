@@ -31,7 +31,7 @@ public class ReviewAPIController {
     /** 리뷰 삭제 **/
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId){
-        reviewService.deleteReview(new ReviewDto.DeleteRequest(reviewId));
+        reviewService.deleteReview(new ReviewDto.DeleteRequest(reviewId), 1L);
         return ResponseEntity.noContent().build();
     }
 
