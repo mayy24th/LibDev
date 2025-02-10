@@ -2,9 +2,11 @@ package com.example.LibDev.review.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class ReviewDto {
 
@@ -12,6 +14,8 @@ public class ReviewDto {
     // TODO : content 사이즈
     @Getter
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SaveRequest {
         private Long userId;
         private Long bookId;
