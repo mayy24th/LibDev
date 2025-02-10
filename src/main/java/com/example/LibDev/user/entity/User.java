@@ -5,6 +5,8 @@ import com.example.LibDev.user.entity.type.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
@@ -23,6 +25,15 @@ public class User extends BaseEntity {
     private String name;
 
     private String phone;
+
+    /*대출가능상태*/
+    private boolean borrow_available;
+
+    /*패널티만료일*/
+    private LocalDateTime penalty_expiration;
+
+    /*탈퇴여부*/
+    private boolean withdraw;
 
     @Enumerated(EnumType.STRING)
     private Role role;
