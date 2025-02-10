@@ -1,6 +1,8 @@
 package com.example.LibDev.global.config;
 
 import com.example.LibDev.auth.filter.CustomAuthenticationFilter;
+import com.example.LibDev.auth.jwt.JwtFilter;
+import com.example.LibDev.auth.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,7 @@ public class SecurityConfig {
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationFailureHandler authenticationFailureHandler;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtProvider jwtProvider;
 
 
 
@@ -54,8 +57,10 @@ public class SecurityConfig {
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+
                 .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(accessDeniedHandler)
                         .authenticationEntryPoint(authenticationEntryPoint))
@@ -68,7 +73,7 @@ public class SecurityConfig {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration));
 
         //로그인 필터 url 설정
-        customAuthenticationFilter.setFilterProcessesUrl("/api/v1/auths/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/api/v2/auths/login");
         //실패 핸들러 등록
         customAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
         //성공 핸들러 등록
@@ -82,5 +87,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public JwtFilter jwtFilter() {
+        return new JwtFilter(jwtProvider);
     }
 }
