@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약 생성</title>
+    <script src="/js/reservation/reservation.js" defer></script>
+</head>
+<body>
+<h2>도서 예약</h2>
+<form id="reservationForm">
+    <label for="userId">사용자 ID:</label>
+    <input type="number" id="userId" name="userId" required>
+    <br>
+    <label for="bookId">도서 ID:</label>
+    <input type="number" id="bookId" name="bookId" required>
+    <br>
+    <button type="button" onclick="createReservation()">예약하기</button>
+</form>
+</body>
+</html>

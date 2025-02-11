@@ -51,7 +51,9 @@ public class SecurityConfig {
                         .requestMatchers("/",
                                 "/api/v1/users",
                                 "/users/join",
-                                "/users/login").permitAll()
+                                "/users/login",
+                                "/reservations/demo",
+                                "/api/v1/reservations/**").permitAll()
                         .requestMatchers("/admin").permitAll()
                         .anyRequest().authenticated()
                 )
