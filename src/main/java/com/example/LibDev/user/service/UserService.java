@@ -23,6 +23,9 @@ public class UserService {
                 .password(passwordEncoder.encode(joinReqDto.getPassword()))
                 .name(joinReqDto.getName())
                 .phone(joinReqDto.getPhone())
+                .borrow_available(true)
+                .penalty_expiration(null)
+                .withdraw(false)
                 .role(Role.USER)
                 .build();
 
