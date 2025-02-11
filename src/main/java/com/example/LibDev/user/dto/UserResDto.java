@@ -1,19 +1,21 @@
 package com.example.LibDev.user.dto;
 
-import com.example.LibDev.user.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
+@AllArgsConstructor
+@Builder
 public class UserResDto {
 
-    private String name;
-    private String email;
-    private String createdAt;
+    private final String name;
+    private final String email;
+    private final String phone;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
-    public UserResDto(User user) {
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.createdAt = user.getCreatedAt().toString();
-    }
 
 }
