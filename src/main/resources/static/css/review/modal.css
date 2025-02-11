@@ -1,0 +1,57 @@
+/* 모달 기본 스타일 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+/* 모달 창 스타일 */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 삭제 안내 문구 스타일 */
+.modal-content p {
+    color: gray;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* 모달 버튼 컨테이너 */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* 삭제 버튼 */
+.btn-delete-confirm {
+    background-color: saddlebrown;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* 취소 버튼 */
+.btn-cancel {
+    background-color: white;
+    color: black;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 5px;
+}
