@@ -21,33 +21,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReviewAPIController {
     private final ReviewService reviewService;
 
-    /** 리뷰 저장 **/
+    /** 한줄평 저장 **/
     @PostMapping
     public ResponseEntity<Void> saveReview(@Valid @RequestBody ReviewDto.SaveRequest saveRequestDto){
         reviewService.saveReview(saveRequestDto);
         return ResponseEntity.ok().build();
     }
 
-    /** 리뷰 삭제 **/
+    /** 한줄평 삭제 **/
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId){
-        reviewService.deleteReview(new ReviewDto.DeleteRequest(reviewId), 1L);
+        reviewService.deleteReview(new ReviewDto.DeleteRequest(reviewId), 2L);
         return ResponseEntity.noContent().build();
     }
 
-    /** 전체 리뷰 조회 **/
+    /** 전체 한줄평 조회 **/
     @GetMapping
     public ResponseEntity<List<Response>> getAllReviews() {
         return ResponseEntity.ok(reviewService.getAllReviews());
     }
 
-    /** 도서별 리뷰 조회 **/
+    /** 도서별 한줄평 조회 **/
     @GetMapping("/book/{bookId}")
     public ResponseEntity<List<ReviewDto.Response>> getReviewsByBook(@PathVariable Long bookId) {
         return ResponseEntity.ok(reviewService.getReviewsByBook(bookId));
     }
 
-    /** 유저별 리뷰 조회 **/
+    /** 유저별 한줄평 조회 **/
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ReviewDto.Response>> getReviewsByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(reviewService.getReviewsByUser(userId));

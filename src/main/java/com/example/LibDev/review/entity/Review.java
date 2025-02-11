@@ -31,16 +31,16 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO : 유저<->리뷰 연관관계 매핑 추가
+    // TODO : 유저<->한줄평 연관관계 매핑 추가
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
 
-    // TODO : 도서<->리뷰 연관관계 매핑 추가
+    // TODO : 도서<->한줄평 연관관계 매핑 추가
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", updatable = false)
     private Book book;
 
-    @Column(name = "content", length = 50)
+    @Column(name = "content", length = 100)
     private String content;
 }

@@ -24,7 +24,7 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
-    /** 리뷰 저장 **/
+    /** 한줄평 저장 **/
     @Transactional
     public void saveReview(ReviewDto.SaveRequest dto){
         User user = userRepository.findById(dto.getUserId())
@@ -42,28 +42,28 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    /** 리뷰 삭제 **/
+    /** 한줄평 삭제 **/
     @Transactional
     public void deleteReview(ReviewDto.DeleteRequest dto, Long userId){
         Review review = reviewRepository.findById(dto.getId())
-                .orElseThrow(()-> new IllegalArgumentException("리뷰 정보를 찾을 수 없습니다."));
+                .orElseThrow(()-> new IllegalArgumentException("한줄평 정보를 찾을 수 없습니다."));
 
-        // 본인이 작성한 리뷰인지 확인
+        // 본인이 작성한 한줄평인지 확인
         if(!review.getUser().getId().equals(userId)){
-            throw new IllegalArgumentException("본인이 작성한 리뷰만 삭제할 수 있습니다.");
+            throw new IllegalArgumentException("본인이 작성한 한줄평만 삭제할 수 있습니다.");
         }
 
         reviewRepository.delete(review);
     }
 
-    /** 전체 리뷰 조회 **/
+    /** 전체 한줄평 조회 **/
     public List<ReviewDto.Response> getAllReviews(){
         return reviewRepository.findAll().stream()
                 .map(reviewMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    /** 도서별 리뷰 조회 **/
+    /** 도서별 한줄평 조회 **/
     public List<ReviewDto.Response> getReviewsByBook(Long bookId){
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(()-> new IllegalArgumentException("도서 정보를 찾을 수 없습니다."));
@@ -73,7 +73,7 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    /** 유저별 리뷰 조회 **/
+    /** 유저별 한줄평 조회 **/
     public List<ReviewDto.Response> getReviewsByUser(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));

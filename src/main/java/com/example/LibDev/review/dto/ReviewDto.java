@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 public class ReviewDto {
 
-    /** 리뷰 저장 요청 DTO **/
+    /** 한줄평 저장 요청 DTO **/
     // TODO : content 사이즈
     @Getter
     @Builder
@@ -23,7 +23,7 @@ public class ReviewDto {
         private String content;
     }
 
-    /** 리뷰 삭제 요청 DTO **/
+    /** 한줄평 삭제 요청 DTO **/
     @Getter
     @Builder
     @AllArgsConstructor
@@ -31,7 +31,7 @@ public class ReviewDto {
         private Long id;
     }
 
-    /** 리뷰 수정 요청 DTO **/
+    /** 한줄평 수정 요청 DTO **/
     @Getter
     @Builder
     public static class UpdateRequest {
@@ -39,11 +39,14 @@ public class ReviewDto {
         private String content;
     }
 
-    /** 리뷰 응답 DTO **/
+    /** 한줄평 응답 DTO **/
     @Getter
     @Builder
     public static class Response {
         private Long id;
+        // TODO : 유저, 도서정보 id -> 유저, 도서 객체
+        // private User user;
+        // private Book book;
         private Long userId;
         private Long bookId;
         private String content;

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    /** 전체 리뷰 조회 **/
+    /** 전체 한줄평 조회 **/
     List<Review> findAll();
 
-    /** 도서별 리뷰 조회 **/
+    /** 도서별 한줄평 조회 **/
     List<Review> findByBook(Book book);
 
-    /** 유저별 리뷰 조회 **/
+    /** 유저별 한줄평 조회 **/
     List<Review> findByUser(User user);
 }

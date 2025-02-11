@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/review")
 public class ReviewViewController {
 
-    /** 전체 리뷰 조회 **/
+    /** 전체 한줄평 조회 **/
     @GetMapping("/list")
     public String getAllReviews() {
         return "review/list";
     }
 
-    /** 리뷰 저장 **/
+    /** 한줄평 저장 **/
     @GetMapping
     public String saveReview(){
         return "review/form";
