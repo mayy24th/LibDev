@@ -18,6 +18,7 @@ public class BaseEntity {
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt; // 생성 시간
 
+    @CreatedDate
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt; // 수정 시간
