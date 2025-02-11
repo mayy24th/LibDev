@@ -76,12 +76,17 @@ public class BookService {
                     String datetime = String.valueOf(bookData.get("datetime"));
                     String contents = String.valueOf(bookData.get("contents"));
 
+                    // 표지 이미지 (thumbnail) 가져오기
+                    String thumbnail = String.valueOf(bookData.get("thumbnail"));
+
                     // 날짜 형식 LocalDateTime으로 수정
                     DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
                     LocalDateTime publishedDate = LocalDateTime.parse(datetime, formatter);
 
-                    // 국립중앙도서관 API에서 청구기호 가져오기
-                    String callNumber = fetchCallNumber(isbn).orElse("N/A");
+                    // 국립중앙도서관 API에서 청구기호, 주제 ID 가져오기
+                    Map<String, String> libraryData = fetchLibraryData(isbn);
+                    String callNumber = libraryData.get("callNumber");
+                    Integer topicId = Integer.parseInt(libraryData.get("topicId"));
 
                     // 도서 정보 DB에 저장
                     Book book = Book.builder()
@@ -93,6 +98,8 @@ public class BookService {
                             .contents(contents)
                             .isAvailable(true)
                             .callNumber(callNumber)
+                            .thumbnail(thumbnail)
+                            .topicId(topicId)
                             .build();
 
                     bookRepository.save(book);
@@ -103,39 +110,36 @@ public class BookService {
             }
         }
     }
-    // 국립중앙도서관 API를 호출하여 청구기호 가져오기
-    private Optional<String> fetchCallNumber(String isbn) {
+
+    // 국립중앙도서관 API에서 청구기호와 주제 ID를 가져오는 메서드
+    private Map<String, String> fetchLibraryData(String isbn) {
         String url = "https://www.nl.go.kr/NL/search/openApi/search.do?key=" + LIBRARY_API_KEY
                 + "&detailSearch=true&isbnOp=isbn&isbnCode=" + isbn;
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", MediaType.APPLICATION_XML_VALUE); // XML 응답을 받도록 설정
+        headers.set("Accept", MediaType.APPLICATION_XML_VALUE);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
-
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         String responseBody = response.getBody();
+
+        Map<String, String> result = Map.of("callNumber", "N/A", "topicId", "0"); // 기본값 설정
 
         if (responseBody != null) {
             System.out.println("Library API XML Response: " + responseBody);
 
-            // 정규식으로 call_no 값 추출
-            Pattern pattern = Pattern.compile("<call_no><!\\[CDATA\\[(.*?)]]></call_no>");
-            Matcher matcher = pattern.matcher(responseBody);
-
-            if (matcher.find()) {
-                return Optional.of(matcher.group(1));
+            // 정규식으로 청구기호(call_no) 추출
+            Matcher callNumberMatcher = Pattern.compile("<call_no><!\\[CDATA\\[(.*?)]]></call_no>").matcher(responseBody);
+            if (callNumberMatcher.find()) {
+                result = Map.of("callNumber", callNumberMatcher.group(1), "topicId", "0");
             }
 
-            // CDATA가 없을 경우 일반 태그로 한 번 더 체크
-            pattern = Pattern.compile("<call_no>(.*?)</call_no>");
-            matcher = pattern.matcher(responseBody);
-            if (matcher.find()) {
-                return Optional.of(matcher.group(1));
+            // 정규식으로 주제 ID(kdc_code_1s) 추출
+            Matcher topicIdMatcher = Pattern.compile("<kdc_code_1s><!\\[CDATA\\[(\\d+)]]></kdc_code_1s>").matcher(responseBody);
+            if (topicIdMatcher.find()) {
+                result = Map.of("callNumber", result.get("callNumber"), "topicId", topicIdMatcher.group(1));
             }
         }
-
-        return Optional.empty();
+        return result;
     }
-
 }
