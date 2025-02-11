@@ -3,6 +3,7 @@ package com.example.LibDev.user.controller;
 import com.example.LibDev.global.dto.GlobalResponseDto;
 import com.example.LibDev.user.dto.JoinReqDto;
 import com.example.LibDev.user.dto.UserResDto;
+import com.example.LibDev.user.dto.UserUpdateReqDto;
 import com.example.LibDev.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,19 @@ public class UserApiController {
     public ResponseEntity<GlobalResponseDto> getUsers() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(GlobalResponseDto.success(HttpStatus.OK, userService.info()));
+    }
+
+    @PatchMapping("/api/v1/users")
+    public ResponseEntity<GlobalResponseDto> updateUser(@RequestBody UserUpdateReqDto userUpdateReqDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(GlobalResponseDto.success(HttpStatus.OK, userService.update(userUpdateReqDto)));
+    }
+
+    @PatchMapping("/api/v1/users/password")
+    public ResponseEntity<GlobalResponseDto> updateUserPassword(@RequestBody UserUpdateReqDto userUpdateReqDto) {
+        userService.updatePassword(userUpdateReqDto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(GlobalResponseDto.success(HttpStatus.OK, "비밀번호 변경 완료"));
     }
 
 
