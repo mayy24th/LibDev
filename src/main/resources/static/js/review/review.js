@@ -31,15 +31,15 @@ async function loadReviews() {
         `<div class="review-card">
             <div class="book-image">이미지 준비중입니다.</div>
             <div class="review-content-box">
-                <div class="review-header">도서ID(도서명으로 변경) ${review.bookId}</div>
+                <div class="review-header"> ${review.bookName}</div>
                 <hr class="review-divider">
                 <div class="review-row">
                     <span class="review-label">한줄서평</span>
                     <span class="review-text">${review.content}</span>
                 </div>
                 <div class="review-row">
-                    <span class="review-label">유저ID(유저명으로 변경) </span>
-                    <span class="review-author">${review.userId}</span>
+                    <span class="review-label">작성자 </span>
+                    <span class="review-author">${review.userName}</span>
                 </div>
                 <div class="review-footer">
                     <button class="btn-delete" onclick="openDeleteModal(${review.id})">삭제</button>
@@ -76,7 +76,7 @@ async function confirmDelete() {
     closeDeleteModal();
 }
 
-// ✅ 전역에서 호출 가능하도록 등록
+// 전역에서 호출 가능하도록 등록
 window.openDeleteModal = openDeleteModal;
 window.closeDeleteModal = closeDeleteModal;
 window.confirmDelete = confirmDelete;

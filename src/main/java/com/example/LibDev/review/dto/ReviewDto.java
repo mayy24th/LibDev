@@ -44,11 +44,8 @@ public class ReviewDto {
     @Builder
     public static class Response {
         private Long id;
-        // TODO : 유저, 도서정보 id -> 유저, 도서 객체
-        // private User user;
-        // private Book book;
-        private Long userId;
-        private Long bookId;
+        private String userName;
+        private String bookName;
         private String content;
         private LocalDateTime createdAt; // 생성 시간
         private LocalDateTime updatedAt; // 생성 시간
