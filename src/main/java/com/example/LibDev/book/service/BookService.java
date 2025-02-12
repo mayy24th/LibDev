@@ -88,6 +88,12 @@ public class BookService {
                     String callNumber = libraryData.get("callNumber");
                     Integer topicId = Integer.parseInt(libraryData.get("topicId"));
 
+                    // 청구기호가 "N/A"라면 저장하지 않음
+                    if ("N/A".equals(callNumber)) {
+                        System.out.println("청구기호가 없으므로 저장하지 않습니다: " + title);
+                        continue; // 현재 루프를 건너뛰고 다음 책으로 진행
+                    }
+
                     // 도서 정보 DB에 저장
                     Book book = Book.builder()
                             .title(title)
