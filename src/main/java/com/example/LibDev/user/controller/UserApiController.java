@@ -39,5 +39,12 @@ public class UserApiController {
                 .body(GlobalResponseDto.success(HttpStatus.OK, "비밀번호 변경 완료"));
     }
 
+    @GetMapping("/api/v1/users/check-email/{email}")
+    public ResponseEntity<GlobalResponseDto> checkEmailDuplication(@PathVariable String email) {
+        userService.checkEmailDuplication(email);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(GlobalResponseDto.success(HttpStatus.OK, true));
+    }
+
 
 }
