@@ -47,4 +47,6 @@ public class User extends BaseEntity {
 
     public void updatePassword(String password) {this.password = password;}
 
+    public void updateBorrowAvailable(Boolean borrow_available) {this.borrow_available = borrow_available;}
+
 }
