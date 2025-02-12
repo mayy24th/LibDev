@@ -10,8 +10,8 @@ public class ReviewMapper {
     public ReviewDto.Response toDto(Review review) {
         return ReviewDto.Response.builder()
                 .id(review.getId())
-                .userId(review.getUserId())
-                .bookId(review.getBookId())
+                .userName(review.getUser().getName())
+                .bookName(review.getBook().getTitle())
                 .content(review.getContent())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
