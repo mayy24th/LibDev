@@ -6,7 +6,7 @@
     <title>한줄평 목록</title>
     <link rel="stylesheet" href="/css/review/review.css">
     <link rel="stylesheet" href="/css/review/modal.css">
-    <script defer src="/js/review/review.js"></script>
+    <script type="module" defer src="/js/review/review.js"></script>
 </head>
 <body class="body-submit">
 <div class="title-container">
@@ -14,21 +14,32 @@
 </div>
 
 <div class="button-container">
-    <button class="btn-add-review" onclick="location.href='/review/new'">한줄평 등록하기</button>
+    <button class="btn-modify-review" id="openModifyModalBtn">한줄평 등록하기</button>
+</div>
+
+<div id="modifyModal" class="modal-overlay">
+    <div class="modal-modify">
+        <h3 id="modalTitle">한줄평 작성</h3>
+        <textarea id="reviewContent" class="review-textarea" placeholder="한줄평을 입력하세요"></textarea>
+        <div class="modal-buttons">
+            <button class="btn-submit" id="submitModifyBtn">작성하기</button>
+            <button class="btn-cancel" id="closeModifyModalBtn">취소</button>
+        </div>
+    </div>
 </div>
 
 <div id="reviewContainer" class="review-container">
-    <!-- JavaScript에서 한줄평 목록 삽입 -->
+    <!-- 한줄평 목록 삽입 -->
 </div>
 
 <!-- 삭제 확인 모달 -->
 <div id="deleteModal" class="modal-overlay">
-    <div class="modal-content">
+    <div class="modal-delete">
         <h3>글을 삭제하시겠습니까?</h3>
         <p>삭제된 글은 복구가 불가능합니다.</p>
         <div class="modal-buttons">
-            <button class="btn-delete-confirm" onclick="confirmDelete()">삭제</button>
-            <button class="btn-cancel" onclick="closeDeleteModal()">취소</button>
+            <button class="btn-delete-confirm" id="confirmDeleteBtn">삭제</button>
+            <button class="btn-cancel" id="closeDeleteModalBtn">취소</button>
         </div>
     </div>
 </div>

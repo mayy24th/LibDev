@@ -27,11 +27,11 @@ public class ReviewService {
     /** 한줄평 저장 **/
     @Transactional
     public void saveReview(ReviewDto.SaveRequest dto){
-        User user = userRepository.findById(dto.getUserId())
+        // TODO : 1L -> dto.getUserId(), dto.getBookId()로 수정
+        User user = userRepository.findById(1L)
                 .orElseThrow(()-> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
-        Book book = bookRepository.findById(dto.getBookId())
+        Book book = bookRepository.findById(1L)
                 .orElseThrow(()-> new IllegalArgumentException("도서 정보를 찾을 수 없습니다."));
-
 
         Review review = Review.builder()
                 .content(dto.getContent())
@@ -55,6 +55,19 @@ public class ReviewService {
 
         reviewRepository.delete(review);
     }
+
+    /** 한줄평 수정 **/
+    @Transactional
+    public void updateReview(ReviewDto.UpdateRequest dto, Long reviewId){
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(()-> new IllegalArgumentException("한줄평 정보를 찾을 수 없습니다."));
+
+        // TODO : 본인이 작성한 한줄평인지 확인하는 로직 추가
+
+        review.updateContent(dto.getContent());
+        review.setUpdatedAt();
+    }
+
 
     /** 전체 한줄평 조회 **/
     public List<ReviewDto.Response> getAllReviews(){

@@ -125,8 +125,18 @@
     border-radius: 5px;
 }
 
+/* 수정 버튼 */
+.btn-edit {
+    background-color: white;
+    color: black;
+    padding: 7px 12px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
 /* 한줄평 등록 버튼 */
-.btn-add-review {
+.btn-modify-review {
     background-color: saddlebrown;
     color: white;
     padding: 10px 15px;
@@ -141,6 +151,6 @@
 }
 
 /* 버튼 호버 효과 */
-.btn-add-review:hover {
+.btn-modify-review:hover {
     background-color: saddlebrown;
 }
