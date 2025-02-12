@@ -46,4 +46,6 @@ public class Book extends BaseEntity {
     @Column(name = "call_number", length = 50)
     private String callNumber; // 청구기호
 
+    public void updateIsAvailable(Boolean isAvailable) {this.isAvailable = isAvailable;}
+
 }
