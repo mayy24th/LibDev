@@ -1,6 +1,7 @@
 package com.example.LibDev.auth.jwt;
 
 import com.example.LibDev.auth.dto.TokenResDto;
+import com.example.LibDev.global.service.RedisTokenService;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtProvider {
     private final UserDetailsService userDetailsService;
+    private final RedisTokenService redisTokenService;
 
     @Value("${spring.jwt.secret-key}")
     private String secretKey;
@@ -78,6 +80,9 @@ public class JwtProvider {
 
     public boolean isValidToken(String token) {
         try{
+            if(isBlacklisted(token)){
+                return false;
+            }
             Claims claims = getClaimsFromToken(token);
             return !claims.getExpiration().before(new Date());
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException e) {
@@ -95,5 +100,9 @@ public class JwtProvider {
 
     public long getTokenValidTime(String token){
         return getClaimsFromToken(token).getExpiration().getTime();
+    }
+
+    private boolean isBlacklisted(String token){
+        return redisTokenService.hasKey(token);
     }
 }
