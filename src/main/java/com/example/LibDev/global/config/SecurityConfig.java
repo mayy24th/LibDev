@@ -81,7 +81,7 @@ public class SecurityConfig {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration));
 
         //로그인 필터 url 설정
-        customAuthenticationFilter.setFilterProcessesUrl("/api/v2/auths/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/api/v3/auths/login");
         //실패 핸들러 등록
         customAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
         //성공 핸들러 등록
