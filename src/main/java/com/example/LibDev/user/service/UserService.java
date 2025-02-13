@@ -1,5 +1,7 @@
 package com.example.LibDev.user.service;
 
+import com.example.LibDev.global.exception.CustomErrorCode;
+import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.user.dto.JoinReqDto;
 import com.example.LibDev.user.dto.UserResDto;
 import com.example.LibDev.user.dto.UserUpdateReqDto;
@@ -85,4 +87,12 @@ public class UserService {
         String newEncodePassword = passwordEncoder.encode(userUpdateReqDto.getPassword());
         user.updatePassword(newEncodePassword);
     }
+
+    /*이메일 중복 체크*/
+    public void checkEmailDuplication(String email) {
+        if(userRepository.existsByEmail(email)) {
+            throw new CustomException(CustomErrorCode.DUPLICATE_EMAIL);
+        }
+    }
+
 }
