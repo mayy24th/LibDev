@@ -27,13 +27,11 @@ public class Borrow extends BaseEntity  {
 
     private boolean overdue; // 연체 여부
 
-    @Builder.Default
-    private int overdueDays = 0; // 연체일 수(초기값 0)
+    private int overdueDays; // 연체일 수(초기값 0)
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Builder.Default
-    private Status status = Status.BORROWED; // 대출 상태
+    private Status status; // 대출 상태
 
     @Column(name = "book_id", nullable = false)
     private Long bookId;
@@ -41,4 +39,6 @@ public class Borrow extends BaseEntity  {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public void extendDuedate(LocalDateTime dueDate) {this.dueDate = dueDate;}
 }
