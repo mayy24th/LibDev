@@ -1,27 +1,42 @@
-async function submitForm() {
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const domain = document.getElementById('emailDomain').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const phone = `${document.getElementById('phone1').value}-${document.getElementById('phone2').value}-${document.getElementById('phone3').value}`;
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("joinForm");
 
-    /*임시 validation*/
-    if (!name || !email || !domain || !password || !confirmPassword) {
-        alert('모든 필드를 입력하세요.');
-        return;
-    }
-    if (password !== confirmPassword) {
-        alert('비밀번호가 일치하지 않습니다.');
-        return;
-    }
-    const fullEmail = `${email}@${domain}`;
-    const response = await fetch('/api/v1/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email: fullEmail, password, phone })
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        const formData = new FormData(form);
+        const name = formData.get("name");
+        const email = formData.get("email");
+        const domain = formData.get("emailDomain");
+        const password = formData.get("password");
+        const confirmPassword = formData.get("confirmPassword");
+        const phone = `${formData.get("phone1")}-${formData.get("phone2")}-${formData.get("phone3")}`;
+
+        // 필수 입력값 체크
+        if (!name || !email || !domain || !password || !confirmPassword) {
+            alert("모든 필드를 입력하세요.");
+            return;
+        }
+
+        // 비밀번호 확인 체크
+        if (password !== confirmPassword) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        const fullEmail = `${email}@${domain}`;
+        try {
+            const response = await fetch("/api/v1/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email: fullEmail, password, phone }),
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        } catch (error) {
+            alert("회원가입 중 오류가 발생했습니다.");
+            console.error(error);
+        }
     });
-
-    const result = await response.json();
-    alert(result.message);
-}
+});
