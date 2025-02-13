@@ -44,6 +44,9 @@ public class Book extends BaseEntity {
     @Column(name = "call_number", length = 50)
     private String callNumber; // 청구기호
 
+    @Column(name = "thumbnail", length = 500)
+    private String thumbnail; // 도서 표지 (썸네일 URL)
+
     public void updateIsAvailable(Boolean isAvailable) {this.isAvailable = isAvailable;}
 
 }
