@@ -12,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /*로그인되어 있는 회원 검색*/
     User findLoginUserByEmail(String email);
 
+    /*이메일이 존재하는 검색*/
+    boolean existsByEmail(String email);
+
 }
