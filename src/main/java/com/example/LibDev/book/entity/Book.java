@@ -17,10 +17,6 @@ public class Book extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookId;
 
-    // Todo 주제 테이블 연결
-//    @ManyToOne
-//    @JoinColumn(name = "topic_id", nullable = false)
-//    private Topic topic;
     @Column(name = "topic_id", nullable = false)
     private Integer topicId;
 
@@ -48,8 +44,7 @@ public class Book extends BaseEntity {
     @Column(name = "call_number", length = 50)
     private String callNumber; // 청구기호
 
-    // 도서 표지 (썸네일 URL)
     @Column(name = "thumbnail", length = 500)
-    private String thumbnail;
+    private String thumbnail; // 도서 표지 (썸네일 URL)
 
 }
