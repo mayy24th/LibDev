@@ -6,6 +6,8 @@ import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
+import com.example.LibDev.reservation.entity.type.ReservationStatus;
+import com.example.LibDev.reservation.repository.ReservationRepository;
 import com.example.LibDev.user.entity.User;
 import com.example.LibDev.borrow.repository.BorrowRepository;
 import com.example.LibDev.user.repository.UserRepository;
@@ -23,6 +25,7 @@ public class BorrowService {
     private final BorrowRepository borrowRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final ReservationRepository reservationRepository;
 
     private static final int MAX_BORROW_LIMIT = 5; // 최대 대출 가능 권 수
 
@@ -40,6 +43,8 @@ public class BorrowService {
                 .returnDate(null)
                 .extended(false)
                 .overdue(false)
+                .overdueDays(0)
+                .status(Status.BORROWED)
                 .bookId(bookId)
                 .user(user)
                 .build();
@@ -59,6 +64,25 @@ public class BorrowService {
             user.updateBorrowAvailable(false);
             userRepository.save(user);
         }
+    }
+
+    /* 대출 기간 연장 */
+    @Transactional
+    public void extendReturnDate(Long borrowId) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+
+        Borrow borrow = borrowRepository.findById(borrowId).orElseThrow(() -> new CustomException(CustomErrorCode.BORROW_NOT_FOUND));
+        Book book = bookRepository.findById(borrow.getBookId()).orElseThrow(() -> new RuntimeException("해당 책이 존재하지 않습니다."));
+
+        // 예약자 존재 여부 확인
+        if (reservationRepository.existsByBookAndStatus(book, ReservationStatus.WAITING)) {
+            throw new CustomException(CustomErrorCode.EXTEND_FORBIDDEN);
+        }
+
+        checkMemberBorrowingStatus(user); // 회원 대출 가능 여부 확인
+
+        borrow.extendDuedate(borrow.getDueDate().plusDays(7));
     }
 
     /* 회원 대출 가능 여부 검사 */
