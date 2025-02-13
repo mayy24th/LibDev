@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (event) => {
         event.preventDefault(); // 기본 폼 제출 방지
 
+        // 기존 에러 메시지 초기화
+        clearValidationErrors();
+
         const formData = new FormData(form);
         const name = formData.get("name");
         const email = formData.get("email");
@@ -33,6 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             const result = await response.json();
+
+            if(!response.ok){
+                if(result.data){
+                    showValidationErrors(result.data)
+                } else {
+                    alert(result.message)
+                }
+            }
+
             alert(result.message);
         } catch (error) {
             alert("회원가입 중 오류가 발생했습니다.");
@@ -40,3 +52,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+function showValidationErrors(errors) {
+    Object.keys(errors).forEach(field => {
+        const inputField = document.getElementById(field);
+
+        // 에러 메시지 요소 추가
+        const errorMessage = document.createElement("div");
+        errorMessage.className = "error-message";
+        errorMessage.innerText = errors[field];
+        inputField.classList.add("error-border"); // 스타일 추가
+        inputField.parentNode.appendChild(errorMessage);
+
+    });
+}
+
+function clearValidationErrors() {
+    document.querySelectorAll(".error-message").forEach(el => el.remove());
+    document.querySelectorAll(".error-border").forEach(el => el.classList.remove("error-border"));
+}
