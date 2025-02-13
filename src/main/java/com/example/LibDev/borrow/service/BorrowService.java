@@ -43,6 +43,8 @@ public class BorrowService {
                 .returnDate(null)
                 .extended(false)
                 .overdue(false)
+                .overdueDays(0)
+                .status(Status.BORROWED)
                 .bookId(bookId)
                 .user(user)
                 .build();
