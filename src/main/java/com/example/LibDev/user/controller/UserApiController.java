@@ -5,10 +5,14 @@ import com.example.LibDev.user.dto.JoinReqDto;
 import com.example.LibDev.user.dto.UserResDto;
 import com.example.LibDev.user.dto.UserUpdateReqDto;
 import com.example.LibDev.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,8 +20,15 @@ public class UserApiController {
     private final UserService userService;
 
     @PostMapping("/api/v1/users")
-    public ResponseEntity<UserResDto> join(@RequestBody JoinReqDto reqDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.join(reqDto));
+    public ResponseEntity<GlobalResponseDto> join(@Valid @RequestBody JoinReqDto reqDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            HashMap<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(fieldError -> {
+                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+            });
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(GlobalResponseDto.fail(HttpStatus.BAD_REQUEST, errors));
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(GlobalResponseDto.success(HttpStatus.CREATED,userService.join(reqDto)));
     }
 
     @GetMapping("/api/v1/users")

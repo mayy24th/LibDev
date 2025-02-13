@@ -27,13 +27,13 @@ public class GlobalResponseDto<T> {
     }
 
     /*실패 응답*/
-    public static <T> GlobalResponseDto<T> fail(HttpStatus status, String message) {
+    public static <T> GlobalResponseDto<T> fail(HttpStatus status, T error) {
         return GlobalResponseDto.<T>builder()
                 .success(false)
                 .code(status.value())
                 .status(status.name())
-                .message(message)
-                .data(null)
+                .message("요청 실페")
+                .data(error)
                 .build();
     }
 
