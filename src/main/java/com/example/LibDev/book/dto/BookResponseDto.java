@@ -1,33 +1,20 @@
 package com.example.LibDev.book.dto;
 
-import com.example.LibDev.book.entity.Book;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import java.time.LocalDate;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookResponseDto {
-    private Long bookId;
-    private String title;
-    private String author;
-    private String publisher;
-    private LocalDate publishedDate;
-    private String isbn;
-    private String contents;
-    private String callNumber;
-    private Boolean isAvailable;
+    private String title;        // 도서 제목
+    private String author;       // 저자
+    private String publisher;    // 출판사
+    private String thumbnail;    // 썸네일 이미지 URL
+    private String publishedDate; // 발행일
+    private String isbn;         // ISBN
+    private String contents;     // 도서 소개
 
-    // Entity -> DTO 변환
-    public BookResponseDto(Book book) {
-        this.bookId = book.getBookId();
-        this.title = book.getTitle();
-        this.author = book.getAuthor();
-        this.publisher = book.getPublisher();
-        this.publishedDate = book.getPublishedDate();
-        this.isbn = book.getIsbn();
-        this.contents = book.getContents();
-        this.isAvailable = book.getIsAvailable();
-        this.callNumber = book.getCallNumber();
-    }
+
 }

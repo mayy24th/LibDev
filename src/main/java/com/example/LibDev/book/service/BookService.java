@@ -13,11 +13,13 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -118,7 +120,7 @@ public class BookService {
     }
 
     // 국립중앙도서관 API에서 청구기호와 주제 ID를 가져오는 메서드
-    private Map<String, String> fetchLibraryData(String isbn) {
+    public Map<String, String> fetchLibraryData(String isbn) {
         String url = "https://www.nl.go.kr/NL/search/openApi/search.do?key=" + LIBRARY_API_KEY
                 + "&detailSearch=true&isbnOp=isbn&isbnCode=" + isbn;
 
@@ -148,4 +150,50 @@ public class BookService {
         }
         return result;
     }
+
+
+    // 도서 등록 페이지에서 도서 검색
+    public List<BookResponseDto> searchBooksFromKakao(String query) {
+        String url = "https://dapi.kakao.com/v3/search/book?query=" + query;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        headers.set("Authorization", KAKAO_API_KEY);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+        Map<String, Object> responseBody = response.getBody();
+
+        if (responseBody != null && responseBody.containsKey("documents")) {
+            List<Map<String, Object>> books = (List<Map<String, Object>>) responseBody.get("documents");
+
+            return books.stream().map(bookData -> new BookResponseDto(
+                    String.valueOf(bookData.get("title")),
+                    ((List<String>) bookData.get("authors")).stream().collect(Collectors.joining(", ")),
+                    String.valueOf(bookData.get("publisher")),
+                    String.valueOf(bookData.get("thumbnail")),
+                    String.valueOf(bookData.get("datetime")),   // 발행일
+                    extractPrimaryIsbn(String.valueOf(bookData.get("isbn"))), // ISBN 첫 번째 값만 저장
+                    String.valueOf(bookData.get("contents"))   // 도서 소개
+            )).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
+    // ISBN 공백 기준 앞부분만 추출하는 메서드
+    private String extractPrimaryIsbn(String isbn) {
+        return Optional.ofNullable(isbn)
+                .filter(s -> !s.trim().isEmpty())
+                .map(s -> s.split(" ")[0]) // 공백 기준 첫 번째 값만 사용
+                .orElse("정보 없음");
+    }
+
+    @Transactional
+    public void registerBook(BookRequestDto bookRequestDto) {
+        // BookRequestDto를 Book 엔티티로 변환
+        Book book = bookRequestDto.toEntity();
+
+        // 도서 저장
+        bookRepository.save(book);
+    }
+
 }
