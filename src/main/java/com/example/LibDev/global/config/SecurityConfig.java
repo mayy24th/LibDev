@@ -1,8 +1,11 @@
 package com.example.LibDev.global.config;
 
 import com.example.LibDev.auth.filter.CustomAuthenticationFilter;
+import com.example.LibDev.auth.filter.CustomLogoutFilter;
 import com.example.LibDev.auth.jwt.JwtFilter;
 import com.example.LibDev.auth.jwt.JwtProvider;
+import com.example.LibDev.auth.service.AuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +24,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @RequiredArgsConstructor
 @Configuration
@@ -31,6 +35,8 @@ public class SecurityConfig {
     private final AuthenticationFailureHandler authenticationFailureHandler;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtProvider jwtProvider;
+    private final AuthService authservice;
+    private final ObjectMapper objectMapper;
 
 
 
@@ -60,6 +66,7 @@ public class SecurityConfig {
 
                 .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomLogoutFilter(authservice,objectMapper), LogoutFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(accessDeniedHandler)
