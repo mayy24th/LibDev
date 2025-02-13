@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -171,7 +172,7 @@ public class BookService {
                     ((List<String>) bookData.get("authors")).stream().collect(Collectors.joining(", ")),
                     String.valueOf(bookData.get("publisher")),
                     String.valueOf(bookData.get("thumbnail")),
-                    String.valueOf(bookData.get("datetime")),   // 발행일
+                    formatPublishedDate(String.valueOf(bookData.get("datetime"))),   // 발행일
                     extractPrimaryIsbn(String.valueOf(bookData.get("isbn"))), // ISBN 첫 번째 값만 저장
                     String.valueOf(bookData.get("contents"))   // 도서 소개
             )).collect(Collectors.toList());
@@ -185,6 +186,17 @@ public class BookService {
                 .filter(s -> !s.trim().isEmpty())
                 .map(s -> s.split(" ")[0]) // 공백 기준 첫 번째 값만 사용
                 .orElse("정보 없음");
+    }
+
+    // 발행일 형식 변경
+    private String formatPublishedDate(String dateTime) {
+        try {
+            OffsetDateTime offsetDateTime = OffsetDateTime.parse(dateTime);
+            LocalDate localDate = offsetDateTime.toLocalDate();
+            return localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } catch (Exception e) {
+            return dateTime;
+        }
     }
 
     @Transactional
