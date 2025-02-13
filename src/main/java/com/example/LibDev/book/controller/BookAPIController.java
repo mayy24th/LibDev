@@ -5,6 +5,7 @@ import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class BookAPIController {
     }*/
 
     // Kakao API에서 도서 정보를 검색해 DB에 등록하는 API
-    @PostMapping("/register")
+    @PostMapping(value = "/register", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> registerBook(@RequestParam("query") String query) {
         try {
             bookService.saveBookFromKakao(query);
