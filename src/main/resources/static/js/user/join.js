@@ -2,7 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("joinForm");
 
     form.addEventListener("submit", async (event) => {
-        event.preventDefault(); // 기본 폼 제출 방지
+        event.preventDefault();
+
+        if(!isEmailChecked){
+            alert("이메일 중복 체크를 진행해주세요.");
+            return;
+        }
 
         // 기존 에러 메시지 초기화
         clearValidationErrors();
@@ -39,9 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if(!response.ok){
                 if(result.data){
-                    showValidationErrors(result.data)
+                    showValidationErrors(result.data);
                 } else {
-                    alert(result.message)
+                    alert(result.message);
                 }
             }
 
@@ -61,7 +66,7 @@ function showValidationErrors(errors) {
         const errorMessage = document.createElement("div");
         errorMessage.className = "error-message";
         errorMessage.innerText = errors[field];
-        inputField.classList.add("error-border"); // 스타일 추가
+        inputField.classList.add("error-border");
         inputField.parentNode.appendChild(errorMessage);
 
     });

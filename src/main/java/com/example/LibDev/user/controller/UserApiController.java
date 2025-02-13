@@ -2,7 +2,6 @@ package com.example.LibDev.user.controller;
 
 import com.example.LibDev.global.dto.GlobalResponseDto;
 import com.example.LibDev.user.dto.JoinReqDto;
-import com.example.LibDev.user.dto.UserResDto;
 import com.example.LibDev.user.dto.UserUpdateReqDto;
 import com.example.LibDev.user.service.UserService;
 import jakarta.validation.Valid;
@@ -42,6 +41,7 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(GlobalResponseDto.success(HttpStatus.OK, userService.update(userUpdateReqDto)));
     }
+    //TODO: 하드 코딩으로 넣어진 문구는 message.properties 적용할 것
 
     @PatchMapping("/api/v1/users/password")
     public ResponseEntity<GlobalResponseDto> updateUserPassword(@RequestBody UserUpdateReqDto userUpdateReqDto) {
@@ -54,7 +54,7 @@ public class UserApiController {
     public ResponseEntity<GlobalResponseDto> checkEmailDuplication(@PathVariable String email) {
         userService.checkEmailDuplication(email);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(GlobalResponseDto.success(HttpStatus.OK, true));
+                .body(GlobalResponseDto.success(HttpStatus.OK, "사용 가능한 이메일입니다."));
     }
 
 

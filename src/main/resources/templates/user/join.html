@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
     <link rel="stylesheet" href="/css/user/join.css">
+    <script defer src="/js/user/duplicateCheckEmail.js"></script>
     <script defer src="/js/user/join.js"></script>
 </head>
 <body class="body-submit">
@@ -23,7 +24,7 @@
             <option value="naver.com">naver.com</option>
             <option value="daum.net">daum.net</option>
         </select>
-        <button class="btn-submit" type="button">중복체크</button>
+        <button class="btn-submit" id= "btn-check" type="button">중복체크</button>
     </div>
     <div class="form-group">
         <label class="label-join" for="password">비밀번호</label>
