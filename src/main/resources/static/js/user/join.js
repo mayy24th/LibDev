@@ -42,13 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const result = await response.json();
 
-            if(!response.ok){
-                if(result.data){
+                if(response.ok){
                     showValidationErrors(result.data);
                 } else {
                     alert(result.message);
                 }
-            }
 
             alert(result.message);
         } catch (error) {
