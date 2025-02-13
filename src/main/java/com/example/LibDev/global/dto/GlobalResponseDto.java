@@ -32,7 +32,7 @@ public class GlobalResponseDto<T> {
                 .success(false)
                 .code(status.value())
                 .status(status.name())
-                .message("요청 실페")
+                .message("요청 실패")
                 .data(error)
                 .build();
     }
