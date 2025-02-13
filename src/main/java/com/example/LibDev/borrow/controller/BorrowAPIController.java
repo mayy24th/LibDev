@@ -16,4 +16,9 @@ public class BorrowAPIController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/api/v1/extend/{borrowId}")
+    public ResponseEntity<?> extend(@PathVariable Long borrowId) {
+        borrowService.extendReturnDate(borrowId);
+        return ResponseEntity.ok().build();
+    }
 }
