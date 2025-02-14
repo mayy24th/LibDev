@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/",
                                 "/api/v1/users",
-                                "/api/v1/users/check-email/**"),
+                                "/api/v1/users/check-email/**",
                                 "/reservations/**",
                                 "/api/v1/reservations/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")

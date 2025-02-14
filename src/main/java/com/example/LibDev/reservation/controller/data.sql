@@ -21,19 +21,29 @@ CREATE TABLE user (
                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- BaseEntity의 updatedAt과 매핑
 );
 
-CREATE TABLE book (
-                      book_id BIGINT PRIMARY KEY AUTO_INCREMENT,            -- 엔티티의 bookId와 매핑
-                      title VARCHAR(255) NOT NULL,                          -- 책 제목
-                      author VARCHAR(100) NOT NULL,                         -- 저자 이름
-                      publisher VARCHAR(100) NOT NULL,                      -- 출판사
-                      published_date DATE,                                   -- 출판 날짜
-                      isbn VARCHAR(50) UNIQUE,                              -- ISBN 코드
-                      contents TEXT,                                        -- 책 내용 요약
-                      is_available BOOLEAN NOT NULL DEFAULT TRUE,           -- 대출 가능 여부
-                      call_number VARCHAR(50),                              -- 청구 기호
-                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,       -- 생성 날짜 (BaseEntity의 createdAt)
-                      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 수정 날짜 (BaseEntity의 updatedAt)
+CREATE TABLE topic (
+                       topic_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                       topic_name VARCHAR(255) NOT NULL
 );
+
+
+CREATE TABLE book (
+                      book_id BIGINT PRIMARY KEY AUTO_INCREMENT,  -- 엔티티의 bookId와 매핑
+                      topic_id BIGINT NOT NULL,                   -- 주제 ID (외래키)
+                      title VARCHAR(255) NOT NULL,                -- 책 제목
+                      author VARCHAR(100) NOT NULL,               -- 저자 이름
+                      publisher VARCHAR(100) NOT NULL,            -- 출판사
+                      published_date DATE,                         -- 출판 날짜
+                      isbn VARCHAR(50) UNIQUE,                    -- ISBN 코드
+                      contents TEXT,                               -- 책 내용 요약
+                      is_available BOOLEAN NOT NULL DEFAULT TRUE, -- 대출 가능 여부
+                      call_number VARCHAR(50),                    -- 청구 기호
+                      thumbnail VARCHAR(500),                     -- 책 썸네일 이미지 URL
+                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                      FOREIGN KEY (topic_id) REFERENCES topic(topic_id) -- topic 테이블과 연결
+);
+
 
 CREATE TABLE reservation (
                              id BIGINT PRIMARY KEY AUTO_INCREMENT,               -- 기본 키, 엔티티의 id 필드와 매핑
@@ -63,12 +73,18 @@ VALUES
     (9, '홍길동', 'hong@example.com', 'supersecure', '010-5555-6666', TRUE, NULL, FALSE, 'ADMIN', NOW(), NOW()),  -- 관리자 계정 추가
     (10, '손흥민', 'heungmin@example.com', 'football', '010-6666-7777', TRUE, NULL, FALSE, 'USER', NOW(), NOW());
 
-INSERT INTO book (book_id, title, author, publisher, published_date, isbn, contents, is_available, call_number, created_at, updated_at)
-VALUES
-    (1, '객체지향의 사실과 오해', '조영호', '위키북스', '2015-07-01', '9788998139766', '객체지향 설계에 대한 개념을 쉽게 설명한 책', TRUE, 'QA76.9.O35 조영호', NOW(), NOW()),
-    (2, '클린 코드', '로버트 C. 마틴', '인사이트', '2013-12-24', '9788966260959', '소프트웨어 개발자가 반드시 읽어야 할 책', TRUE, 'QA76.76.M42 마틴', NOW(), NOW());
+INSERT INTO topic (topic_id, topic_name) VALUES
+                                             (1, '객체지향'),
+                                             (2, '소프트웨어 개발');
 
-INSERT INTO reservation (id, user_id, book_id, status, reserved_date, expiration_date, queue_order, created_at, updated_at)
+
+INSERT INTO book (book_id, topic_id, title, author, publisher, published_date, isbn, contents, is_available, call_number, thumbnail, created_at, updated_at)
+VALUES
+    (1, 1, '객체지향의 사실과 오해', '조영호', '위키북스', '2015-07-01', '9788998139766', '객체지향 설계에 대한 개념을 쉽게 설명한 책', TRUE, 'QA76.9.O35 조영호', 'https://example.com/image1.jpg', NOW(), NOW()),
+    (2, 2, '클린 코드', '로버트 C. 마틴', '인사이트', '2013-12-24', '9788966260959', '소프트웨어 개발자가 반드시 읽어야 할 책', TRUE, 'QA76.76.M42 마틴', 'https://example.com/image2.jpg', NOW(), NOW());
+
+/*INSERT INTO reservation (id, user_id, book_id, status, reserved_date, expiration_date, queue_order, created_at, updated_at)
 VALUES
     (1, 1, 1, 'WAITING', NOW(), DATE_ADD(NOW(), INTERVAL 3 DAY), 1, NOW(), NOW()),
     (2, 2, 2, 'READY', NOW(), DATE_ADD(NOW(), INTERVAL 3 DAY), 2, NOW(), NOW());
+*/
