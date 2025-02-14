@@ -45,7 +45,7 @@ public class ReviewService {
     /** 한줄평 삭제 **/
     @Transactional
     public void deleteReview(ReviewDto.DeleteRequest dto, Long userId){
-        Review review = reviewRepository.findById(dto.getId())
+        Review review = reviewRepository.findById(dto.getReviewId())
                 .orElseThrow(()-> new IllegalArgumentException("한줄평 정보를 찾을 수 없습니다."));
 
         // 본인이 작성한 한줄평인지 확인
@@ -90,6 +90,8 @@ public class ReviewService {
     public List<ReviewDto.Response> getReviewsByUser(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+
+        // TODO : 로그인 회원 확인 로직 추가
 
         return reviewRepository.findByUser(user).stream()
                 .map(reviewMapper::toDto)

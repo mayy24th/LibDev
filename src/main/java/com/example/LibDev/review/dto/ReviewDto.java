@@ -13,9 +13,6 @@ public class ReviewDto {
     /** 한줄평 저장 요청 DTO **/
     // TODO : content 사이즈
     @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SaveRequest {
         private Long userId;
         private Long bookId;
@@ -25,15 +22,13 @@ public class ReviewDto {
 
     /** 한줄평 삭제 요청 DTO **/
     @Getter
-    @Builder
     @AllArgsConstructor
     public static class DeleteRequest {
-        private Long id;
+        private Long reviewId;
     }
 
     /** 한줄평 수정 요청 DTO **/
     @Getter
-    @Builder
     public static class UpdateRequest {
         @NotBlank
         private String content;
