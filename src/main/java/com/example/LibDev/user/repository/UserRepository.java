@@ -6,5 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    public Optional<User> findByEmail(String email);
+    /*이메일로 회원 검색*/
+    Optional<User> findByEmail(String email);
+
+    /*로그인되어 있는 회원 검색*/
+    User findLoginUserByEmail(String email);
+
+    /*이메일이 존재하는 검색*/
+    boolean existsByEmail(String email);
+
 }

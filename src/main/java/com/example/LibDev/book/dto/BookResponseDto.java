@@ -1,33 +1,37 @@
 package com.example.LibDev.book.dto;
 
 import com.example.LibDev.book.entity.Book;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import java.time.LocalDate;
+
+import java.time.format.DateTimeFormatter;
 
 @Getter
-@Setter
+@AllArgsConstructor
 public class BookResponseDto {
-    private Long bookId;
     private String title;
     private String author;
     private String publisher;
-    private LocalDate publishedDate;
+    private String publishedDate;
     private String isbn;
     private String contents;
     private String callNumber;
-    private Boolean isAvailable;
+    private String thumbnail;
+    private Integer topicId;
 
-    // Entity -> DTO 변환
-    public BookResponseDto(Book book) {
-        this.bookId = book.getBookId();
-        this.title = book.getTitle();
-        this.author = book.getAuthor();
-        this.publisher = book.getPublisher();
-        this.publishedDate = book.getPublishedDate();
-        this.isbn = book.getIsbn();
-        this.contents = book.getContents();
-        this.isAvailable = book.getIsAvailable();
-        this.callNumber = book.getCallNumber();
+    public static BookResponseDto fromEntity(Book book) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        return new BookResponseDto(
+                book.getTitle(),
+                book.getAuthor(),
+                book.getPublisher(),
+                book.getPublishedDate() != null ? book.getPublishedDate().format(formatter) : null, // 발행일 변환
+                book.getIsbn(),
+                book.getContents(),
+                book.getCallNumber(),
+                book.getThumbnail(),
+                book.getTopicId()
+        );
     }
 }

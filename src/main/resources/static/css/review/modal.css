@@ -1,0 +1,88 @@
+/* 모달 기본 스타일 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+/* 모달 창 스타일 */
+.modal-delete {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 삭제 안내 문구 스타일 */
+.modal-delete p {
+    color: gray;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* 모달 버튼 컨테이너 */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* 삭제 버튼 */
+.btn-delete-confirm {
+    background-color: saddlebrown;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* 취소 버튼 */
+.btn-cancel {
+    background-color: white;
+    color: black;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* 한줄평 작성 모달 스타일 추가 */
+.modal-modify {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 500px; /* 등록 모달은 더 넓게 */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 한줄평 입력 필드 스타일 */
+.review-textarea {
+    width: 95%;
+    height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+/* 작성하기 버튼 스타일 */
+.btn-submit {
+    background-color: saddlebrown;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
