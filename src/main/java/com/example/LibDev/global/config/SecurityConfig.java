@@ -56,11 +56,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/",
                                 "/api/v1/users",
-                                "/api/v1/users/check-email/**",
-                                "/users/join",
-                                "/users/login").permitAll()
-                        .requestMatchers("/admin").permitAll()
-                        .anyRequest().authenticated()
+                                "/api/v1/users/check-email/**").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/api/**").authenticated()
+                                .anyRequest().permitAll()
+                        //csr 랜더링 시 jwt 적용을 위해서 페이지 접근 자체는 전부 열어둠
+                        // api만 jwt로 인증 받도록
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -81,7 +82,7 @@ public class SecurityConfig {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration));
 
         //로그인 필터 url 설정
-        customAuthenticationFilter.setFilterProcessesUrl("/api/v2/auths/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/api/v3/auths/login");
         //실패 핸들러 등록
         customAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
         //성공 핸들러 등록
