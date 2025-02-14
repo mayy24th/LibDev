@@ -40,13 +40,13 @@ public class JwtProvider {
         signingkey = Keys.hmacShaKeyFor(bytes);
     }
 
-    public TokenResDto generateToken(Authentication authentication) {
+    public String generateAccessToken(Authentication authentication) {
         Claims claims = Jwts.claims().setSubject(authentication.getName());
         claims.put("role", authentication.getAuthorities().stream().findFirst().get().getAuthority());
 
         Date now = new Date();
 
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .setHeaderParam("typ","JWT")
                 .setHeaderParam("alg","HS256")
                 .setSubject("access-token")
@@ -55,18 +55,23 @@ public class JwtProvider {
                 .setExpiration(new Date(now.getTime() + accessTokenValidTime))
                 .signWith(signingkey, SignatureAlgorithm.HS256)
                 .compact();
+    }
 
-        String refreshToken = Jwts.builder()
+    public String generateRefreshToken(Authentication authentication) {
+        Claims claims = Jwts.claims().setSubject(authentication.getName());
+        claims.put("role", authentication.getAuthorities().stream().findFirst().get().getAuthority());
+
+        Date now = new Date();
+
+        return Jwts.builder()
                 .setHeaderParam("typ","JWT")
                 .setHeaderParam("alg","HS256")
                 .setSubject("refresh-token")
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime()+refreshTokenValidTime))
+                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
                 .signWith(signingkey,SignatureAlgorithm.HS256)
                 .compact();
-
-        return new TokenResDto(accessToken, refreshToken);
     }
 
     private Claims getClaimsFromToken(String token) {
