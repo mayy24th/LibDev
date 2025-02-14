@@ -11,4 +11,10 @@ public class ReservationViewController {
         return "reservation/reservation-demo";
     }
 
+    @GetMapping("/reservations/list")
+    public String showReservationList() {
+        return "reservation/reservationList";
+    }
+
+
 }

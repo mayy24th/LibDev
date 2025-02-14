@@ -20,11 +20,11 @@ public class Reservation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
@@ -36,6 +36,10 @@ public class Reservation extends BaseEntity {
     private LocalDate reservedDate;
 
     private LocalDate expirationDate;
+
+    public void updateExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
 
     @Column(nullable = false)
     private int queueOrder; // 대기 순번

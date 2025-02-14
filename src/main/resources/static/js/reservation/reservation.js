@@ -5,6 +5,7 @@ function createReservation() {
     fetch('/api/v1/reservations', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ userId, bookId })

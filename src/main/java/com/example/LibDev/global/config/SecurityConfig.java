@@ -52,7 +52,7 @@ public class SecurityConfig {
                                 "/api/v1/users",
                                 "/users/join",
                                 "/users/login",
-                                "/reservations/demo",
+                                "/reservations/**",
                                 "/api/v1/reservations/**").permitAll()
                         .requestMatchers("/admin").permitAll()
                         .anyRequest().authenticated()

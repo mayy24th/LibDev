@@ -12,8 +12,15 @@ public enum CustomErrorCode {
 
     // borrow 관련 에러
     BORROW_NOT_FOUND(HttpStatus.NOT_FOUND, "대출 내역을 찾을 수 없습니다"),
-    BORROW_FORBIDDEN(HttpStatus.FORBIDDEN, "해당 회원은 대출이 불가합니다.")
-    ;
+    BORROW_FORBIDDEN(HttpStatus.FORBIDDEN, "해당 회원은 대출이 불가합니다."),
+
+    // reservation 관련 에러
+    BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "책을 찾을 수 없습니다"),
+    BOOK_RESERVATION_FULL(HttpStatus.BAD_REQUEST, "해당 도서는 최대 예약 인원(5명)을 초과했습니다."),
+    USER_RESERVATION_FULL(HttpStatus.BAD_REQUEST, "사용자는 최대 5권까지만 예약할 수 있습니다."),
+    BOOK_ALREADY_RESERVED(HttpStatus.BAD_REQUEST, "이미 해당 책을 예약하셨습니다."),
+    RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 정보를 찾을 수 없습니다."),
+    RESERVATION_CANCELLATION_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 예약만 취소할 수 있습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
