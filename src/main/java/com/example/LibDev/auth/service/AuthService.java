@@ -25,7 +25,10 @@ public class AuthService {
             redisTokenService.delRefreshToken(email);
         }
 
-        TokenResDto tokenResDto = jwtProvider.generateToken(authentication);
+        TokenResDto tokenResDto = TokenResDto.builder()
+                .accessToken(jwtProvider.generateAccessToken(authentication))
+                .refreshToken(jwtProvider.generateRefreshToken(authentication))
+                .build();
         saveRefreshToken(email,tokenResDto.getRefreshToken());
         return tokenResDto;
     }
@@ -68,4 +71,6 @@ public class AuthService {
         }
         return null;
     }
+
+    /**/
 }
