@@ -1,5 +1,6 @@
 package com.example.LibDev.borrow.entity;
 
+import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.global.entity.BaseEntity;
 import com.example.LibDev.user.entity.User;
@@ -33,8 +34,9 @@ public class Borrow extends BaseEntity  {
     @Column(nullable = false)
     private Status status; // 대출 상태
 
-    @Column(name = "book_id", nullable = false)
-    private Long bookId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
