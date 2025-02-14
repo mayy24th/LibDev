@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthApiController {
 
-    @PostMapping("/api/v2/auths/login")
+    @PostMapping("/api/v3/auths/login")
     public ResponseEntity<Void> login(@RequestBody LoginReqDto loginReqDto){ return null; }
+
+    @PostMapping("/api/v1/auths/logout")
+    public ResponseEntity<Void> logout(){ return null; }
 }

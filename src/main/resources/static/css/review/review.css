@@ -1,0 +1,156 @@
+/* 전체 페이지 기본 스타일 */
+.body-submit {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+/* 제목 컨테이너 */
+.title-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* 버튼 컨테이너 */
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 15px auto;
+    position: relative;
+}
+
+/* 한줄평 목록 컨테이너 */
+.review-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 80%;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* 개별 한줄평 카드 */
+.review-card {
+    width: 100%;
+    max-width: 800px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 20px;
+}
+
+/* 한줄평 도서 제목 */
+.review-header{
+    font-weight: bold;
+}
+
+/* 도서 이미지 컨테이너 */
+.review-card .book-image {
+    width: 120px;
+    height: 160px;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: gray;
+    background-color: #f4f4f4;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* 한줄평 내용 컨테이너 */
+.review-content-box {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 구분선 */
+.review-divider {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 8px 0;
+}
+
+/* 한줄평 정보 레이아웃 */
+.review-row {
+    display: grid;
+    grid-template-columns: 120px auto;
+    align-items: flex-start;
+    text-align: left;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+/* 라벨 스타일 */
+.review-label {
+    font-weight: bold;
+    text-align: left;
+    flex-shrink: 0;
+    min-height: 24px;
+    align-self: flex-start;
+}
+
+/* 한줄평 내용 및 작성자 텍스트 */
+.review-text, .review-author {
+    text-align: left;
+    word-break: break-word;
+    align-self: flex-start;
+}
+
+/* 한줄평 하단 버튼 영역 */
+.review-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+/* 삭제 버튼 */
+.btn-delete {
+    background-color: white;
+    color: black;
+    padding: 7px 12px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* 수정 버튼 */
+.btn-edit {
+    background-color: white;
+    color: black;
+    padding: 7px 12px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* 한줄평 등록 버튼 */
+.btn-modify-review {
+    background-color: saddlebrown;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: normal;
+    position: relative;
+    right: 0;
+    margin-top: 5px;
+}
+
+/* 버튼 호버 효과 */
+.btn-modify-review:hover {
+    background-color: saddlebrown;
+}
