@@ -1,65 +1,71 @@
-// 도서 검색
+// 검색 함수 (도서 검색 후 결과를 표시)
 function searchBooks() {
-    const query = document.getElementById("searchQuery").value;
-    fetch(`/api/v1/books/search?query=${query}`, {
-        method: "GET",
-        credentials: "include" // 로그인된 세션 유지
-    })
+    const query = document.getElementById('searchQuery').value;
+
+    fetch(`/api/v1/books/search?query=${query}`)
         .then(response => response.json())
         .then(data => {
-            const resultsTable = document.getElementById("searchResults");
-            resultsTable.innerHTML = "";  // 기존 검색 결과 초기화
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = ''; // 기존 검색 결과 초기화
 
             data.forEach(book => {
-                const row = `<tr>
+                const row = document.createElement('tr');
+
+                // 도서명, 저자, 출판사, 썸네일
+                row.innerHTML = `
                     <td>${book.title}</td>
                     <td>${book.author}</td>
                     <td>${book.publisher}</td>
-                    <td><button onclick="selectBook(${JSON.stringify(book)})">선택</button></td>
-                </tr>`;
-                resultsTable.innerHTML += row;
+                    <td><img src="${book.thumbnail}" alt="썸네일" width="50" height="80"></td>
+                    <td><button onclick="selectBook('${book.title}', '${book.author}', '${book.publisher}', '${book.publishedDate}', '${book.isbn}', '${book.callNumber}', '${book.contents}', '${book.thumbnail}')">선택</button></td>
+                `;
+
+                resultsContainer.appendChild(row);
             });
         })
-        .catch(error => console.error("도서 검색 실패:", error));
+        .catch(error => console.error('Error:', error));
 }
 
-// 선택한 도서 정보 표시
-function selectBook(book) {
-    document.getElementById("bookTitle").innerText = book.title;
-    document.getElementById("bookAuthor").innerText = book.author;
-    document.getElementById("bookPublisher").innerText = book.publisher;
-    document.getElementById("bookPublishedDate").innerText = book.publishedDate;
-    document.getElementById("bookIsbn").innerText = book.isbn;
-    document.getElementById("bookCallNumber").innerText = book.callNumber;
-    document.getElementById("bookContents").innerText = book.contents.substring(0, 200);
-}
+// 도서 선택 함수 (선택한 도서 정보를 상세 정보에 표시)
+function selectBook(title, author, publisher, publishedDate, isbn, callNumber, contents, thumbnail) {
+    document.getElementById('bookTitle').textContent = title;
+    document.getElementById('bookAuthor').textContent = author;
+    document.getElementById('bookPublisher').textContent = publisher;
+    document.getElementById('bookPublishedDate').textContent = publishedDate;
+    document.getElementById('bookIsbn').textContent = isbn;
+    document.getElementById('bookCallNumber').textContent = callNumber;
+    document.getElementById('bookContents').textContent = contents;
+    document.getElementById('bookThumbnail').src = thumbnail;
 
-// 도서 등록
-function registerBook() {
-    const bookData = {
-        title: document.getElementById("bookTitle").innerText,
-        author: document.getElementById("bookAuthor").innerText,
-        publisher: document.getElementById("bookPublisher").innerText,
-        publishedDate: document.getElementById("bookPublishedDate").innerText,
-        isbn: document.getElementById("bookIsbn").innerText,
-        callNumber: document.getElementById("bookCallNumber").innerText,
-        contents: document.getElementById("bookContents").innerText
-    };
-
-    fetch("/api/v1/books/register", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(bookData)
-    })
-        .then(response => {
-            if (response.ok) {
-                alert("도서가 성공적으로 등록되었습니다.");
-            } else {
-                alert("도서 등록 실패!");
-            }
+    // 국립중앙도서관 API에서 청구기호와 주제 ID 가져오기
+    fetch(`/api/v1/books/library-info?isbn=${isbn}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('bookCallNumber').textContent = data.callNumber || '정보 없음';
+            document.getElementById('bookTopicId').textContent = data.topicId || '정보 없음';
         })
-        .catch(error => console.error("도서 등록 중 오류 발생:", error));
+        .catch(error => console.error('Error fetching library info:', error));
 }
 
+// 도서 등록 함수
+function registerBook() {
+    const title = document.getElementById('bookTitle').textContent;
+    const author = document.getElementById('bookAuthor').textContent;
+    const publisher = document.getElementById('bookPublisher').textContent;
+    const publishedDate = document.getElementById('bookPublishedDate').textContent;
+    const isbn = document.getElementById('bookIsbn').textContent;
+    const callNumber = document.getElementById('bookCallNumber').textContent;
+    const topicId = document.getElementById('bookTopicId').textContent;
+    const contents = document.getElementById('bookContents').textContent;
+    const thumbnail = document.getElementById('bookThumbnail').src;
+
+    fetch('/api/v1/books/register', {
+        method: 'POST',
+        body: JSON.stringify({ title, author, publisher, publishedDate, isbn, callNumber, topicId, contents, thumbnail }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+    })
+        .then(response => response.json())
+        .then(data => alert('도서 등록 성공!'))
+        .catch(error => alert('도서 등록 실패'));
+}
