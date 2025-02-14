@@ -56,11 +56,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/",
                                 "/api/v1/users",
-                                "/api/v1/users/check-email/**",
-                                "/users/join",
-                                "/users/login").permitAll()
-                        .requestMatchers("/admin").permitAll()
-                        .anyRequest().authenticated()
+                                "/api/v1/users/check-email/**").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/api/**").authenticated()
+                                .anyRequest().permitAll()
+                        //csr 랜더링 시 jwt 적용을 위해서 페이지 접근 자체는 전부 열어둠
+                        // api만 jwt로 인증 받도록
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
