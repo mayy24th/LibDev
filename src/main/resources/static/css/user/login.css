@@ -1,0 +1,64 @@
+/* 로그인 컨테이너 */
+.container-login {
+    background-color: white;
+    padding: 40px;
+    width: 400px;
+    border-radius: 8px;
+    box-shadow: 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 환영 문구 */
+.text-welcome {
+    font-size: 20px;
+    font-weight: bold;
+}
+.text-description {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* 입력 필드 */
+.input-login {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 로그인 버튼 */
+.btn-login {
+    width: 100%;
+    background-color: #5b3d1b;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-login:hover {
+    background-color: #4a2e15;
+}
+
+/* 하단 버튼 그룹 */
+.btn-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.btn-group-member {
+    border: 1px solid #aaa;
+    background-color: white;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.secondary-button:hover {
+    background-color: #f0f0f0;
+}

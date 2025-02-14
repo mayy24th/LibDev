@@ -22,6 +22,7 @@
         <th>도서명</th>
         <th>저자</th>
         <th>출판사</th>
+        <th>썸네일</th>
         <th>선택</th>
     </tr>
     </thead>
@@ -37,11 +38,14 @@
     <p><strong>발행일:</strong> <span id="bookPublishedDate"></span></p>
     <p><strong>ISBN:</strong> <span id="bookIsbn"></span></p>
     <p><strong>청구번호:</strong> <span id="bookCallNumber"></span></p>
+    <p><strong>주제 ID:</strong> <span id="bookTopicId"></span></p>
     <p><strong>도서 소개:</strong> <span id="bookContents"></span></p>
+    <img id="bookThumbnail" alt="썸네일" style="max-width: 200px; max-height: 300px;">
+
+    <br>
     <button onclick="registerBook()">등록</button>
 </div>
 
 <script src="/book/js/register.js"></script>
 </body>
 </html>
-
