@@ -43,4 +43,6 @@ public class Borrow extends BaseEntity  {
     private User user;
 
     public void extendDuedate(LocalDateTime dueDate) {this.dueDate = dueDate;}
+
+    public void updateExtended(boolean extended) {this.extended = extended;}
 }

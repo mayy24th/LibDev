@@ -80,16 +80,17 @@ public class BorrowService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
         Borrow borrow = borrowRepository.findById(borrowId).orElseThrow(() -> new CustomException(CustomErrorCode.BORROW_NOT_FOUND));
-        log.debug("BorrowId: {}", borrow.getId());
+        log.debug("extend - BorrowId: {}", borrow.getId());
 
-        /* 예약자 존재 여부 확인
-        if (reservationRepository.existsByBookAndStatus(book, ReservationStatus.WAITING)) {
+        // 예약자 존재 여부 확인
+        if (reservationRepository.existsByBookAndStatus(borrow.getBook(), ReservationStatus.WAITING)) {
             throw new CustomException(CustomErrorCode.EXTEND_FORBIDDEN);
-        }*/
+        }
 
         checkMemberBorrowingStatus(user); // 회원 대출 가능 여부 확인
 
         borrow.extendDuedate(borrow.getDueDate().plusDays(7));
+        borrow.updateExtended(true);
     }
 
     /* 회원 대출 가능 여부 검사 */
@@ -122,6 +123,7 @@ public class BorrowService {
                 .extended(borrow.isExtended())
                 .overdue(borrow.isOverdue())
                 .overdueDays(borrow.getOverdueDays())
+                .borrowAvailable(borrow.getUser().isBorrow_available())
                 .build();
     }
 }
