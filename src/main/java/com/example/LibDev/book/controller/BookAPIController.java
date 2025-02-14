@@ -2,6 +2,7 @@ package com.example.LibDev.book.controller;
 
 import com.example.LibDev.book.dto.BookRequestDto;
 import com.example.LibDev.book.dto.BookResponseDto;
+import com.example.LibDev.book.dto.KakaoBookResponseDto;
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +41,8 @@ public class BookAPIController {
 
     // Kakao API에서 도서 검색 (DB에 저장 X, 검색 결과 반환)
     @GetMapping("/search")
-    public ResponseEntity<List<BookResponseDto>> searchBooks(@RequestParam String query) {
-        List<BookResponseDto> books = bookService.searchBooksFromKakao(query);
+    public ResponseEntity<List<KakaoBookResponseDto>> searchKakaoBooks(@RequestParam String query) {
+        List<KakaoBookResponseDto> books = bookService.searchBooksFromKakao(query);
         return ResponseEntity.ok(books);
     }
 
@@ -59,6 +60,33 @@ public class BookAPIController {
         return ResponseEntity.ok(libraryInfo);
     }
 
+    // 도서 목록 조회 API
+    @GetMapping
+    public ResponseEntity<List<BookResponseDto>> getBooks(@RequestParam(required = false) String query) {
+        List<BookResponseDto> books = bookService.searchBooks(query);
+        return ResponseEntity.ok(books);
+    }
 
+    public ResponseEntity<List<BookResponseDto>> searchBooks(
+            @RequestParam(value = "query") String query,
+            @RequestParam(value = "searchType", defaultValue = "전체") String searchType) {
+
+        List<BookResponseDto> books;
+
+        // 전체 검색
+        if ("전체".equals(searchType)) {
+            books = bookService.searchBooks(query); // 검색어로 도서 전체 조회
+        } else if ("제목".equals(searchType)) {
+            books = bookService.searchByTitle(query); // 제목으로만 검색
+        } else if ("저자".equals(searchType)) {
+            books = bookService.searchByAuthor(query); // 저자별로 검색
+        } else if ("출판사".equals(searchType)) {
+            books = bookService.searchByPublisher(query); // 출판사별로 검색
+        } else {
+            books = bookService.searchBooks(query); // 기본적으로 전체 검색 처리
+        }
+
+        return ResponseEntity.ok(books);
+    }
 
 }

@@ -36,7 +36,6 @@ public class BookRequestDto {
                 .callNumber(this.callNumber)
                 .topicId(Integer.valueOf(this.topicId))
                 .thumbnail(this.thumbnail)
-                .isAvailable(true)
                 .build();
     }
 }

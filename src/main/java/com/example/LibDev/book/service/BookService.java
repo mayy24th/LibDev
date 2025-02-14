@@ -2,6 +2,7 @@ package com.example.LibDev.book.service;
 
 import com.example.LibDev.book.dto.BookRequestDto;
 import com.example.LibDev.book.dto.BookResponseDto;
+import com.example.LibDev.book.dto.KakaoBookResponseDto;
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -154,7 +155,7 @@ public class BookService {
 
 
     // 도서 등록 페이지에서 도서 검색
-    public List<BookResponseDto> searchBooksFromKakao(String query) {
+    public List<KakaoBookResponseDto> searchBooksFromKakao(String query) {
         String url = "https://dapi.kakao.com/v3/search/book?query=" + query;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -167,7 +168,7 @@ public class BookService {
         if (responseBody != null && responseBody.containsKey("documents")) {
             List<Map<String, Object>> books = (List<Map<String, Object>>) responseBody.get("documents");
 
-            return books.stream().map(bookData -> new BookResponseDto(
+            return books.stream().map(bookData -> new KakaoBookResponseDto(
                     String.valueOf(bookData.get("title")),
                     ((List<String>) bookData.get("authors")).stream().collect(Collectors.joining(", ")),
                     String.valueOf(bookData.get("publisher")),
@@ -208,4 +209,28 @@ public class BookService {
         bookRepository.save(book);
     }
 
+    public List<BookResponseDto> searchBooks(String query) {
+        List<Book> books;
+        if (query != null && !query.trim().isEmpty()) {
+            books = bookRepository.findByTitleContainingOrAuthorContainingOrPublisherContaining(query, query, query);
+        } else {
+            books = bookRepository.findAll();
+        }
+        return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
+    }
+
+    public List<BookResponseDto> searchByTitle(String query) {
+        List<Book> books = bookRepository.findByTitleContaining(query);
+        return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
+    }
+
+    public List<BookResponseDto> searchByAuthor(String query) {
+        List<Book> books = bookRepository.findByAuthorContaining(query);
+        return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
+    }
+
+    public List<BookResponseDto> searchByPublisher(String query) {
+        List<Book> books = bookRepository.findByPublisherContaining(query);
+        return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
+    }
 }
