@@ -13,4 +13,7 @@ public class UserViewController {
 
     @GetMapping("/users/login")
     public String login() { return "user/login"; }
+
+    @GetMapping("/users/mypage")
+    public String mypage() { return "user/mypage"; }
 }
