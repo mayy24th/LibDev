@@ -2,11 +2,8 @@ package com.example.LibDev.review.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 public class ReviewDto {
 
@@ -14,17 +11,9 @@ public class ReviewDto {
     // TODO : content 사이즈
     @Getter
     public static class SaveRequest {
-        private Long userId;
         private Long bookId;
         @NotBlank
         private String content;
-    }
-
-    /** 한줄평 삭제 요청 DTO **/
-    @Getter
-    @AllArgsConstructor
-    public static class DeleteRequest {
-        private Long reviewId;
     }
 
     /** 한줄평 수정 요청 DTO **/
@@ -39,10 +28,11 @@ public class ReviewDto {
     @Builder
     public static class Response {
         private Long id;
+        private String email;
         private String userName;
         private String bookName;
         private String content;
         private LocalDateTime createdAt; // 생성 시간
-        private LocalDateTime updatedAt; // 생성 시간
+        private LocalDateTime updatedAt; // 수정 시간
     }
 }
