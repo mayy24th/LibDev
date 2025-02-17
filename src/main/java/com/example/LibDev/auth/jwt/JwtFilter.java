@@ -18,28 +18,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BEARER_PREFIX = "Bearer ";
-
     private static final String ACCESS_TOKEN = "access-token";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //TODO: 추후에 Cookie 방식만 남길 것
-        String jwt = resolveToken(request) != null ? resolveToken(request) : resolveTokenInCookie(request);
+        String jwt = resolveTokenInCookie(request);
         if (jwt != null && jwtProvider.isValidToken(jwt)) {
             Authentication authentication = jwtProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
-    }
-    /*요청 헤더 Authorization 에서 AccessToken*/
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
-            bearerToken = bearerToken.substring(BEARER_PREFIX.length());
-        }
-        return bearerToken;
     }
 
     /*요청 헤더 쿠키에서 AccessToken*/
