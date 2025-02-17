@@ -2,6 +2,7 @@ package com.example.LibDev.borrow.service;
 
 import com.example.LibDev.book.repository.BookRepository;
 import com.example.LibDev.borrow.dto.BorrowResDto;
+import com.example.LibDev.borrow.dto.ExtendResDto;
 import com.example.LibDev.borrow.entity.Borrow;
 import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.book.entity.Book;
@@ -39,6 +40,10 @@ public class BorrowService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findLoginUserByEmail(email);
 
+        if (user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
+        }
+
         List<Borrow> borrowList = borrowRepository.findByUserAndStatusNot(user, Status.RETURNED);
 
         return borrowList.stream()
@@ -75,7 +80,7 @@ public class BorrowService {
 
     /* 대출 기간 연장 */
     @Transactional
-    public void extendReturnDate(Long borrowId) {
+    public ExtendResDto extendReturnDate(Long borrowId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
@@ -91,6 +96,12 @@ public class BorrowService {
 
         borrow.extendDuedate(borrow.getDueDate().plusDays(7));
         borrow.updateExtended(true);
+
+        return ExtendResDto.builder()
+                .id(borrow.getId())
+                .dueDate(borrow.getDueDate())
+                .extended(borrow.isExtended())
+                .build();
     }
 
     /* 회원 대출 가능 여부 검사 */
@@ -116,7 +127,7 @@ public class BorrowService {
         return BorrowResDto.builder()
                 .id(borrow.getId())
                 .bookTitle(borrow.getBook().getTitle())
-                .status(borrow.getStatus())
+                .status(borrow.getStatus().getDescription())
                 .borrowDate(borrow.getCreatedAt())
                 .dueDate(borrow.getDueDate())
                 .returnDate(borrow.getReturnDate())
