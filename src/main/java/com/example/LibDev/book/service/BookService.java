@@ -173,9 +173,9 @@ public class BookService {
                     ((List<String>) bookData.get("authors")).stream().collect(Collectors.joining(", ")),
                     String.valueOf(bookData.get("publisher")),
                     String.valueOf(bookData.get("thumbnail")),
-                    formatPublishedDate(String.valueOf(bookData.get("datetime"))),   // 발행일
+                    formatPublishedDate(String.valueOf(bookData.get("datetime"))),
                     extractPrimaryIsbn(String.valueOf(bookData.get("isbn"))), // ISBN 첫 번째 값만 저장
-                    String.valueOf(bookData.get("contents"))   // 도서 소개
+                    String.valueOf(bookData.get("contents"))
             )).collect(Collectors.toList());
         }
         return Collections.emptyList();
@@ -204,9 +204,34 @@ public class BookService {
     public void registerBook(BookRequestDto bookRequestDto) {
         // BookRequestDto를 Book 엔티티로 변환
         Book book = bookRequestDto.toEntity();
+        book.setAvailable(true);
 
-        // 도서 저장
+        System.out.println("ISBN 1: " + book.getIsbn());
+        System.out.println("청구기호 1: " + book.getCallNumber());
+
+        // 기존 도서가 있으면, callNumber 뒤에 숫자 증가
+        Optional<Book> existingBook = bookRepository.findByCallNumber(book.getCallNumber());
+        if (existingBook.isPresent()) {
+            String newCallNumber = generateNewCallNumber(existingBook.get().getCallNumber());
+            book.setCallNumber(newCallNumber);
+        }
+        System.out.println("ISBN 2: " + book.getIsbn());
+        System.out.println("청구기호 2: " + book.getCallNumber());
+
         bookRepository.save(book);
+    }
+
+    // 새로운 청구번호 생성
+    private String generateNewCallNumber(String existingCallNumber) {
+        if (existingCallNumber != null && existingCallNumber.contains("=")) {
+            String[] parts = existingCallNumber.split("=");
+            System.out.println("existingCallNumber : " + existingCallNumber);
+            int number = Integer.parseInt(parts[1]) + 1;
+
+            return parts[0] + "=" + number;
+        } else {
+            return existingCallNumber + "=2";
+        }
     }
 
     public List<BookResponseDto> searchBooks(String query) {
