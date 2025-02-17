@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -43,7 +44,14 @@ public class BookAPIController {
     @GetMapping("/search")
     public ResponseEntity<List<KakaoBookResponseDto>> searchKakaoBooks(@RequestParam String query) {
         List<KakaoBookResponseDto> books = bookService.searchBooksFromKakao(query);
-        return ResponseEntity.ok(books);
+
+        // 저자 또는 출판사가 빈칸이면 제외
+        List<KakaoBookResponseDto> filteredBooks = books.stream()
+                .filter(book -> book.getAuthor() != null && !book.getAuthor().trim().isEmpty())
+                .filter(book -> book.getPublisher() != null && !book.getPublisher().trim().isEmpty())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(filteredBooks);
     }
 
     // 도서 등록 API (청구기호 & 주제 ID 포함)
