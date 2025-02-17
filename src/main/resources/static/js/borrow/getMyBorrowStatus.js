@@ -2,16 +2,22 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchCurrentBorrows();
 });
 
-function fetchCurrentBorrows() {
-    fetch('/api/v1/my/borrow-status')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch borrow list');
-            }
-            return response.json();
-        })
-        .then(data => renderCurrentBorrows(data))
-        .catch(error => console.error('Error:', error));
+async function fetchCurrentBorrows() {
+    try {
+        const response = await fetch("/api/v1/my/borrow-status", {
+            method: "GET",
+            credentials:"include"
+        });
+
+        if (!response.ok) {
+            throw new Error('대출 현황 조회 실패');
+        }
+
+        const data = await response.json();
+        renderCurrentBorrows(data);
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 function renderCurrentBorrows(borrows) {
@@ -25,19 +31,29 @@ function renderCurrentBorrows(borrows) {
     borrowContainer.innerHTML = borrows.map(borrow =>
         `<div class="borrow-box">
             <div class="borrow-content-box">
-                <p>${borrow.bookTitle}</p>
-                <div class="borrow-info">
+                <p class="book-title">${borrow.bookTitle}</p>
+                <div class="borrow-info" id="borrow-info-${borrow.id}">
                     <p>대출일: <span>${formatDate(borrow.borrowDate)}</span></p>
-                    <p>반납 예정일: <span>${formatDate(borrow.dueDate)}</span></p>
+                    <p>반납 예정일: <span id="duedate-${borrow.id}">${formatDate(borrow.dueDate)}</span></p>
                     <p>상태: <span>${borrow.status}</span></p>
+                    ${borrow.extended ? '<p class="extended-info">연장 완료</p>' : ''}
                 </div>
             </div>
             <div class="buttons">
-                <button class="btn btn-primary">연장</button>
+                ${!borrow.extended && borrow.borrowAvailable ? `
+                <button class="btn btn-primary extend-btn" id="extend-btn-${borrow.id}" data-borrow-id="${borrow.id}">연장</button>
+                ` : ''}
                 <button class="btn btn-primary">반납 신청</button>
             </div>
         </div>`
     ).join("");
+
+    document.querySelectorAll(".extend-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            const borrowId = this.dataset.borrowId;
+            extendBorrow(borrowId);
+        });
+    });
 }
 
 function formatDate(dateString) {

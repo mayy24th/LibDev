@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class BorrowResDto {
     private final Long id;
     private final String bookTitle;
-    private final Status status; // 대출 상태
+    private final String status; // 대출 상태
     private final LocalDateTime borrowDate; // 대출일
     private final LocalDateTime dueDate; // 반납 예정일
     private final LocalDateTime returnDate; // 실제 반납일

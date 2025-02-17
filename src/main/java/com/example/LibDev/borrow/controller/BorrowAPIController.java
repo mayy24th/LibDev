@@ -1,6 +1,7 @@
 package com.example.LibDev.borrow.controller;
 
 import com.example.LibDev.borrow.dto.BorrowResDto;
+import com.example.LibDev.borrow.dto.ExtendResDto;
 import com.example.LibDev.borrow.service.BorrowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,7 @@ public class BorrowAPIController {
 
     /* 대출 연장 */
     @PatchMapping("/api/v1/extend/{borrowId}")
-    public ResponseEntity<?> extend(@PathVariable Long borrowId) {
-        borrowService.extendReturnDate(borrowId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ExtendResDto> extend(@PathVariable Long borrowId) {
+        return ResponseEntity.ok(borrowService.extendReturnDate(borrowId));
     }
 }
