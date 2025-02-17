@@ -10,6 +10,7 @@ public class ReviewMapper {
     public ReviewDto.Response toDto(Review review) {
         return ReviewDto.Response.builder()
                 .id(review.getId())
+                .email(review.getUser().getEmail())
                 .userName(review.getUser().getName())
                 .bookName(review.getBook().getTitle())
                 .content(review.getContent())

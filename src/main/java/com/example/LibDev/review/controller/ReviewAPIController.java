@@ -29,17 +29,13 @@ public class ReviewAPIController {
     public ResponseEntity<Void> saveReview(@Valid @RequestBody ReviewDto.SaveRequest saveRequestDto){
         reviewService.saveReview(saveRequestDto);
 
-        log.info("POST 요청 데이터 = {}", saveRequestDto);
-
         return ResponseEntity.ok().build();
     }
 
     /** 한줄평 삭제 **/
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId){
-        reviewService.deleteReview(new ReviewDto.DeleteRequest(reviewId), 1L);
-
-        log.info("DELETE 요청 reviewId = {}", reviewId);
+        reviewService.deleteReview(reviewId);
 
         return ResponseEntity.noContent().build();
     }
@@ -49,9 +45,6 @@ public class ReviewAPIController {
     public ResponseEntity<Void> updateReview(@PathVariable Long reviewId,
                                              @Valid @RequestBody ReviewDto.UpdateRequest updateRequestDto){
         reviewService.updateReview(updateRequestDto, reviewId);
-
-        log.info("PUT 요청 reviewId = {}", reviewId);
-        log.info("PUT 요청 데이터 = {}", updateRequestDto);
 
         return ResponseEntity.ok().build();
     }
@@ -69,8 +62,8 @@ public class ReviewAPIController {
     }
 
     /** 유저별 한줄평 조회 **/
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ReviewDto.Response>> getReviewsByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(reviewService.getReviewsByUser(userId));
+    @GetMapping("/user")
+    public ResponseEntity<List<ReviewDto.Response>> getReviewsByUser() {
+        return ResponseEntity.ok(reviewService.getReviewsByUser());
     }
 }
