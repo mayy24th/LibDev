@@ -1,6 +1,11 @@
 package com.example.LibDev.global.config;
 
 import com.example.LibDev.auth.filter.CustomAuthenticationFilter;
+import com.example.LibDev.auth.filter.CustomLogoutFilter;
+import com.example.LibDev.auth.jwt.JwtFilter;
+import com.example.LibDev.auth.jwt.JwtProvider;
+import com.example.LibDev.auth.service.AuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +24,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @RequiredArgsConstructor
 @Configuration
@@ -28,6 +34,9 @@ public class SecurityConfig {
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationFailureHandler authenticationFailureHandler;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtProvider jwtProvider;
+    private final AuthService authservice;
+    private final ObjectMapper objectMapper;
 
 
 
@@ -47,15 +56,22 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/",
                                 "/api/v1/users",
-                                "/users/join",
-                                "/users/login").permitAll()
-                        .requestMatchers("/admin").permitAll()
-                        .anyRequest().authenticated()
+                                "/api/v1/users/check-email/**",
+                                "/reservations/**",
+                                "/api/v1/reservations/**").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/api/**").authenticated()
+                                .anyRequest().permitAll()
+                        //csr 랜더링 시 jwt 적용을 위해서 페이지 접근 자체는 전부 열어둠
+                        // api만 jwt로 인증 받도록
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+
                 .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomLogoutFilter(authservice,objectMapper), LogoutFilter.class)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(accessDeniedHandler)
                         .authenticationEntryPoint(authenticationEntryPoint))
@@ -68,7 +84,7 @@ public class SecurityConfig {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration));
 
         //로그인 필터 url 설정
-        customAuthenticationFilter.setFilterProcessesUrl("/api/v1/auths/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/api/v3/auths/login");
         //실패 핸들러 등록
         customAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
         //성공 핸들러 등록
@@ -82,5 +98,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public JwtFilter jwtFilter() {
+        return new JwtFilter(jwtProvider);
     }
 }

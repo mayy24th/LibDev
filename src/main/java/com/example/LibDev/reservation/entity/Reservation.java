@@ -37,6 +37,10 @@ public class Reservation extends BaseEntity {
 
     private LocalDate expirationDate;
 
+    public void updateExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
     @Column(nullable = false)
     private int queueOrder; // 대기 순번
 }
