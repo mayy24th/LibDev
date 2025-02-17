@@ -1,28 +1,26 @@
 import { loadReviews } from "./reviewList.js";
-export let reviewToEdit = null;
+import { getReviewApiEndpoint } from "../utils/pathUtils.js";
 
 export function openModifyModal(reviewId = null, content = "") {
-    if (reviewId) {
-        reviewToEdit = reviewId;
-        document.getElementById("modalTitle").textContent = "한줄평 수정";
-        document.getElementById("submitModifyBtn").textContent = "수정하기";
-        document.getElementById("reviewContent").value = content;
-    } else {
-        reviewToEdit = null;
-        document.getElementById("modalTitle").textContent = "한줄평 작성";
-        document.getElementById("submitModifyBtn").textContent = "작성하기";
-        document.getElementById("reviewContent").value = "";
-    }
+    const modal = document.getElementById("modifyModal");
+    modal.dataset.reviewId = reviewId || ""; // reviewId를 dataset으로 저장
 
-    document.getElementById("modifyModal").style.display = "flex";
+    document.getElementById("modalTitle").textContent = reviewId ? "한줄평 수정" : "한줄평 작성";
+    document.getElementById("submitModifyBtn").textContent = reviewId ? "수정하기" : "작성하기";
+    document.getElementById("reviewContent").value = content || "";
+
+    modal.style.display = "flex";
 }
 
 export function closeModifyModal() {
-    document.getElementById("modifyModal").style.display = "none";
-    reviewToEdit = null;
+    const modal = document.getElementById("modifyModal");
+    modal.style.display = "none";
+    modal.dataset.reviewId = ""; // reviewId 초기화
 }
 
 export async function submitModifyReview() {
+    const modal = document.getElementById("modifyModal");
+    const reviewId = modal.dataset.reviewId; // dataset에서 reviewId 가져오기
     const content = document.getElementById("reviewContent").value.trim();
 
     if (!content) {
@@ -30,41 +28,47 @@ export async function submitModifyReview() {
         return;
     }
 
-    if (reviewToEdit) {
-        await updateReview(reviewToEdit, content);
+    if (reviewId) {
+        await updateReview(reviewId, content);
     } else {
         await createReview(content);
     }
 }
 
 async function createReview(content) {
-    const response = await fetch("/api/review", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content })
-    });
+    try {
+        const response = await fetch("/api/review", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content })
+        });
 
-    if (response.ok) {
+        if (!response.ok) throw new Error("한줄평 등록 실패");
+
         alert("한줄평을 등록했습니다.");
-        loadReviews();
+        loadReviews(getReviewApiEndpoint());
         closeModifyModal();
-    } else {
+    } catch (error) {
+        console.error(error);
         alert("한줄평 등록에 실패했습니다.");
     }
 }
 
 async function updateReview(reviewId, content) {
-    const response = await fetch(`/api/review/${reviewId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content })
-    });
+    try {
+        const response = await fetch(`/api/review/${reviewId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content })
+        });
 
-    if (response.ok) {
+        if (!response.ok) throw new Error("한줄평 수정 실패");
+
         alert("한줄평을 수정하였습니다.");
-        loadReviews();
+        loadReviews(getReviewApiEndpoint());
         closeModifyModal();
-    } else {
+    } catch (error) {
+        console.error(error);
         alert("한줄평 수정에 실패했습니다.");
     }
 }
