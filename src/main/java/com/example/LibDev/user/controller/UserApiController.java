@@ -1,6 +1,7 @@
 package com.example.LibDev.user.controller;
 
 import com.example.LibDev.global.dto.GlobalResponseDto;
+import com.example.LibDev.global.util.BindingValidError;
 import com.example.LibDev.user.dto.JoinReqDto;
 import com.example.LibDev.user.dto.UserUpdateReqDto;
 import com.example.LibDev.user.service.UserService;
@@ -21,10 +22,7 @@ public class UserApiController {
     @PostMapping("/api/v1/users")
     public ResponseEntity<GlobalResponseDto> join(@Valid @RequestBody JoinReqDto reqDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            HashMap<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(fieldError -> {
-                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
-            });
+            HashMap<String, String> errors = BindingValidError.bindingValidError(bindingResult);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(GlobalResponseDto.fail(HttpStatus.BAD_REQUEST, errors));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(GlobalResponseDto.success(HttpStatus.CREATED,userService.join(reqDto)));
