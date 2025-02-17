@@ -10,4 +10,6 @@ import java.util.List;
 public interface BorrowRepository extends JpaRepository<Borrow, Long> {
     int countByUserAndStatus(User user, Status status);
     List<Borrow> findByUserAndStatusNot(User user, Status status);
+
+    Boolean existsByUser(User user);
 }
