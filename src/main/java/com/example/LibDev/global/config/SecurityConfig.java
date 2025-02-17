@@ -55,6 +55,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/",
+                                "/api/v1/auths/reissue",
                                 "/api/v1/users",
                                 "/api/v1/users/check-email/**",
                                 "/reservations/**",
@@ -102,6 +103,6 @@ public class SecurityConfig {
 
     @Bean
     public JwtFilter jwtFilter() {
-        return new JwtFilter(jwtProvider);
+        return new JwtFilter(jwtProvider,objectMapper);
     }
 }
