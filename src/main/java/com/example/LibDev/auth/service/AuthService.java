@@ -18,8 +18,6 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RedisTokenService redisTokenService;
 
-    private static final int subStringNum = 7;
-
     /*토큰 생성*/
     public TokenResDto generateToken(Authentication authentication) {
         String email = authentication.getName();
@@ -50,11 +48,13 @@ public class AuthService {
     }
 
     /*토큰 무효화*/
-    public void deleteToken(String accessTokenInHeader) {
-        String targetAccessToken = getAccessTokenInHeader(accessTokenInHeader);
+    public void deleteToken(String accessToken) {
+        if (accessToken == null) {
+            return;
+        }
 
-        String principal = getPrincipal(targetAccessToken);
-        long expiration = jwtProvider.getTokenValidTime(targetAccessToken);
+        String principal = getPrincipal(accessToken);
+        long expiration = jwtProvider.getTokenValidTime(accessToken);
 
         String refreshTokenInReds = redisTokenService.getRefreshToken(principal);
 
@@ -62,7 +62,7 @@ public class AuthService {
 
             redisTokenService.delRefreshToken(principal);
 
-            redisTokenService.setBlackList(targetAccessToken,"logout",expiration - new Date().getTime());
+            redisTokenService.setBlackList(accessToken,"logout",expiration - new Date().getTime());
         }
     }
 
@@ -71,11 +71,4 @@ public class AuthService {
         return jwtProvider.getAuthentication(requestAccessToken).getName();
     }
 
-    /*Header 에서 AccessToken 추출*/
-    public String getAccessTokenInHeader(String accessTokenInHeader) {
-        if(accessTokenInHeader != null && accessTokenInHeader.startsWith("Bearer ")) {
-            return accessTokenInHeader.substring(subStringNum);
-        }
-        return null;
-    }
 }
