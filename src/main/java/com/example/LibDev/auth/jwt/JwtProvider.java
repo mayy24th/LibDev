@@ -4,6 +4,7 @@ import com.example.LibDev.auth.dto.TokenResDto;
 import com.example.LibDev.global.service.RedisTokenService;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,9 +27,11 @@ public class JwtProvider {
     @Value("${spring.jwt.secret-key}")
     private String secretKey;
 
+    @Getter
     @Value("${spring.jwt.access-token-valid-time}")
     private long accessTokenValidTime;
 
+    @Getter
     @Value("${spring.jwt.refresh-token-valid-time}")
     private long refreshTokenValidTime;
 
@@ -40,7 +43,7 @@ public class JwtProvider {
         signingkey = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String generateAccessToken(Authentication authentication) {
+    public String generateToken(Authentication authentication, String subject, long expiration) {
         Claims claims = Jwts.claims().setSubject(authentication.getName());
         claims.put("role", authentication.getAuthorities().stream().findFirst().get().getAuthority());
 
@@ -49,29 +52,13 @@ public class JwtProvider {
         return Jwts.builder()
                 .setHeaderParam("typ","JWT")
                 .setHeaderParam("alg","HS256")
-                .setSubject("access-token")
+                .setSubject(subject)
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + accessTokenValidTime))
-                .signWith(signingkey, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    public String generateRefreshToken(Authentication authentication) {
-        Claims claims = Jwts.claims().setSubject(authentication.getName());
-        claims.put("role", authentication.getAuthorities().stream().findFirst().get().getAuthority());
-
-        Date now = new Date();
-
-        return Jwts.builder()
-                .setHeaderParam("typ","JWT")
-                .setHeaderParam("alg","HS256")
-                .setSubject("refresh-token")
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
+                .setExpiration(new Date(now.getTime() + expiration))
                 .signWith(signingkey,SignatureAlgorithm.HS256)
                 .compact();
+
     }
 
     private Claims getClaimsFromToken(String token) {
@@ -93,14 +80,6 @@ public class JwtProvider {
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException e) {
             return false;
         }
-    }
-
-    public long getAccessTokenValidTime() {
-        return accessTokenValidTime;
-    }
-
-    public long getRefreshTokenValidTime() {
-        return refreshTokenValidTime;
     }
 
     public long getTokenValidTime(String token){

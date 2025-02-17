@@ -4,6 +4,7 @@ import com.example.LibDev.auth.dto.TokenResDto;
 import com.example.LibDev.auth.jwt.JwtProvider;
 import com.example.LibDev.global.service.RedisTokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,17 @@ public class AuthService {
     /*토큰 생성*/
     public TokenResDto generateToken(Authentication authentication) {
         String email = authentication.getName();
+
+        long accessTokenValidTime = jwtProvider.getAccessTokenValidTime();
+        long refreshTokenValidTime = jwtProvider.getRefreshTokenValidTime();
+
         if(redisTokenService.getRefreshToken(email) != null){
             redisTokenService.delRefreshToken(email);
         }
 
         TokenResDto tokenResDto = TokenResDto.builder()
-                .accessToken(jwtProvider.generateAccessToken(authentication))
-                .refreshToken(jwtProvider.generateRefreshToken(authentication))
+                .accessToken(jwtProvider.generateToken(authentication,"access-token",accessTokenValidTime))
+                .refreshToken(jwtProvider.generateToken(authentication,"refresh-token",refreshTokenValidTime))
                 .build();
         saveRefreshToken(email,tokenResDto.getRefreshToken());
         return tokenResDto;
