@@ -1,4 +1,5 @@
 import { loadReviews } from "./reviewList.js";
+import { getReviewApiEndpoint } from "../utils/pathUtils.js";
 
 export function openModifyModal(reviewId = null, content = "") {
     const modal = document.getElementById("modifyModal");
@@ -45,7 +46,7 @@ async function createReview(content) {
         if (!response.ok) throw new Error("한줄평 등록 실패");
 
         alert("한줄평을 등록했습니다.");
-        loadReviews();
+        loadReviews(getReviewApiEndpoint());
         closeModifyModal();
     } catch (error) {
         console.error(error);
@@ -64,7 +65,7 @@ async function updateReview(reviewId, content) {
         if (!response.ok) throw new Error("한줄평 수정 실패");
 
         alert("한줄평을 수정하였습니다.");
-        loadReviews();
+        loadReviews(getReviewApiEndpoint());
         closeModifyModal();
     } catch (error) {
         console.error(error);

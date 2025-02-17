@@ -1,4 +1,5 @@
 import { loadReviews } from "./reviewList.js";
+import {getReviewApiEndpoint} from "../utils/pathUtils.js";
 
 export function openDeleteModal(reviewId) {
     const modal = document.getElementById("deleteModal");
@@ -26,7 +27,7 @@ export async function confirmDelete() {
         if (!response.ok) throw new Error("한줄평 삭제 실패");
 
         alert("한줄평이 삭제되었습니다.");
-        loadReviews();
+        loadReviews(getReviewApiEndpoint());
         closeDeleteModal();
     } catch (error) {
         console.error(error);
