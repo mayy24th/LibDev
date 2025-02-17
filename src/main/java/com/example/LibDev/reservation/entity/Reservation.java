@@ -7,7 +7,7 @@ import com.example.LibDev.book.entity.Book;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -33,11 +33,11 @@ public class Reservation extends BaseEntity {
     private ReservationStatus status;
 
     @Column(nullable = false)
-    private LocalDate reservedDate;
+    private LocalDateTime reservedDate;
 
-    private LocalDate expirationDate;
+    private LocalDateTime expirationDate;
 
-    public void updateExpirationDate(LocalDate expirationDate) {
+    public void updateExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 
