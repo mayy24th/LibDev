@@ -1,26 +1,26 @@
 // 검색 함수 (도서 검색 후 결과를 표시)
 function searchBooks() {
     const query = document.getElementById('searchQuery').value;
-
     fetch(`/api/v1/books/search?query=${query}`)
         .then(response => response.json())
         .then(data => {
             const resultsContainer = document.getElementById('searchResults');
-            resultsContainer.innerHTML = ''; // 기존 검색 결과 초기화
+            resultsContainer.innerHTML = '';
 
             data.forEach(book => {
-                const row = document.createElement('tr');
-
-                // 도서명, 저자, 출판사, 썸네일
-                row.innerHTML = `
-                    <td>${book.title}</td>
-                    <td>${book.author}</td>
-                    <td>${book.publisher}</td>
-                    <td><img src="${book.thumbnail}" alt="썸네일" width="50" height="80"></td>
-                    <td><button onclick="selectBook('${book.title}', '${book.author}', '${book.publisher}', '${book.publishedDate}', '${book.isbn}', '${book.callNumber}', '${book.contents}', '${book.thumbnail}')">선택</button></td>
-                `;
-
-                resultsContainer.appendChild(row);
+                const card = document.createElement('div');
+                card.className = 'col';
+                card.innerHTML = `
+                            <div class="card h-100 text-center p-2">
+                                <img src="${book.thumbnail}" class="card-img-top" alt="썸네일" style="max-height: 150px; object-fit: contain;">
+                                <div class="card-body">
+                                    <h5 class="card-title">${book.title}</h5>
+                                    <p class="card-text">${book.author} | ${book.publisher}</p>
+                                    <button class="btn btn-outline-success" onclick="selectBook('${book.title}', '${book.author}', '${book.publisher}', '${book.publishedDate}', '${book.isbn}', '${book.callNumber}', '${book.contents}', '${book.thumbnail}')" data-bs-dismiss="modal">선택</button>
+                                </div>
+                            </div>
+                        `;
+                resultsContainer.appendChild(card);
             });
         })
         .catch(error => console.error('Error:', error));
@@ -65,7 +65,7 @@ function registerBook() {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
     })
-        .then(response => response.json())
+        .then(response => response.text())
         .then(data => alert('도서 등록 성공!'))
         .catch(error => alert('도서 등록 실패'));
 }

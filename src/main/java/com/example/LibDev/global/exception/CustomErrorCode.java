@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum CustomErrorCode {
+    //global 에러
+    DATA_INTEGRITY_VIOLATION(HttpStatus.BAD_REQUEST, "데이터 무결성 오류가 발생했습니다."),
+
     //user 관련 에러
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT,"이미 사용 중인 이메일입니다"),
@@ -24,6 +27,7 @@ public enum CustomErrorCode {
     BOOK_ALREADY_RESERVED(HttpStatus.BAD_REQUEST, "이미 해당 책을 예약하셨습니다."),
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 정보를 찾을 수 없습니다."),
     RESERVATION_CANCELLATION_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 예약만 취소할 수 있습니다."),
+    USER_PENALIZED(HttpStatus.FORBIDDEN, "패널티가 적용된 사용자입니다. 예약이 불가능합니다."),
 
     // review 관련 에러
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "한줄평 정보를 찾을 수 없습니다."),

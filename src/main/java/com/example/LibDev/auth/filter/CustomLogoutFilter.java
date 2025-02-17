@@ -5,6 +5,7 @@ import com.example.LibDev.global.dto.GlobalResponseDto;
 import com.example.LibDev.global.util.CookieUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.*;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,9 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
     private final AuthService authService;
     private final ObjectMapper objectMapper;
-
-    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String ACCESS_COOKIE_HEADER = "access_token";
     private static final String REFRESH_COOKIE_HEADER = "refresh-token";
-    private static final long REFRESH_TOKEN_DEL = 0;
+    private static final long TOKEN_DEL = 0;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -42,11 +42,12 @@ public class CustomLogoutFilter extends GenericFilterBean {
             return;
         }
 
-        String accessToken = request.getHeader(AUTHORIZATION_HEADER);
+        String accessToken = getAccessTokenInCookie(request);
 
         authService.deleteToken(accessToken);
 
-        response.addHeader(HttpHeaders.SET_COOKIE, CookieUtil.createCookie(REFRESH_COOKIE_HEADER,null,REFRESH_TOKEN_DEL).toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, CookieUtil.createCookie(ACCESS_COOKIE_HEADER,null,TOKEN_DEL).toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, CookieUtil.createCookie(REFRESH_COOKIE_HEADER,null,TOKEN_DEL).toString());
         response.setStatus(HttpStatus.OK.value());
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -54,5 +55,18 @@ public class CustomLogoutFilter extends GenericFilterBean {
         response.getWriter().write(objectMapper.writeValueAsString(
                 GlobalResponseDto.success(HttpStatus.OK,"로그아웃 성공")
         ));
+    }
+
+    /* Cookie 에서 AccessToken 추출 */
+    public String getAccessTokenInCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("access-token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
