@@ -1,15 +1,23 @@
 import { openModifyModal } from "./reviewModify.js";
 import { openDeleteModal } from "./reviewDelete.js";
+import { checkLoginStatus } from "../utils/auth.js";
 
-export async function loadReviews() {
+export async function loadReviews(apiEndpoint) {
     try {
-        const response = await fetch("/api/review");
+        const response = await fetch(apiEndpoint, {
+            method: "GET",
+            credentials: "include" // 쿠키 포함하여 요청
+        });
 
         if (!response.ok) {
             throw new Error(`서버 응답 오류: ${response.status} ${response.statusText}`);
         }
 
         const reviews = await response.json();
+        reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        const user = await checkLoginStatus(); // 현재 로그인된 유저의 이메일
+        const email = user.data.email;
 
         const container = document.getElementById("reviewContainer");
         container.innerHTML = reviews.map(review =>
@@ -27,8 +35,10 @@ export async function loadReviews() {
                         <span class="review-author">${review.userName}</span>
                     </div>
                     <div class="review-footer">
-                        <button class="btn-edit edit-btn" data-id="${review.id}" data-content="${review.content}">수정</button>
-                        <button class="btn-delete delete-btn" data-id="${review.id}">삭제</button>
+                        ${email === review.email ? `
+                            <button class="btn-edit edit-btn" data-id="${review.id}" data-content="${review.content}">수정</button>
+                            <button class="btn-delete delete-btn" data-id="${review.id}">삭제</button>
+                        ` : ""}
                     </div>
                 </div>
             </div>`
