@@ -1,16 +1,30 @@
-function createReservation() {
+async function createReservation() {
     const userId = document.getElementById('userId').value;
     const bookId = document.getElementById('bookId').value;
 
-    fetch('/api/v1/reservations', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId, bookId })
-    })
-        .then(response => response.json())
-        .then(data => alert('예약 완료: ' + JSON.stringify(data)))
-        .catch(error => alert('예약 실패: ' + error));
+    /*if (!userId || !bookId) {
+        alert("사용자 ID 또는 도서 ID가 입력되지 않았습니다.");
+        return;
+    }*/
+
+    try {
+        const response = await fetch("/api/v1/reservations", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId, bookId })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message ||`${response.status} ${response.statusText}`);
+        }
+
+        alert(`"${data.book.title}" 도서의 예약이 완료되었습니다!`);
+    } catch (error) {
+        alert(error.message);
+    }
 }

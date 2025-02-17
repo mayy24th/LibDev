@@ -29,7 +29,9 @@ public class ReservationAPIController {
 
     // 예약 내역 조회
     @GetMapping
-    public ResponseEntity<List<ReservationResponseDto>> getUserReservations(@AuthenticationPrincipal Long userId) {
+    /*public ResponseEntity<List<ReservationResponseDto>> getUserReservations(@AuthenticationPrincipal Long userId) {*/
+    public ResponseEntity<List<ReservationResponseDto>> getUserReservations() {
+        Long userId = 1L;  // 임시로 userId를 1로 설정
 
         if (userId == null) {
             return ResponseEntity.badRequest().body(Collections.emptyList());
@@ -39,9 +41,17 @@ public class ReservationAPIController {
         return ResponseEntity.ok(reservations);
     }
 
-    // 예약 취소
+    /*// 예약 취소
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<?> cancelReservation(@AuthenticationPrincipal Long userId, @PathVariable Long reservationId) {
+        reservationService.cancelReservation(userId, reservationId);
+        return ResponseEntity.ok("예약이 취소되었습니다.");
+    }*/
+
+    @DeleteMapping("/{reservationId}")
+    public ResponseEntity<?> cancelReservation(@PathVariable Long reservationId) {
+        Long userId = 1L;  // 임시로 userId를 1로 설정
+
         reservationService.cancelReservation(userId, reservationId);
         return ResponseEntity.ok("예약이 취소되었습니다.");
     }
