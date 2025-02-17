@@ -6,7 +6,7 @@ import com.example.LibDev.reservation.entity.type.ReservationStatus;
 import com.example.LibDev.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -22,5 +22,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     int countByUserAndStatus(User user, ReservationStatus status);
 
     // 만료된 예약 조회
-    List<Reservation> findByExpirationDateBefore(LocalDate date);
+    List<Reservation> findByExpirationDateBefore(LocalDateTime date);
 }
