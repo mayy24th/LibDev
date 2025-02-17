@@ -106,7 +106,7 @@ public class BorrowService {
 
     /* 회원 대출 가능 여부 검사 */
     public void checkMemberBorrowingStatus(User user) {
-        if(!user.isBorrow_available()) {
+        if(!user.isBorrowAvailable()) {
             log.debug("대출 불가 : 연체 중 or 연체 피널티 존재");
             throw new CustomException(CustomErrorCode.BORROW_FORBIDDEN);
         }
@@ -134,7 +134,7 @@ public class BorrowService {
                 .extended(borrow.isExtended())
                 .overdue(borrow.isOverdue())
                 .overdueDays(borrow.getOverdueDays())
-                .borrowAvailable(borrow.getUser().isBorrow_available())
+                .borrowAvailable(borrow.getUser().isBorrowAvailable())
                 .build();
     }
 }

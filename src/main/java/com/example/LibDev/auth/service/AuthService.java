@@ -4,11 +4,13 @@ import com.example.LibDev.auth.dto.TokenResDto;
 import com.example.LibDev.auth.jwt.JwtProvider;
 import com.example.LibDev.global.service.RedisTokenService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AuthService {
@@ -16,18 +18,21 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RedisTokenService redisTokenService;
 
-    private static final int subStringNum = 7;
-
     /*토큰 생성*/
     public TokenResDto generateToken(Authentication authentication) {
         String email = authentication.getName();
+        String role =  authentication.getAuthorities().stream().findFirst().get().getAuthority();
+
+        long accessTokenValidTime = jwtProvider.getAccessTokenValidTime();
+        long refreshTokenValidTime = jwtProvider.getRefreshTokenValidTime();
+
         if(redisTokenService.getRefreshToken(email) != null){
             redisTokenService.delRefreshToken(email);
         }
 
         TokenResDto tokenResDto = TokenResDto.builder()
-                .accessToken(jwtProvider.generateAccessToken(authentication))
-                .refreshToken(jwtProvider.generateRefreshToken(authentication))
+                .accessToken(jwtProvider.generateToken(email,role,"access-token",accessTokenValidTime))
+                .refreshToken(jwtProvider.generateToken(email,role,"refresh-token",refreshTokenValidTime))
                 .build();
         saveRefreshToken(email,tokenResDto.getRefreshToken());
         return tokenResDto;
@@ -43,11 +48,13 @@ public class AuthService {
     }
 
     /*토큰 무효화*/
-    public void deleteToken(String accessTokenInHeader) {
-        String targetAccessToken = getAccessTokenInHeader(accessTokenInHeader);
+    public void deleteToken(String accessToken) {
+        if (accessToken == null) {
+            return;
+        }
 
-        String principal = getPrincipal(targetAccessToken);
-        long expiration = jwtProvider.getTokenValidTime(targetAccessToken);
+        String principal = getPrincipal(accessToken);
+        long expiration = jwtProvider.getTokenValidTime(accessToken);
 
         String refreshTokenInReds = redisTokenService.getRefreshToken(principal);
 
@@ -55,7 +62,7 @@ public class AuthService {
 
             redisTokenService.delRefreshToken(principal);
 
-            redisTokenService.setBlackList(targetAccessToken,"logout",expiration - new Date().getTime());
+            redisTokenService.setBlackList(accessToken,"logout",expiration - new Date().getTime());
         }
     }
 
@@ -64,13 +71,4 @@ public class AuthService {
         return jwtProvider.getAuthentication(requestAccessToken).getName();
     }
 
-    /*Header 에서 AccessToken 추출*/
-    public String getAccessTokenInHeader(String accessTokenInHeader) {
-        if(accessTokenInHeader != null && accessTokenInHeader.startsWith("Bearer ")) {
-            return accessTokenInHeader.substring(subStringNum);
-        }
-        return null;
-    }
-
-    /**/
 }
