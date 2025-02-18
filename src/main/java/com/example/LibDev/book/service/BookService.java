@@ -206,32 +206,32 @@ public class BookService {
         Book book = bookRequestDto.toEntity();
         book.setAvailable(true);
 
-        System.out.println("ISBN 1: " + book.getIsbn());
-        System.out.println("청구기호 1: " + book.getCallNumber());
-
         // 기존 도서가 있으면, callNumber 뒤에 숫자 증가
-        Optional<Book> existingBook = bookRepository.findByCallNumber(book.getCallNumber());
-        if (existingBook.isPresent()) {
-            String newCallNumber = generateNewCallNumber(existingBook.get().getCallNumber());
+        List<Book> existingBooks = bookRepository.findByCallNumberStartingWith(book.getCallNumber());
+
+        if (!existingBooks.isEmpty()) {
+            String newCallNumber = generateNewCallNumber(book.getCallNumber(), existingBooks);
             book.setCallNumber(newCallNumber);
         }
-        System.out.println("ISBN 2: " + book.getIsbn());
-        System.out.println("청구기호 2: " + book.getCallNumber());
 
         bookRepository.save(book);
     }
 
     // 새로운 청구번호 생성
-    private String generateNewCallNumber(String existingCallNumber) {
-        if (existingCallNumber != null && existingCallNumber.contains("=")) {
-            String[] parts = existingCallNumber.split("=");
-            System.out.println("existingCallNumber : " + existingCallNumber);
-            int number = Integer.parseInt(parts[1]) + 1;
+    private String generateNewCallNumber(String baseCallNumber, List<Book> existingBooks) {
+        int maxSuffix = 1;
 
-            return parts[0] + "=" + number;
-        } else {
-            return existingCallNumber + "=2";
+        for (Book existingBook : existingBooks) {
+            String existingCallNumber = existingBook.getCallNumber();
+            if (existingCallNumber.contains("=")) {
+                String[] parts = existingCallNumber.split("=");
+                try {
+                    int number = Integer.parseInt(parts[1]);
+                    maxSuffix = Math.max(maxSuffix, number);
+                } catch (NumberFormatException ignored) {}
+            }
         }
+        return baseCallNumber + "=" + (maxSuffix + 1);
     }
 
     public List<BookResponseDto> searchBooks(String query) {
