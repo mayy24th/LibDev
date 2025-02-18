@@ -35,8 +35,8 @@ function renderCurrentBorrows(borrows) {
                 <div class="borrow-info" id="borrow-info-${borrow.id}">
                     <p>대출일: <span>${formatDate(borrow.borrowDate)}</span></p>
                     <p>반납 예정일: <span id="duedate-${borrow.id}">${formatDate(borrow.dueDate)}</span></p>
-                    <p>상태: <span>${borrow.status}</span></p>
-                    ${borrow.extended ? '<p class="extended-info">연장 완료</p>' : ''}
+                    <p class="extended-text">연장: <span>${borrow.extended ? 'Y' : 'N'}</span></p>
+                    <p>상태: <span class="${borrow.overdue ? 'overdue-text' : ''}">${borrow.status}</span>${borrow.overdue ? '<span class="overdue-days"></span>' : ''}</p> 
                 </div>
             </div>
             <div class="buttons">
