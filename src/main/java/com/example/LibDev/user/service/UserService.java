@@ -1,5 +1,7 @@
 package com.example.LibDev.user.service;
 
+import com.example.LibDev.auth.jwt.JwtProvider;
+import com.example.LibDev.auth.service.AuthService;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.user.dto.JoinReqDto;
@@ -8,7 +10,7 @@ import com.example.LibDev.user.dto.UserUpdateReqDto;
 import com.example.LibDev.user.entity.User;
 import com.example.LibDev.user.entity.type.Role;
 import com.example.LibDev.user.repository.UserRepository;
-import java.util.Objects;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +23,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
+    private final AuthService authService;
 
     public UserResDto join(JoinReqDto joinReqDto) {
 
@@ -96,13 +100,16 @@ public class UserService {
         }
     }
 
-    /*이메일 반환*/
-    public String getUserEmail(){
+    /*회원 탈퇴*/
+    @Transactional
+    public void deleteUser(HttpServletRequest request) {
+        String accessToken = jwtProvider.resolveTokenInCookie(request);
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(Objects.equals(email, "anonymousUser")){
-            return null;
-        } else{
-            return email;
-        }
+        User user = userRepository.findLoginUserByEmail(email);
+
+        authService.deleteToken(accessToken);
+        user.deleteUser();
     }
+
+
 }

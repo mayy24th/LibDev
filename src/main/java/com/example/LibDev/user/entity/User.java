@@ -30,6 +30,8 @@ public class User extends BaseEntity {
     private boolean borrowAvailable;
 
     /*패널티만료일*/
+    @Setter
+    @Column(name = "penalty_expiration")
     private LocalDateTime penaltyExpiration;
 
     /*탈퇴여부*/
@@ -40,7 +42,6 @@ public class User extends BaseEntity {
 
     public void update(String email, String name, String phone) {
         this.email = email;
-
         this.name = name;
         this.phone = phone;
     }
@@ -48,5 +49,14 @@ public class User extends BaseEntity {
     public void updatePassword(String password) {this.password = password;}
 
     public void updateBorrowAvailable(Boolean borrowAvailable) {this.borrowAvailable = borrowAvailable;}
+
+    public void deleteUser(){
+        this.email = null;
+        this.password = null;
+        this.name = "알수없음";
+        this.phone = null;
+        this.role = Role.DEL;
+        this.withdraw = true;
+    }
 
 }
