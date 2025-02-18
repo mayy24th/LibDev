@@ -66,3 +66,7 @@ button:hover {
 .book-info p {
     margin: 5px 0;
 }
+
+.modal-custom {
+    max-width: 80%;
+}
