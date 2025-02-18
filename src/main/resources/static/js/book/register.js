@@ -37,7 +37,7 @@ function searchBooks() {
                         card.className = 'col';
                         card.innerHTML = `
                             <div class="card h-100 text-center p-2">
-                                <img src="${book.thumbnail}" class="card-img-top" alt="썸네일" style="max-height: 150px; object-fit: contain;">
+                                <img src="${book.thumbnail || '/images/bookImage.jpg'}" class="card-img-top" alt="썸네일" style="max-height: 150px; object-fit: contain;">
                                 <div class="card-body">
                                     <h5 class="card-title">${book.title}</h5>
                                     <p class="card-text">${book.author} | ${book.publisher}</p>
@@ -63,7 +63,7 @@ function selectBook(title, author, publisher, publishedDate, isbn, callNumber, c
     document.getElementById('bookIsbn').textContent = isbn;
     document.getElementById('bookCallNumber').textContent = callNumber;
     document.getElementById('bookContents').textContent = contents;
-    document.getElementById('bookThumbnail').src = thumbnail;
+    document.getElementById('bookThumbnail').src = thumbnail || '/images/bookImage.jpg';
     document.getElementById('bookTopicId').textContent = topicId;
 }
 
