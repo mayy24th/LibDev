@@ -28,24 +28,19 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String jwt = jwtProvider.resolveTokenInCookie(request);
-        if (jwt == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(mapper.writeValueAsString(GlobalResponseDto.fail(HttpStatus.UNAUTHORIZED, "토큰이 존재하지 않습니다.")));
-            return;
+        if (jwt != null) {
+            if ( jwtProvider.isValidToken(jwt)) {
+                Authentication authentication = jwtProvider.getAuthentication(jwt);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(mapper.writeValueAsString(GlobalResponseDto.fail(HttpStatus.UNAUTHORIZED,"유효하지않은 토큰입니다.")));
+                return;
+            }
         }
 
-        if ( jwtProvider.isValidToken(jwt)) {
-            Authentication authentication = jwtProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(mapper.writeValueAsString(GlobalResponseDto.fail(HttpStatus.UNAUTHORIZED,"유효하지않은 토큰입니다.")));
-            return;
-        }
         filterChain.doFilter(request, response);
     }
 }
