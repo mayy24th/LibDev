@@ -43,6 +43,10 @@
     margin: 0.5rem;
 }
 
+.overdue-text {
+    color: #df0303;
+}
+
 .btn-primary {
     background-color: #5B3A1E;
 }
