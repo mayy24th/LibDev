@@ -1,14 +1,27 @@
-document.addEventListener("DOMContentLoaded",async () => {
+import { reissue } from "../utils/reissue.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
     try{
-        const response = await fetch("/api/v1/users", {
+        let response = await fetch("/api/v1/users", {
             method: "GET",
             credentials:"include"
         })
 
-        //추후 세부 에러 알림 표시
-        if(!response.ok){
-            window.location.href = "/users/login"
-            return;
+        if (response.status === 401 || response.status === 500) {
+            const reissued = await reissue();
+
+            if (reissued) {
+                response = await fetch("/api/v1/users", {
+                    method: "GET",
+                    credentials: "include"
+                });
+            } else {
+                return;
+            }
+        }
+
+        if (!response.ok) {
+            throw new Error("회원정보 조회 실패");
         }
         const result =  await response.json()
         const userInfo = result.data;
