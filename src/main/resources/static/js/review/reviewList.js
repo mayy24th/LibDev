@@ -60,8 +60,21 @@ export async function loadReviews(apiEndpoint) {
             });
         });
 
+        updateReviewWriteButton()
+
     } catch (error) {
         console.error("한줄평 목록 불러오기 실패:", error);
         alert("한줄평 목록을 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    }
+}
+
+function updateReviewWriteButton() {
+    const writeButton = document.getElementById("openModifyModalBtn");
+    const currentPath = window.location.pathname;
+
+    if (currentPath.startsWith("/review/book/")) {
+        writeButton.style.display = "block"; // 도서별 리뷰 조회에서는 보이게 설정
+    } else {
+        writeButton.style.display = "none"; // 그 외 페이지에서는 숨김
     }
 }
