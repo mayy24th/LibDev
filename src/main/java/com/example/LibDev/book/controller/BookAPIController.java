@@ -3,7 +3,6 @@ package com.example.LibDev.book.controller;
 import com.example.LibDev.book.dto.BookRequestDto;
 import com.example.LibDev.book.dto.BookResponseDto;
 import com.example.LibDev.book.dto.KakaoBookResponseDto;
-import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,7 +42,7 @@ public class BookAPIController {
     // Kakao API에서 도서 검색 (DB에 저장 X, 검색 결과 반환)
     @GetMapping("/search")
     public ResponseEntity<List<KakaoBookResponseDto>> searchKakaoBooks(@RequestParam String query) {
-        List<KakaoBookResponseDto> books = bookService.searchBooksFromKakao(query);
+        List<KakaoBookResponseDto> books = bookService.searchBooksToRegister(query);
 
         // 저자 또는 출판사가 빈칸이면 제외
         List<KakaoBookResponseDto> filteredBooks = books.stream()

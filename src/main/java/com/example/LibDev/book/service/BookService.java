@@ -155,7 +155,7 @@ public class BookService {
 
 
     // 도서 등록 페이지에서 도서 검색
-    public List<KakaoBookResponseDto> searchBooksFromKakao(String query) {
+    public List<KakaoBookResponseDto> searchBooksToRegister(String query) {
         String url = "https://dapi.kakao.com/v3/search/book?query=" + query;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
