@@ -24,15 +24,16 @@ th {
     background-color: #f4f4f4;
 }
 
-button {
-    background-color: #007bff;
+.custom-btn {
+    background-color: #623F3F;
     color: white;
     border: none;
-    cursor: pointer;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-button:hover {
-    background-color: #0056b3;
+.custom-btn:hover {
+    background-color: #4F2D2D;
 }
 
 .book-detail-container {
@@ -45,24 +46,23 @@ button:hover {
     width: 100%;
     background-color: #fff;
 }
+
 .book-thumbnail {
     flex: 1;
     display: flex;
     justify-content: center;
     padding-right: 20px;
 }
+
 .book-thumbnail img {
     max-width: 100%;
     border-radius: 5px;
 }
+
 .book-info {
     flex: 2;
 }
-.book-info h2 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
+
 .book-info p {
     margin: 5px 0;
 }
