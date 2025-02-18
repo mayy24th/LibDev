@@ -30,6 +30,8 @@ public class User extends BaseEntity {
     private boolean borrowAvailable;
 
     /*패널티만료일*/
+    @Setter
+    @Column(name = "penalty_expiration")
     private LocalDateTime penaltyExpiration;
 
     /*탈퇴여부*/
