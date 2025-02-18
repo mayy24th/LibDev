@@ -2,11 +2,14 @@ package com.example.LibDev.user.controller;
 
 import com.example.LibDev.global.dto.GlobalResponseDto;
 import com.example.LibDev.global.util.BindingValidError;
+import com.example.LibDev.global.util.CookieUtil;
 import com.example.LibDev.user.dto.JoinReqDto;
 import com.example.LibDev.user.dto.UserUpdateReqDto;
 import com.example.LibDev.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,6 +21,10 @@ import java.util.HashMap;
 @RestController
 public class UserApiController {
     private final UserService userService;
+
+    private static final String ACCESS_COOKIE_HEADER = "access-token";
+    private static final String REFRESH_COOKIE_HEADER = "refresh-token";
+    private static final long TOKEN_DEL = 0;
 
     @PostMapping("/api/v1/users")
     public ResponseEntity<GlobalResponseDto> join(@Valid @RequestBody JoinReqDto reqDto, BindingResult bindingResult) {
@@ -53,6 +60,16 @@ public class UserApiController {
         userService.checkEmailDuplication(email);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(GlobalResponseDto.success(HttpStatus.OK, "사용 가능한 이메일입니다."));
+    }
+
+    @DeleteMapping("/api/v1/users")
+    public ResponseEntity<GlobalResponseDto> deleteUsers(HttpServletRequest request) {
+        userService.deleteUser(request);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .header(HttpHeaders.SET_COOKIE, CookieUtil.createCookie(ACCESS_COOKIE_HEADER,null,TOKEN_DEL).toString())
+                .header(HttpHeaders.SET_COOKIE, CookieUtil.createCookie(REFRESH_COOKIE_HEADER,null,TOKEN_DEL).toString())
+                .body(GlobalResponseDto.success(HttpStatus.NO_CONTENT,"회원탈퇴 완료"));
     }
 
 

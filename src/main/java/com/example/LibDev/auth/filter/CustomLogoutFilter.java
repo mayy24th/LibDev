@@ -9,7 +9,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.GenericFilterBean;
@@ -21,7 +20,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
     private final AuthService authService;
     private final ObjectMapper objectMapper;
-    private static final String ACCESS_COOKIE_HEADER = "access_token";
+    private static final String SET_COOKIE_HEADER = "Set-Cookie";
+    private static final String ACCESS_COOKIE_HEADER = "access-token";
     private static final String REFRESH_COOKIE_HEADER = "refresh-token";
     private static final long TOKEN_DEL = 0;
 
@@ -46,8 +46,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         authService.deleteToken(accessToken);
 
-        response.addHeader(HttpHeaders.SET_COOKIE, CookieUtil.createCookie(ACCESS_COOKIE_HEADER,null,TOKEN_DEL).toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, CookieUtil.createCookie(REFRESH_COOKIE_HEADER,null,TOKEN_DEL).toString());
+        response.addHeader(SET_COOKIE_HEADER, CookieUtil.createCookie(ACCESS_COOKIE_HEADER,null,TOKEN_DEL).toString());
+        response.addHeader(SET_COOKIE_HEADER, CookieUtil.createCookie(REFRESH_COOKIE_HEADER,null,TOKEN_DEL).toString());
         response.setStatus(HttpStatus.OK.value());
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
