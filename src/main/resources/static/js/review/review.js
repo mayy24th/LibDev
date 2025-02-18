@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     loadReviews(getReviewApiEndpoint());
 
     document.getElementById("openModifyModalBtn").addEventListener("click", async () => {
-        await checkLoginStatus();
+        const isLoggedIn = await checkLoginStatus();
+        if (!isLoggedIn) return;
+
         openModifyModal();
     });
 
