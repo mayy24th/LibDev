@@ -42,7 +42,7 @@ function searchBooks() {
                                     <h5 class="card-title">${book.title}</h5>
                                     <p class="card-text">${book.author} | ${book.publisher}</p>
                                     <p class="card-text">${book.callNumber} | ${book.topicId}</p>
-                                    <button class="btn btn-outline-success" onclick="selectBook('${book.title}', '${book.author}', '${book.publisher}', '${book.publishedDate}', '${book.isbn}', '${book.callNumber}', '${book.contents}', '${book.thumbnail}', '${book.topicId}')" data-bs-dismiss="modal">선택</button>
+                                    <button class="btn custom-btn-outline" onclick="selectBook('${book.title}', '${book.author}', '${book.publisher}', '${book.publishedDate}', '${book.isbn}', '${book.callNumber}', '${book.contents}', '${book.thumbnail}', '${book.topicId}')" data-bs-dismiss="modal">선택</button>
                                 </div>
                             </div>
                         `;
