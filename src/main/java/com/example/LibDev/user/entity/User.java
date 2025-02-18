@@ -40,7 +40,6 @@ public class User extends BaseEntity {
 
     public void update(String email, String name, String phone) {
         this.email = email;
-
         this.name = name;
         this.phone = phone;
     }
@@ -48,5 +47,14 @@ public class User extends BaseEntity {
     public void updatePassword(String password) {this.password = password;}
 
     public void updateBorrowAvailable(Boolean borrowAvailable) {this.borrowAvailable = borrowAvailable;}
+
+    public void deleteUser(){
+        this.email = null;
+        this.password = null;
+        this.name = "알수없음";
+        this.phone = null;
+        this.role = Role.DEL;
+        this.withdraw = true;
+    }
 
 }
