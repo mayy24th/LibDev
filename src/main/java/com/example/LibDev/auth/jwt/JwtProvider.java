@@ -3,6 +3,8 @@ package com.example.LibDev.auth.jwt;
 import com.example.LibDev.global.service.RedisTokenService;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ public class JwtProvider {
     @Value("${spring.jwt.refresh-token-valid-time}")
     private long refreshTokenValidTime;
 
+    private static final String ACCESS_TOKEN = "access-token";
     private static Key signingkey;
 
     @PostConstruct
@@ -94,6 +97,19 @@ public class JwtProvider {
             return true;
         }
         return false;
+    }
+
+    /*요청 헤더 쿠키에서 AccessToken*/
+    public String resolveTokenInCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (ACCESS_TOKEN.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
     public long getTokenValidTime(String token){
