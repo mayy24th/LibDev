@@ -7,11 +7,7 @@ export async function checkLoginStatus() {
 
         if (!response.ok) throw new Error("로그인 정보 없음");
 
-        const user = await response.json();
-        console.log(user)
-
-        return user; // 로그인 유저 이메일 반환
-
+        return true;
     } catch (error) {
         console.log("로그인되지 않음");
         alert("로그인이 필요합니다.");
