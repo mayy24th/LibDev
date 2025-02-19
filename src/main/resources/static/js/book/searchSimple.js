@@ -67,11 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         <p class="mb-1 text-muted">저자: ${book.author} | 출판사: ${book.publisher} | 발행일: ${book.publishedDate}</p>
                         <p class="mb-1 text-muted">ISBN: ${book.isbn} | 청구기호: ${book.callNumber}</p>
                         <div class="p-2 mt-2" style="background-color: #f2f2f2;">
-                            <span class="${book.isAvailable === 0 || book.isAvailable === '0' ? 'text-danger' : 'text-success'} fw-bold">
-                                ${book.isAvailable === 0 || book.isAvailable === '0' ? '대출 불가' : '대출 가능'} ${book.isAvailable}
+                            <span class="${book.isAvailable ? 'text-success' : 'text-danger'} fw-bold">
+                                ${book.isAvailable ? '대출가능[비치중]' : '대출불가[대출중]'}
                             </span>
                             <span class="ms-3 text-muted">
-                                ${book.isAvailable === 0 || book.isAvailable === '0' ? '도서 예약 가능' : '도서 예약 불가'}
+                                ${book.isAvailable ? '도서 예약 불가' : '도서 예약 가능'}
                             </span>
                         </div>
                     </div>
