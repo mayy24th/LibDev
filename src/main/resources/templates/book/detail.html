@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도서 상세 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/book/detail.css">
+</head>
+<body>
+<div class="container mt-4-1">
+    <h1 class="text-center">도서 정보</h1>
+    <div class="book-detail-container">
+        <div class="book-thumbnail">
+            <img id="bookThumbnail" alt="도서 표지" th:src="@{${book.thumbnail}}">
+        </div>
+        <div class="book-info">
+            <p><strong>도서명:</strong> <span id="bookTitle" th:text="${book.title}"></span></p>
+            <p><strong>저자:</strong> <span id="bookAuthor" th:text="${book.author}"></span></p>
+            <p><strong>출판사:</strong> <span id="bookPublisher" th:text="${book.publisher}"></span></p>
+            <p><strong>발행일:</strong> <span id="bookPublishedDate" th:text="${book.publishedDate}"></span></p>
+            <p><strong>표준번호:</strong> <span id="bookIsbn" th:text="${book.isbn}"></span></p>
+            <p><strong>청구기호:</strong> <span id="bookCallNumber" th:text="${book.callNumber}"></span></p>
+            <p><strong>주제 ID:</strong> <span id="bookTopicId" th:text="${book.topicId}"></span></p>
+
+        </div>
+    </div>
+    <div>
+        <h5>도서 소개</h5>
+        <span id="bookContents" th:text="${book.contents}"></span>
+        <p class="fromKakao">[Kakao 제공]</p>
+    </div>
+
+    <div class="text-center btns mt-4">
+        <button class="btn btn-custom-1">대출하기</button>
+        <button class="btn btn-custom-2 mx-2">한줄평</button>
+        <button class="btn btn-secondary">목록으로</button>
+    </div>
+
+    <div class="mt-4">
+        <h5>소장정보</h5>
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+            <tr>
+                <th>도서명</th>
+                <th>표준번호</th>
+                <th>청구기호</th>
+                <th>대출상태</th>
+                <th>반납예정일</th>
+                <th>도서예약</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.isbn}"></td>
+                <td th:text="${book.callNumber}"></td>
+                <td class="text-center">
+                    <span th:if="${book.isAvailable}">
+                        대출가능<br>
+                        [비치중]
+                    </span>
+                    <span th:unless="${book.isAvailable}">
+                        대출불가<br>
+                        [대출중]<br>
+                        <!--(예약: <span th:text="${book.reservationCount}"></span>명)-->
+                        (예약: 0명)
+                    </span>
+                </td>
+                <!--<td th:text="${book.returnDueDate != null ? book.returnDueDate : '-'}"></td>-->
+                <td th:text="'-'"></td>
+                <td>
+                    <button th:classappend="${book.isAvailable ? 'btn-secondary' : 'btn-secondary'}"
+                            class="btn text-white py-1"
+                            th:text="${book.isAvailable ? '예약불가' : '예약가능'}"
+                            disabled>
+                    </button>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="/js/book/detail.js"></script>
+</body>
+</html>
