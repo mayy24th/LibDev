@@ -40,4 +40,18 @@ public class BookViewController {
         return "book/detail";
     }
 
+    // 주제 선택 페이지
+    @GetMapping("/search-topic")
+    public String showTopicSelectionPage(Model model) {
+        return "book/searchTopic";
+    }
+
+    // 주제별 도서 목록 페이지
+    @GetMapping("/search-topic/{topicId}")
+    public String showBooksByTopic(@PathVariable int topicId, Model model) {
+        List<BookResponseDto> books = bookService.findBooksByTopic(topicId); // 주제별 도서 목록 조회
+        model.addAttribute("books", books);
+        return "book/searchTopicList";
+    }
+
 }

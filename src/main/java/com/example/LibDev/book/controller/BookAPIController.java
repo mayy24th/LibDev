@@ -96,4 +96,11 @@ public class BookAPIController {
         return ResponseEntity.ok(books);
     }
 
+    // 주제별 도서 목록 조회 API
+    @GetMapping("/search-topic/{topicId}")
+    public ResponseEntity<List<BookResponseDto>> searchBooksByTopic(@PathVariable int topicId) {
+        List<BookResponseDto> books = bookService.findBooksByTopic(topicId);
+        return ResponseEntity.ok(books);
+    }
+
 }
