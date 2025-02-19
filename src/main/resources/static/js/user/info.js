@@ -42,3 +42,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error(error);
     }
 })
+
+const editBtn = document.getElementById("edit");
+
+editBtn.addEventListener("click",() => {
+    window.location.href = "/users/update"
+})
+
