@@ -33,20 +33,22 @@ function searchBooks() {
             Promise.all(bookRequests)
                 .then(mergedBooks => {
                     mergedBooks.forEach(book => {
-                        const card = document.createElement('div');
-                        card.className = 'col';
-                        card.innerHTML = `
-                            <div class="card h-100 text-center p-2">
-                                <img src="${book.thumbnail || '/images/bookImage.jpg'}" class="card-img-top" alt="썸네일" style="max-height: 150px; object-fit: contain;">
-                                <div class="card-body">
-                                    <h5 class="card-title">${book.title}</h5>
-                                    <p class="card-text">${book.author} | ${book.publisher}</p>
-                                    <p class="card-text">${book.callNumber} | ${book.topicId}</p>
-                                    <button class="btn custom-btn-outline" onclick="selectBook('${book.title}', '${book.author}', '${book.publisher}', '${book.publishedDate}', '${book.isbn}', '${book.callNumber}', '${book.contents}', '${book.thumbnail}', '${book.topicId}')" data-bs-dismiss="modal">선택</button>
+                        if (book.callNumber !== 'N/A') {
+                            const card = document.createElement('div');
+                            card.className = 'col';
+                            card.innerHTML = `
+                                <div class="card h-100 text-center p-2">
+                                    <img src="${book.thumbnail || '/images/bookImage.jpg'}" class="card-img-top" alt="썸네일" style="max-height: 150px; object-fit: contain;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${book.title}</h5>
+                                        <p class="card-text">${book.author} | ${book.publisher}</p>
+                                        <p class="card-text">${book.callNumber} | ${book.topicId}</p>
+                                        <button class="btn custom-btn-outline" onclick="selectBook('${book.title}', '${book.author}', '${book.publisher}', '${book.publishedDate}', '${book.isbn}', '${book.callNumber}', '${book.contents}', '${book.thumbnail}', '${book.topicId}')" data-bs-dismiss="modal">선택</button>
+                                    </div>
                                 </div>
-                            </div>
-                        `;
-                        resultsContainer.appendChild(card);
+                            `;
+                            resultsContainer.appendChild(card);
+                        }
                     });
                 })
                 .catch(error => console.error('Error with book requests:', error));
