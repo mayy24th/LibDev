@@ -58,4 +58,9 @@ public class Book extends BaseEntity {
     public void setCallNumber(String callNumber) {
         this.callNumber = callNumber;
     }
+
+    public Boolean getIsAvailable() {
+        return isAvailable;
+    }
+
 }

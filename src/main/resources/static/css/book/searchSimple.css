@@ -1,58 +1,89 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    padding: 20px;
-    background-color: #f8f8f8;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
-.title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
+.mt-4 {
+    width: 70%;
 }
 
-.search-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
+
+/* 검색창 스타일 */
+.input-group {
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
-#search-type, #search-input, #search-button {
-    padding: 10px;
-    margin-right: 5px;
-    font-size: 14px;
-}
-
+/* 검색 버튼 스타일 */
 #search-button {
-    background-color: #007BFF;
-    color: white;
+    background-color: #623F3F;
     border: none;
-    cursor: pointer;
+}
+#search-button:hover {
+    background-color: #4e2f2f;
 }
 
-.result-info {
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
+/* 검색 결과 개수 */
+.text-center.fw-bold {
+    margin-top: 10px;
+    text-align: left !important;
 }
 
-.book-table {
+.d-flex {
+    display: flex !important;
+    align-items: center;
+}
+
+.d-flex > div {
     width: 100%;
-    border-collapse: collapse;
-    background-color: white;
 }
 
-.book-table th, .book-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
+/* 리스트 스타일 */
+.list-group-item {
+    background: white;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+.list-group-item:hover {
+    transform: scale(1.02);
 }
 
-.book-table th {
-    background-color: #f4f4f4;
+/* 도서 정보 텍스트 */
+.list-group-item h5 {
+    color: #333;
 }
 
-.thumbnail-img {
-    width: 50px;
-    height: auto;
+.list-group-item p {
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+.text-muted {
+    color: #535353 !important;
+}
+
+/* 대출 가능 여부 스타일 */
+.list-group-item .p-2 {
+    font-size: 0.9rem;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 표지 이미지 스타일 */
+.list-group-item img {
+    width: 100px !important;
+    margin-right: 1.5rem !important;
+}
+
+/* 페이지네이션 스타일 */
+.pagination .page-item.active .page-link {
+    background-color: #623F3F;
+    border-color: #623F3F;
+    color: white;
+}
+.pagination .page-link {
+    color: #623F3F;
+}
+.pagination .page-link:hover {
+    background-color: #f1e3e3;
 }

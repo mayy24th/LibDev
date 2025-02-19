@@ -1,0 +1,105 @@
+body {
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.mt-4-1 {
+    width: 70%;
+}
+
+.book-detail-container {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 2px solid #656565;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.book-thumbnail {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.book-thumbnail img {
+    width: 100%;
+    max-width: 200px;
+}
+
+.book-info {
+    flex: 2;
+}
+
+.book-info p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.book-info p strong {
+    color: #333;
+}
+
+.fromKakao {
+    padding-top: 5px;
+    color: #9a9a9a;
+}
+
+.btns {
+    align-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.btn-custom-1 {
+    background-color: #623F3F;
+    border: none;
+    color: white;
+    width: 100px;
+    padding: 10px;
+}
+
+.btn-custom-1:hover {
+    background-color: #4e2f2f;
+    color: white;
+}
+
+.btn-custom-1:active {
+    background-color: #4e2f2f !important;
+    color: white !important;
+}
+
+.btn-custom-2 {
+    background-color: #996247;
+    border: none;
+    color: white;
+    width: 100px;
+    padding: 10px;
+}
+
+.btn-custom-2:hover {
+    background-color: #7a4e38;
+    border: none;
+    color: white;
+}
+
+.btn-custom-2:active {
+    background-color: #7a4e38 !important;
+    color: white !important;
+}
+
+.btn-custom-2 {
+    background-color: #996247;
+    border: none;
+    color: white;
+}
+
+.btn-secondary {
+    width: 100px;
+    padding: 10px;
+}
+
+td {
+    vertical-align: middle;
+    text-align: center;
+}
