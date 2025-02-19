@@ -4,7 +4,9 @@ import com.example.LibDev.borrow.repository.BorrowRepository;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.recommendation.dto.RecommendationResponseDto;
-import com.example.LibDev.recommendation.mapper.RecommendationMapper;
+import com.example.LibDev.recommendation.mapper.PopularBookMapper;
+import com.example.LibDev.recommendation.mapper.RecommendationBookMapper;
+import com.example.LibDev.recommendation.mapper.UserActivityMapper;
 import com.example.LibDev.user.entity.User;
 import com.example.LibDev.user.repository.UserRepository;
 import com.example.LibDev.user.service.UserService;
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserBaseBookService {
 
-    private final RecommendationMapper recommendationMapper;
+    private final RecommendationBookMapper RecommendationBookMapper;
+    private final PopularBookMapper popularBookMapper;
+    private final UserActivityMapper userActivityMapper;
     private final BorrowRepository borrowRepository;
     private final UserRepository userRepository;
     private final UserService userService;
@@ -28,7 +32,7 @@ public class UserBaseBookService {
         /** 비로그인 - popularBooks **/
         String email = userService.getUserEmail();
         if(email == null){
-            return recommendationMapper.findPopularBooks();
+            return popularBookMapper.findPopularBooks();
         }
 
         /** 로그인 **/
@@ -36,11 +40,11 @@ public class UserBaseBookService {
                 .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
         // 대출내역이 존재하지 않는 경우 경우 - 인기도서 (대출 수 기반)
-        if (!borrowRepository.existsByUser(user)) {return recommendationMapper.findPopularBooks();}
+        if (!borrowRepository.existsByUser(user)) {return popularBookMapper.findPopularBooks();}
 
         // 대출내역이 존재하는 경우 - 최다, 최신 대출 도서를 기반으로 조회
-        Integer mostBorrowedTopic = recommendationMapper.findMostBorrowedTopic(user.getId());
-        List<RecommendationResponseDto> recommendations = recommendationMapper.findUserBaseBooks(user.getId(), mostBorrowedTopic);
+        Integer mostBorrowedTopic = userActivityMapper.findMostBorrowedTopic(user.getId());
+        List<RecommendationResponseDto> recommendations = RecommendationBookMapper.findUserBaseBooks(user.getId(), mostBorrowedTopic);
         fillWithPopularBooks(recommendations);
 
         return recommendations;
@@ -53,8 +57,8 @@ public class UserBaseBookService {
                     .toList();
 
             List<RecommendationResponseDto> popularBooks = excludedBookIds.isEmpty()
-                    ? recommendationMapper.findPopularBooks()
-                    : recommendationMapper.findPopularBooksExcluding(excludedBookIds, RECOMMENDATION_LIMIT - recommendations.size());
+                    ? popularBookMapper.findPopularBooks()
+                    : popularBookMapper.findPopularBooksExcluding(excludedBookIds, RECOMMENDATION_LIMIT - recommendations.size());
 
             recommendations.addAll(popularBooks);
         }
