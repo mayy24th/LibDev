@@ -3,6 +3,7 @@ package com.example.LibDev.borrow.service;
 import com.example.LibDev.book.repository.BookRepository;
 import com.example.LibDev.borrow.dto.BorrowResDto;
 import com.example.LibDev.borrow.dto.ExtendResDto;
+import com.example.LibDev.borrow.dto.ReturnResDto;
 import com.example.LibDev.borrow.entity.Borrow;
 import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.book.entity.Book;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +59,7 @@ public class BorrowService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("해당 책이 존재하지 않습니다."));
-        log.debug("User Name: {}, Book Title: {}", user.getName(), book.getTitle());
+        log.debug("대출 신청 - User Name: {}, Book Title: {}", user.getName(), book.getTitle());
 
         checkMemberBorrowingStatus(user);
         checkMaxBorrowLimit(user);
@@ -104,10 +106,55 @@ public class BorrowService {
                 .build();
     }
 
+    /* 도서 반납 신청 */
+    @Transactional
+    public ReturnResDto requestReturn(Long borrowId) {
+        Borrow borrow = borrowRepository.findById(borrowId).orElseThrow(() -> new CustomException(CustomErrorCode.BORROW_NOT_FOUND));
+        borrow.updateStatus(Status.RETURN_REQUESTED);
+
+        return ReturnResDto.builder()
+                .id(borrow.getId())
+                .status(borrow.getStatus().getDescription())
+                .build();
+    }
+
+    /* 도서 반납 승인 */
+    @Transactional
+    public void approveReturn(Long borrowId) {
+        Borrow borrow = borrowRepository.findById(borrowId).orElseThrow(() -> new CustomException(CustomErrorCode.BORROW_NOT_FOUND));
+
+        borrow.updateReturnDate(LocalDateTime.now());
+
+        if(borrow.getStatus() == Status.OVERDUE) {
+            borrow.updateOverdueDays(ChronoUnit.DAYS.between(borrow.getDueDate(), borrow.getReturnDate()));
+            updateUserPenaltyExpiration(borrow.getUser(), borrow.getOverdueDays(), borrow.getReturnDate());
+        }
+
+        borrow.updateStatus(Status.RETURNED);
+
+        updateBookIsAvailable(borrow.getBook());
+    }
+
+    /* 회원 패널티 만료일 업데이트 */
+    public void updateUserPenaltyExpiration(User user, long overdueDays,  LocalDateTime returnDate) {
+        if(user.getPenaltyExpiration() != null) {
+            user.updatePenaltyExpiration(user.getPenaltyExpiration().plusDays(overdueDays));
+        } else {
+          user.setPenaltyExpiration(returnDate.plusDays(overdueDays));
+        }
+    }
+
+    /* 도서 대출 가능 여부 업데이트 */
+    public void updateBookIsAvailable(Book book) {
+        if (!reservationRepository.existsByBook(book)) {
+            book.updateIsAvailable(true);
+        }
+    }
+
     /* 회원 대출 가능 여부 검사 */
     public void checkMemberBorrowingStatus(User user) {
         if(!user.isBorrowAvailable()) {
-            log.debug("대출 불가 : 연체 중 or 연체 피널티 존재");
+            log.debug("대출(연장) 불가 - 연체 중 / 연체 피널티 존재");
             throw new CustomException(CustomErrorCode.BORROW_FORBIDDEN);
         }
     }
@@ -117,7 +164,7 @@ public class BorrowService {
         int borrowedCount = borrowRepository.countByUserAndStatus(user, Status.BORROWED);
 
         if (borrowedCount >= MAX_BORROW_LIMIT) {
-            log.debug("대출 불가 : 대출 가능 권 수 초과");
+            log.debug("대출 불가 - 대출 가능 권 수 초과");
             throw new CustomException(CustomErrorCode.BORROW_FORBIDDEN);
         }
     }

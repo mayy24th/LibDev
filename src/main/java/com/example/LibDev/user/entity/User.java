@@ -50,6 +50,8 @@ public class User extends BaseEntity {
 
     public void updateBorrowAvailable(Boolean borrowAvailable) {this.borrowAvailable = borrowAvailable;}
 
+    public void updatePenaltyExpiration(LocalDateTime penaltyExpiration) {this.penaltyExpiration = penaltyExpiration;}
+
     public void deleteUser(){
         this.email = null;
         this.password = null;
