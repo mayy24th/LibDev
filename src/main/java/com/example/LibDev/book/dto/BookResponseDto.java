@@ -18,6 +18,7 @@ public class BookResponseDto {
     private String callNumber;
     private String thumbnail;
     private Integer topicId;
+    private Boolean isAvailable;
 
     public static BookResponseDto fromEntity(Book book) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -31,7 +32,8 @@ public class BookResponseDto {
                 book.getContents(),
                 book.getCallNumber(),
                 book.getThumbnail(),
-                book.getTopicId()
+                book.getTopicId(),
+                book.getIsAvailable()
         );
     }
 }
