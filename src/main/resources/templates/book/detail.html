@@ -11,19 +11,20 @@
 <body>
 <div class="container mt-4-1">
     <h1 class="text-center">도서 정보</h1>
-    <div class="book-detail-container">
-        <div class="book-thumbnail">
-            <img id="bookThumbnail" alt="도서 표지" th:src="@{${book.thumbnail}}">
-        </div>
-        <div class="book-info">
-            <p><strong>도서명:</strong> <span id="bookTitle" th:text="${book.title}"></span></p>
-            <p><strong>저자:</strong> <span id="bookAuthor" th:text="${book.author}"></span></p>
-            <p><strong>출판사:</strong> <span id="bookPublisher" th:text="${book.publisher}"></span></p>
-            <p><strong>발행일:</strong> <span id="bookPublishedDate" th:text="${book.publishedDate}"></span></p>
-            <p><strong>표준번호:</strong> <span id="bookIsbn" th:text="${book.isbn}"></span></p>
-            <p><strong>청구기호:</strong> <span id="bookCallNumber" th:text="${book.callNumber}"></span></p>
-            <p><strong>주제 ID:</strong> <span id="bookTopicId" th:text="${book.topicId}"></span></p>
-
+    <div class="book-detail-box">
+        <h3 class="book-detail-title" th:text="${book.title}">도서명</h3>
+        <div class="book-detail-container">
+            <div class="book-detail-thumbnail">
+                <img id="bookThumbnail" alt="도서 표지" th:src="@{${book.thumbnail}}">
+            </div>
+            <div class="book-detail-info">
+                <p><strong>저자:</strong> <span id="bookAuthor" th:text="${book.author}"></span></p>
+                <p><strong>출판사:</strong> <span id="bookPublisher" th:text="${book.publisher}"></span></p>
+                <p><strong>발행일:</strong> <span id="bookPublishedDate" th:text="${book.publishedDate}"></span></p>
+                <p><strong>표준번호:</strong> <span id="bookIsbn" th:text="${book.isbn}"></span></p>
+                <p><strong>청구기호:</strong> <span id="bookCallNumber" th:text="${book.callNumber}"></span></p>
+                <p><strong>주제 ID:</strong> <span id="bookTopicId" th:text="${book.topicId}"></span></p>
+            </div>
         </div>
     </div>
     <div>
