@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @AllArgsConstructor
 public class BookResponseDto {
+    private Long bookId;
     private String title;
     private String author;
     private String publisher;
@@ -24,6 +25,7 @@ public class BookResponseDto {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         return new BookResponseDto(
+                book.getBookId(),
                 book.getTitle(),
                 book.getAuthor(),
                 book.getPublisher(),
