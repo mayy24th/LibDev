@@ -2,13 +2,16 @@ package com.example.LibDev.borrow.controller;
 
 import com.example.LibDev.borrow.dto.BorrowResDto;
 import com.example.LibDev.borrow.dto.ExtendResDto;
+import com.example.LibDev.borrow.dto.ReturnResDto;
 import com.example.LibDev.borrow.service.BorrowService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class BorrowAPIController {
@@ -31,5 +34,19 @@ public class BorrowAPIController {
     @PatchMapping("/api/v1/extend/{borrowId}")
     public ResponseEntity<ExtendResDto> extend(@PathVariable Long borrowId) {
         return ResponseEntity.ok(borrowService.extendReturnDate(borrowId));
+    }
+
+    /* 도서 반납 신청 */
+    @PatchMapping("/api/v1/return/{borrowId}")
+    public ResponseEntity<ReturnResDto> requestReturn(@PathVariable Long borrowId) {
+        log.debug("반납 신청 - borrowId = {}", borrowId);
+        return ResponseEntity.ok(borrowService.requestReturn(borrowId));
+    }
+
+    /* 도서 반납 승인 */
+    @PatchMapping("/api/v1/approve-return/{borrowId}")
+    public ResponseEntity<?> approveReturn(@PathVariable Long borrowId) {
+        borrowService.approveReturn(borrowId);
+        return ResponseEntity.ok().build();
     }
 }

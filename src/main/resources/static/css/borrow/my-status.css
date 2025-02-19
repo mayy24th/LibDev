@@ -49,8 +49,16 @@
 
 .btn-primary {
     background-color: #5B3A1E;
+    border-color: #5B3A1E;
 }
 
 .btn-primary:hover {
-    background-color: #7A4E29;
+    background-color: #4F2D2D;
+    border-color: #5B3A1E;
+}
+
+.btn-primary:disabled {
+    background-color: #5B3A1E;
+    border-color: #5B3A1E;
+    opacity: 0.7;
 }
