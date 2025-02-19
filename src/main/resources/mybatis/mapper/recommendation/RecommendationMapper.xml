@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-
 <mapper namespace="com.example.LibDev.recommendation.mapper.RecommendationMapper">
 
     <!-- 도서 상세페이지 추천 : 해당 도서와 유사한 도서 추천 -->
@@ -62,39 +61,6 @@
         LIMIT 5; -- 최종적으로 5개까지만 반환
     </select>
 
-
-    <!-- 사용자가 가장 많이 대출한 주제 -->
-    <select id="findMostBorrowedTopic" resultType="int">
-        SELECT b.topic_id
-        FROM borrow br
-            JOIN book b ON br.book_id = b.book_id
-        WHERE br.user_id = #{userId}
-        GROUP BY b.topic_id
-        ORDER BY COUNT(*) DESC, MAX(br.created_at) DESC -- 최신 대출 날짜를 기준으로 정렬
-            LIMIT 1;
-    </select>
-
-    <!-- 메인페이지 추천 : 사용자 기반 도서 추천 -->
-    <!-- 사용자의 대출내역이 존재하지 않는 처음에는 인기도서 (대출 수 기반) -->
-    <select id="findPopularBooks" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
-        SELECT
-            b.book_id AS bookId,
-            b.title AS title,
-            b.author AS author,
-            b.thumbnail AS thumbnail,
-            IFNULL(br.borrow_count, 0) AS borrowCount -- 대출 기록이 없는 경우 0으로 처리
-        FROM book b
-        LEFT JOIN (
-            SELECT book_id, COUNT(*) AS borrow_count
-            FROM borrow
-            GROUP BY book_id
-        ) br ON b.book_id = br.book_id
-        ORDER BY
-            borrowCount DESC,  -- 대출 횟수가 많은 순
-            b.published_date DESC -- 최신 출판 순
-            LIMIT 5;
-    </select>
-
     <!-- 대출 내역이 존재하는 경우 가장 대출 빈도수가 높고 최근에 대출한 도서의 주제를 기반으로 추천 -->
     <select id="findUserBaseBooks" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
         SELECT
@@ -117,25 +83,4 @@
             LIMIT 5; -- 상위 5개 데이터 추출
     </select>
 
-    <!-- 이미 추천한 특정 도서를 제외한 인기도서 추천 -->
-    <select id="findPopularBooksExcluding" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
-        SELECT
-            b.book_id AS bookId,
-            b.title AS title,
-            b.author AS author,
-            b.thumbnail AS thumbnail,
-            IFNULL(br.borrow_count, 0) AS borrowCount
-        FROM book b
-        LEFT JOIN (
-            SELECT book_id, COUNT(*) AS borrow_count
-            FROM borrow
-            GROUP BY book_id
-        ) br ON b.book_id = br.book_id
-        WHERE b.book_id NOT IN
-        <foreach collection="excludedBooks" item="excludedBook" open="(" separator="," close=")">
-            #{excludedBook}
-        </foreach>
-        ORDER BY borrowCount DESC, b.published_date DESC
-        LIMIT #{limit};
-    </select>
 </mapper>

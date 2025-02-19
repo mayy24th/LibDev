@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.LibDev.recommendation.mapper.PopularBookMapper">
+
+    <!-- 메인페이지 추천 : 사용자 기반 도서 추천 -->
+    <!-- 사용자의 대출내역이 존재하지 않는 처음에는 인기도서 (대출 수 기반) -->
+    <select id="findPopularBooks" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
+        SELECT b.book_id, b.title, b.author, b.thumbnail, IFNULL(br.borrow_count, 0) AS borrowCount
+        FROM book b
+        LEFT JOIN (
+        SELECT book_id, COUNT(*) AS borrow_count
+        FROM borrow
+        GROUP BY book_id
+        ) br ON b.book_id = br.book_id
+        ORDER BY borrowCount DESC, b.published_date DESC
+        LIMIT 5;
+    </select>
+
+    <!-- 이미 추천한 특정 도서를 제외한 인기도서 추천 -->
+    <select id="findPopularBooksExcluding" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
+        SELECT b.book_id, b.title, b.author, b.thumbnail, IFNULL(br.borrow_count, 0) AS borrowCount
+        FROM book b
+        LEFT JOIN (
+        SELECT book_id, COUNT(*) AS borrow_count
+        FROM borrow
+        GROUP BY book_id
+        ) br ON b.book_id = br.book_id
+        WHERE b.book_id NOT IN
+        <foreach collection="excludedBooks" item="excludedBook" open="(" separator="," close=")">
+            #{excludedBook}
+        </foreach>
+        ORDER BY borrowCount DESC, b.published_date DESC
+        LIMIT #{limit};
+    </select>
+
+</mapper>
