@@ -1,4 +1,4 @@
-import { reissue } from "../utils/reissue.js";
+import {reissue} from "../utils/reissue.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     try{
@@ -49,7 +49,10 @@ function populateUserInfo(userInfo) {
     const emailElement = document.querySelector(".email-address");
 
     if (nameElement) nameElement.textContent = userInfo.name;
-    if (joinDateElement) joinDateElement.textContent = userInfo.createdAt;
+    if (joinDateElement) {
+        const date = new Date(userInfo.createdAt);
+        joinDateElement.textContent = date.toLocaleDateString('ko-KR');
+    }
     if (phoneElement) phoneElement.textContent = userInfo.phone;
     if (emailElement) emailElement.textContent = userInfo.email;
 
