@@ -91,20 +91,22 @@ public class ReviewService {
 
 
     /** 전체 한줄평 조회 **/
-    public List<ReviewDto.Response> getAllReviews(){
-        return reviewRepository.findAll().stream()
-                .map(reviewMapper::toDto)
-                .collect(Collectors.toList());
+    public List<ReviewDto.Response> getAllReviews() {
+        String email = userService.getUserEmail();
+
+        List<Review> reviews = reviewRepository.findAll();
+        return reviewMapper.toDtoList(reviews, email);
     }
 
     /** 도서별 한줄평 조회 **/
-    public List<ReviewDto.Response> getReviewsByBook(Long bookId){
+    public List<ReviewDto.Response> getReviewsByBook(Long bookId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(()-> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
 
-        return reviewRepository.findByBook(book).stream()
-                .map(reviewMapper::toDto)
-                .collect(Collectors.toList());
+        String email = userService.getUserEmail();
+
+        List<Review> reviews = reviewRepository.findByBook(book);
+        return reviewMapper.toDtoList(reviews, email);
     }
 
     /** 유저별 한줄평 조회 **/
@@ -117,8 +119,7 @@ public class ReviewService {
         User user = userRepository.findByEmail(userResDto.getEmail())
                 .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
-        return reviewRepository.findByUser(user).stream()
-                .map(reviewMapper::toDto)
-                .collect(Collectors.toList());
+        List<Review> reviews = reviewRepository.findByUser(user);
+        return reviewMapper.toDtoList(reviews, userResDto.getEmail());
     }
 }

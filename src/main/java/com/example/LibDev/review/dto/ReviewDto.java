@@ -32,7 +32,8 @@ public class ReviewDto {
         private String userName;
         private String bookName;
         private String content;
+        private String thumbnail;
         private LocalDateTime createdAt; // 생성 시간
-        private LocalDateTime updatedAt; // 수정 시간
+        private boolean isOwner;    // 수정, 삭제 가능 여부
     }
 }

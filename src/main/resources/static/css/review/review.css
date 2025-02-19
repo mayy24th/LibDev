@@ -148,6 +148,7 @@
     position: relative;
     right: 0;
     margin-top: 5px;
+    display: none;
 }
 
 /* 버튼 호버 효과 */
