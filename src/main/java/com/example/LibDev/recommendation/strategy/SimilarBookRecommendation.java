@@ -7,6 +7,7 @@ import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.recommendation.dto.RecommendationResponseDto;
 import com.example.LibDev.recommendation.mapper.RecommendationBookMapper;
 import com.example.LibDev.recommendation.util.RecommendationUtils;
+import com.example.LibDev.recommendation.vo.RecommendedBookVO;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,12 +30,13 @@ public class SimilarBookRecommendation implements RecommendationStrategy{
         List<Long> excludedBookIds = new ArrayList<>();
         excludedBookIds.add(bookId);
 
-        List<RecommendationResponseDto> recommendations =
-                recommendationBookMapper.findBooksByTopic(excludedBookIds, book.getTopicId());
+        List<RecommendedBookVO> books = recommendationBookMapper.findBooksByTopic(excludedBookIds, book.getTopicId());
 
-        RecommendationUtils.fillWithBooksByAuthor(recommendations, excludedBookIds, book.getAuthor(), recommendationBookMapper, RECOMMENDATION_LIMIT);
-        RecommendationUtils.fillWithLatestPublishedBooks(recommendations, excludedBookIds, recommendationBookMapper, RECOMMENDATION_LIMIT);
+        RecommendationUtils.fillWithBooksByAuthor(books, excludedBookIds, book.getAuthor(), recommendationBookMapper, RECOMMENDATION_LIMIT);
+        RecommendationUtils.fillWithLatestPublishedBooks(books, excludedBookIds, recommendationBookMapper, RECOMMENDATION_LIMIT);
 
-        return recommendations;
+        return books.stream()
+                .map(RecommendedBookVO::toDto)
+                .toList();
     }
 }
