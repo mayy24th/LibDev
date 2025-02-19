@@ -3,7 +3,10 @@ package com.example.LibDev.user.repository;
 import com.example.LibDev.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+
 
 public interface UserRepository extends JpaRepository<User, Long> {
     /*이메일로 회원 검색*/
@@ -14,5 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /*이메일이 존재하는 검색*/
     boolean existsByEmail(String email);
+
+    /*패널티 만료 여부 조회*/
+    List<User> findByPenaltyExpirationBeforeAndBorrowAvailableFalse(LocalDateTime now);
 
 }
