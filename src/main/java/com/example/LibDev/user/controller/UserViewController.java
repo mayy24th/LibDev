@@ -16,4 +16,7 @@ public class UserViewController {
 
     @GetMapping("/users/mypage")
     public String mypage() { return "user/mypage"; }
+
+    @GetMapping("/users/update")
+    public String update() { return "user/update"; }
 }

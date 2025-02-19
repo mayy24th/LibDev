@@ -1,17 +1,17 @@
 package com.example.LibDev.auth.jwt;
 
 
-import com.example.LibDev.global.dto.GlobalResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -25,22 +25,33 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         String jwt = jwtProvider.resolveTokenInCookie(request);
-        if (jwt != null) {
-            if ( jwtProvider.isValidToken(jwt)) {
+
+        try{
+            if (jwt != null && jwtProvider.isValidToken(jwt)) {
                 Authentication authentication = jwtProvider.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(mapper.writeValueAsString(GlobalResponseDto.fail(HttpStatus.UNAUTHORIZED,"유효하지않은 토큰입니다.")));
-                return;
             }
+        } catch (ExpiredJwtException e){
+            SecurityContextHolder.clearContext();
+            response.sendError(HttpStatus.FORBIDDEN.value(), e.getMessage());
+            return;
+        } catch (UsernameNotFoundException e){
+            SecurityContextHolder.clearContext();
+            response.sendError(HttpStatus.FORBIDDEN.value(), e.getMessage());
+
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        return requestURI.equals("/api/v3/auths/login") || requestURI.equals("/api/v1/auths/reissue") || !requestURI.startsWith("/api/");
     }
 }
