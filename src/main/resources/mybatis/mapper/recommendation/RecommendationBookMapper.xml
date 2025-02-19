@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.LibDev.recommendation.mapper.RecommendationBookMapper">
+
+    <!-- 도서 상세페이지 추천 : 해당 도서와 유사한 도서 추천 -->
+    <select id="findBooksByTopic" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
+        -- 1. 동일한 주제에서 대출 횟수가 많은 도서 (최대 5개)
+        SELECT
+            b.book_id AS bookId,
+            b.title AS title,
+            b.author AS author,
+            b.thumbnail AS thumbnail
+        FROM book b
+        LEFT JOIN (
+            SELECT book_id, COUNT(*) AS borrow_count
+            FROM borrow
+            GROUP BY book_id
+        ) br ON b.book_id = br.book_id
+        WHERE b.topic_id = #{topicId}
+            AND b.book_id NOT IN
+            <foreach collection="excludedBooks" item="excludedBook" open="(" separator="," close=")">
+                #{excludedBook}
+            </foreach>
+        ORDER BY br.borrow_count DESC, b.published_date DESC
+        LIMIT 5
+    </select>
+    <select id="findBooksByAuthor" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
+        -- 2. 동일한 저자의 도서 중 최신 출판 도서
+        SELECT
+            b.book_id AS bookId,
+            b.title AS title,
+            b.author AS author,
+            b.thumbnail AS thumbnail
+        FROM book b
+        LEFT JOIN (
+            SELECT book_id, COUNT(*) AS borrow_count
+            FROM borrow
+            GROUP BY book_id
+        ) br ON b.book_id = br.book_Id
+        WHERE b.author = #{author}
+        AND b.book_id NOT IN
+        <foreach collection="excludedBooks" item="excludedBook" open="(" separator="," close=")">
+            #{excludedBook}
+        </foreach>
+        ORDER BY br.borrow_count DESC, b.published_date DESC
+        LIMIT #{limit}
+    </select>
+    <select id="findLatestPublishedBooks" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
+        -- 3. 최신 출판 도서 추가 (이미 선택된 도서 제외)
+        SELECT
+            b.book_id AS bookId,
+            b.title AS title,
+            b.author AS author,
+            b.thumbnail AS thumbnail
+        FROM book b
+        WHERE b.book_id NOT IN
+        <foreach collection="excludedBooks" item="excludedBook" open="(" separator="," close=")">
+            #{excludedBook}
+        </foreach>
+        ORDER BY b.published_date DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 메인페이지 : 대출 내역이 존재하는 경우 가장 대출 빈도수가 높고 최근에 대출한 도서의 주제를 기반으로 추천 -->
+    <select id="findUserBaseBooks" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
+        SELECT
+            b.book_id AS bookId,
+            b.title AS title,
+            b.author AS author,
+            b.thumbnail AS thumbnail,
+            IFNULL(br.borrow_count, 0) AS borrowCount -- 대출 횟수 (없으면 0 처리)
+        FROM book b
+        LEFT JOIN (
+            SELECT book_id, COUNT(*) AS borrow_count, MAX(created_at) AS latestBorrowDate
+            FROM borrow
+            GROUP BY book_id
+        ) br ON b.book_id = br.book_id
+        WHERE b.topic_id = #{topicId} -- 동일한 topic_id 필터링
+          AND b.book_id NOT IN (SELECT book_id FROM borrow WHERE user_id = #{userId}) -- 해당 유저가 대여하지 않은 도서 필터링
+        ORDER BY
+            borrowCount DESC, -- 대출 횟수가 많은 순서
+            br.latestBorrowDate DESC -- 최근 대출 도서 우선 정렬
+            LIMIT 5; -- 상위 5개 데이터 추출
+    </select>
+
+</mapper>
