@@ -16,16 +16,16 @@
     width: 200px; padding: 5px;
 }
 
-.btn-join {
-    background-color: #5b3d1b;
+.btn-submit {
+    background-color: #623F3F;
     color: white;
     padding: 10px;
     border: none;
     cursor: pointer;
 }
 
-.btn-join:hover {
-    background-color: #4a2e15;
+.btn-submit:hover {
+    background-color: #4F2D2D;
 }
 
 .error-message {
