@@ -3,15 +3,25 @@
 
 <mapper namespace="com.example.LibDev.recommendation.mapper.UserActivityMapper">
 
-    <!-- 사용자가 가장 많이 대출한 주제 -->
+    <!-- 사용자가 가장 많이 대출한 주제 중 가장 최근에 대출한 도서의 topic_id -->
     <select id="findMostBorrowedTopic" resultType="int">
         SELECT b.topic_id
         FROM borrow br
-                 JOIN book b ON br.book_id = b.book_id
+            JOIN book b ON br.book_id = b.book_id
         WHERE br.user_id = #{userId}
         GROUP BY b.topic_id
-        ORDER BY COUNT(*) DESC, MAX(br.created_at) DESC
-            LIMIT 1;
+        HAVING COUNT(*) = (
+            SELECT MAX(borrow_count)
+            FROM (
+                SELECT COUNT(*) AS borrow_count
+                FROM borrow br2
+                    JOIN book b2 ON br2.book_id = b2.book_id
+                WHERE br2.user_id = #{userId}
+                GROUP BY b2.topic_id
+                ) AS subquery
+            )
+        ORDER BY MAX(br.created_at) DESC
+        LIMIT 1;
     </select>
 
 </mapper>
