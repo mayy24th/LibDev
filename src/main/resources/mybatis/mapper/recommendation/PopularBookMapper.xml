@@ -10,7 +10,7 @@
         FROM book b
         WHERE 1=1
             <if test="excludedBooks != null and !excludedBooks.isEmpty()">
-                b.book_id NOT IN
+                AND b.book_id NOT IN
                 <foreach collection="excludedBooks" item="excludedBook" open="(" separator="," close=")">
                     #{excludedBook}
                 </foreach>

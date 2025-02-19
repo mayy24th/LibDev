@@ -38,7 +38,7 @@
 
 /* 삭제 버튼 */
 .btn-delete-confirm {
-    background-color: saddlebrown;
+    background-color: #623F3F;
     color: white;
     padding: 8px 15px;
     border: none;
@@ -79,7 +79,7 @@
 
 /* 작성하기 버튼 스타일 */
 .btn-submit {
-    background-color: saddlebrown;
+    background-color: #623F3F;
     color: white;
     padding: 10px 15px;
     border: none;
