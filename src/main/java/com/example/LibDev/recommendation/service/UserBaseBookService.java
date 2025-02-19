@@ -35,19 +35,24 @@ public class UserBaseBookService {
      *  - 사용자의 대출내역이 존재하는 경우 대출횟수가 가장 높은 도서를 기반으로 조회
      */
     public List<RecommendationResponseDto> findUserBaseBooks(){
-        UserResDto userResDto = userService.info();
-        if(userResDto == null) {
+
+        // 비로그인
+        String email = userService.getUserEmail();
+        if(email == null){
             return recommendationMapper.findPopularBooks();
         }
 
-        User user = userRepository.findByEmail(userResDto.getEmail())
+        // 로그인
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(()-> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
 
+        // 대출내역이 존재하지 않는 경우
         boolean hasBorrowHistory = borrowRepository.existsByUser(user);
         if (!hasBorrowHistory) {
             return recommendationMapper.findPopularBooks();
         }
 
+        // 대출내역이 존재하는 경우
         Integer mostBorrowedTopic = recommendationMapper.findMostBorrowedTopic(user.getId());
         List<RecommendationResponseDto> recommendations = recommendationMapper.findUserBaseBooks(user.getId(), mostBorrowedTopic);
         if(recommendations.size() < RECOMMENDATION_LIMIT){
