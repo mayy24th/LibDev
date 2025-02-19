@@ -31,7 +31,6 @@ public class ReviewService {
     /** 한줄평 저장 **/
     @Transactional
     public void saveReview(ReviewDto.SaveRequest dto){
-        // TODO : 1L -> dto.getBookId()로 수정
         UserResDto userResDto = userService.info();
         if(userResDto == null){
             throw new IllegalStateException("로그인이 필요합니다.");
@@ -39,7 +38,7 @@ public class ReviewService {
 
         User user = userRepository.findByEmail(userResDto.getEmail())
                 .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
-        Book book = bookRepository.findById(1L)
+        Book book = bookRepository.findById(dto.getBookId())
                 .orElseThrow(()-> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
 
         Review review = Review.builder()

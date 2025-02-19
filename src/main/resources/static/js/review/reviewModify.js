@@ -20,6 +20,7 @@ export function closeModifyModal() {
 
 export async function submitModifyReview() {
     const modal = document.getElementById("modifyModal");
+    const bookId = window.location.pathname.split("/").pop();
     const reviewId = modal.dataset.reviewId; // dataset에서 reviewId 가져오기
     const content = document.getElementById("reviewContent").value.trim();
 
@@ -31,16 +32,19 @@ export async function submitModifyReview() {
     if (reviewId) {
         await updateReview(reviewId, content);
     } else {
-        await createReview(content);
+        await createReview(bookId, content);
     }
 }
 
-async function createReview(content) {
+async function createReview(bookId, content) {
     try {
         const response = await fetch("/api/review", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content })
+            body: JSON.stringify({
+                bookId: bookId,
+                content: content
+            })
         });
 
         if (!response.ok) throw new Error("한줄평 등록 실패");
