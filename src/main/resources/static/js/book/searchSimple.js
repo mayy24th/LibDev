@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const searchType = searchTypeSelect.value;
 
         if (query === "") {
-            alert("검색어를 입력하세요.");
+            fetchBooks();
             return;
         }
 
