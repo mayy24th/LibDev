@@ -1,7 +1,8 @@
-let isEmailChecked = false;
+export let isEmailChecked;
 
-document.addEventListener("DOMContentLoaded",() => {
+export async function duplicateCheckEmail(){
     const checkEmailButton = document.getElementById("btn-check");
+    isEmailChecked = false;
 
     checkEmailButton.addEventListener("click", async (event) => {
         event.preventDefault();
@@ -35,4 +36,5 @@ document.addEventListener("DOMContentLoaded",() => {
             console.error(error);
         }
     });
-})
+    return isEmailChecked;
+}

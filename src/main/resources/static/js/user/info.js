@@ -36,9 +36,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 const editBtn = document.getElementById("edit");
 
-editBtn.addEventListener("click",() => {
-    window.location.href = "/users/update"
-})
+if(editBtn){
+    editBtn.addEventListener("click",() => {
+        window.location.href = "/users/update"
+    })
+}
+
 
 function populateUserInfo(userInfo) {
     const nameElement = document.querySelector(".user-name");
@@ -56,6 +59,9 @@ function populateUserInfo(userInfo) {
     const phone1Input = document.getElementById("phone1");
     const phone2Input = document.getElementById("phone2");
     const phone3Input = document.getElementById("phone3");
+
+    const currentEmail = document.getElementById("currentEmail");
+    if(currentEmail) currentEmail.value = userInfo.email;
 
     if (nameInput) nameInput.value = userInfo.name;
     if (emailInput) {
