@@ -27,11 +27,8 @@ function updateBorrow(borrow) {
         dueDate.textContent = formatDate(borrow.dueDate);
     }
 
-    const borrowInfo = document.querySelector(`#borrow-info-${borrow.id}`);
-    if (borrowInfo) {
-        const extendedInfo = document.createElement("p");
-        extendedInfo.classList.add("extended-info");
-        extendedInfo.textContent = "연장 완료";
-        borrowInfo.appendChild(extendedInfo);
+    const extendedStatus = document.querySelector(`#extended-status-${borrow.id}`);
+    if (extendedStatus) {
+        extendedStatus.textContent = "Y";
     }
 }
