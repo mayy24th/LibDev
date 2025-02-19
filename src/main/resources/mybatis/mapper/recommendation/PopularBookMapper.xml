@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.LibDev.recommendation.mapper.PopularBookMapper">
+
+    <!-- 메인페이지 추천 : 사용자의 대출내역이 존재하지 않거나 비회원일 경우 인기도서 (대출 수 기반) -->
+    <!-- 대출 내역이 존재하는 경우 findUserBaseBooks 도서 데이터 조회 이후 부족한 도서 데이터는 인기도서 -->
+    <select id="findPopularBooks" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">
+        SELECT b.book_id, b.title, b.author, b.thumbnail
+        FROM book b
+        WHERE 1=1
+            <if test="excludedBooks != null and !excludedBooks.isEmpty()">
+                b.book_id NOT IN
+                <foreach collection="excludedBooks" item="excludedBook" open="(" separator="," close=")">
+                    #{excludedBook}
+                </foreach>
+            </if>
+        ORDER BY (
+            SELECT COUNT(*)
+            FROM borrow br
+            WHERE br.book_id = b.book_id) DESC,
+            b.published_date DESC
+        LIMIT #{limit};
+    </select>
+
+</mapper>
