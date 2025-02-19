@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.LibDev.recommendation.mapper.RecommendationMapper">
+<mapper namespace="com.example.LibDev.recommendation.mapper.RecommendationBookMapper">
 
     <!-- 도서 상세페이지 추천 : 해당 도서와 유사한 도서 추천 -->
     <select id="findSimilarBooks" resultType="com.example.LibDev.recommendation.dto.RecommendationResponseDto">

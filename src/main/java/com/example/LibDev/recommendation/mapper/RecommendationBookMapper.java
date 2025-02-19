@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
-public interface RecommendationMapper {
+public interface RecommendationBookMapper {
     /** 도서 상세 페이지 유사 도서 추천 **/
     List<RecommendationResponseDto> findSimilarBooks(@Param("bookId") Long bookId,
                                                      @Param("topicId") Integer topicId,
