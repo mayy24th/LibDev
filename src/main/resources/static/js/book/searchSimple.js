@@ -56,8 +56,16 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("search-result-count").textContent = booksData.length;
 
         booksToDisplay.forEach(book => {
+            console.log("도서 정보:", book);
             const listItem = document.createElement("div");
             listItem.classList.add("list-group-item", "p-3", "shadow-sm", "mb-3");
+            listItem.style.cursor = "pointer"; // 마우스를 올리면 클릭할 수 있는 UI로 변경
+
+            // 클릭 시 도서 상세 페이지로 이동
+            listItem.addEventListener("click", function () {
+                window.location.href = `/books/${book.bookId}`;
+            });
+
 
             listItem.innerHTML = `
                 <div class="d-flex">
