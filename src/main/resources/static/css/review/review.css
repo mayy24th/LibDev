@@ -137,7 +137,7 @@
 
 /* 한줄평 등록 버튼 */
 .btn-modify-review {
-    background-color: saddlebrown;
+    background-color: #623F3F;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -153,5 +153,5 @@
 
 /* 버튼 호버 효과 */
 .btn-modify-review:hover {
-    background-color: saddlebrown;
+    background-color: #4F2D2D;
 }
