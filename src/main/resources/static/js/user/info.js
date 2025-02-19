@@ -26,15 +26,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const result =  await response.json()
         const userInfo = result.data;
 
-        // 사용자 이름 삽입
-        document.querySelector(".profile-info strong").textContent = `${userInfo.name}님, 안녕하세요`;
-
-        // 사용자 정보 삽입
-        document.querySelector(".personal-info").innerHTML = `
-            회원가입일: ${userInfo.createdAt} <br>
-            휴대폰 번호: ${userInfo.phone} <br>
-            이메일 주소: ${userInfo.email}
-        `;
+        // 필드에 사용자 정보 주입
+        document.querySelector(".user-name").textContent = userInfo.name;
+        document.querySelector(".join-date").textContent = userInfo.createdAt;
+        document.querySelector(".phone-number").textContent = userInfo.phone;
+        document.querySelector(".email-address").textContent = userInfo.email;
 
 
     } catch(error){
