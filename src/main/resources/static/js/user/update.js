@@ -1,33 +1,43 @@
 import {reissue} from "../utils/reissue.js";
-import { isEmailChecked } from  "./duplicateCheckEmail.js"
+import {duplicateCheckEmail} from "./duplicateCheckEmail.js"
 document.addEventListener("DOMContentLoaded",() => {
     const form = document.getElementById("updateForm")
+    const checkEmailButton = document.getElementById("btn-check");
+    let btn = false;
+    let isEmailChecked = false;
 
-    const btnCheck = document.getElementById("btn-check");
     const currentEmail = document.getElementById("currentEmail").value;
-
     const emailField = document.getElementById("email");
     const emailDomainField = document.getElementById("emailDomain");
 
     function toggleCheckButton() {
-
         const fullEmail = `${emailField.value}@${emailDomainField.value}`;
 
         if (fullEmail === currentEmail) {
-            btnCheck.disabled = true;
+            btn = false;
+            isEmailChecked = true;
         } else {
-            btnCheck.disabled = false;
+            btn = true;
+            isEmailChecked = false;
         }
     }
 
     emailField.addEventListener("input", toggleCheckButton);
     emailDomainField.addEventListener("input", toggleCheckButton);
 
+    checkEmailButton.addEventListener("click", async (event) => {
+        event.preventDefault();
+        if (btn) {
+            isEmailChecked = await duplicateCheckEmail();
+        }
+    });
+
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        if(btnCheck.disabled && !isEmailChecked){
-            alert("이메일 중복 체크를 진행해주세요.")
+        if (btn && !isEmailChecked) {
+            alert("이메일 중복 체크를 진행해주세요.");
             return;
         }
 
@@ -45,7 +55,6 @@ document.addEventListener("DOMContentLoaded",() => {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email: fullEmail, phone }),
-                credentials: "include"
             });
             if(response.status === 401){
                 const reissued = await reissue();
@@ -55,7 +64,6 @@ document.addEventListener("DOMContentLoaded",() => {
                         method: "PATCH",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ name, email: fullEmail, phone }),
-                        credentials: "include"
                     })
                 }
             }

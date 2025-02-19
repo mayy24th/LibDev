@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     try{
         let response = await fetch("/api/v1/users", {
             method: "GET",
-            credentials:"include"
         })
 
         if (response.status === 401 || response.status === 500) {
@@ -13,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (reissued) {
                 response = await fetch("/api/v1/users", {
                     method: "GET",
-                    credentials: "include"
                 });
             } else {
                 return;
@@ -31,6 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch(error){
         alert("회원정보 조회 실패");
         console.error(error);
+        window.location.href="/users/login"
     }
 })
 
@@ -56,6 +55,7 @@ function populateUserInfo(userInfo) {
 
     const nameInput = document.getElementById("name");
     const emailInput = document.getElementById("email");
+    const emailDomainInput = document.getElementById("emailDomain")
     const phone1Input = document.getElementById("phone1");
     const phone2Input = document.getElementById("phone2");
     const phone3Input = document.getElementById("phone3");
@@ -67,10 +67,7 @@ function populateUserInfo(userInfo) {
     if (emailInput) {
         const [emailId, emailDomain] = userInfo.email.split("@");
         emailInput.value = emailId;
-        const emailDomainSelect = document.getElementById("emailDomain");
-        if (emailDomainSelect) {
-            emailDomainSelect.value = emailDomain || "";
-        }
+        if(emailDomainInput) emailDomainInput.value = emailDomain;
     }
     if (userInfo.phone && phone1Input && phone2Input && phone3Input) {
         const phoneParts = userInfo.phone.split("-");
