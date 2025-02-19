@@ -23,7 +23,7 @@ public class BookRequestDto {
     private LocalDate publishedDate;
 
     private String callNumber;
-    private String topicId;
+    private Integer topicId;
 
     public Book toEntity() {
         return Book.builder()
@@ -34,7 +34,7 @@ public class BookRequestDto {
                 .contents(this.contents)
                 .publishedDate(this.publishedDate)
                 .callNumber(this.callNumber)
-                .topicId(Integer.valueOf(this.topicId))
+                .topicId(this.topicId)
                 .thumbnail(this.thumbnail)
                 .build();
     }
