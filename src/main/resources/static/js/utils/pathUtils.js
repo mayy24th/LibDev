@@ -1,7 +1,10 @@
+import {checkLoginStatus} from "./auth.js";
+
 export function getReviewApiEndpoint() {
     const currentPath = window.location.pathname;
 
     if (currentPath === "/review/user") {
+        checkLoginStatus();
         return "/api/review/user"; // 로그인한 유저의 리뷰
     } else if (currentPath.startsWith("/review/book/")) {
         const bookId = currentPath.split("/").pop();
