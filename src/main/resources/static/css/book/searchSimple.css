@@ -79,6 +79,7 @@ body {
 .pagination .page-item.active .page-link {
     background-color: #623F3F;
     border-color: #623F3F;
+    color: white;
 }
 .pagination .page-link {
     color: #623F3F;
