@@ -258,4 +258,9 @@ public class BookService {
         List<Book> books = bookRepository.findByPublisherContaining(query);
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
+
+    public Book findBookById(Long bookId) {
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("도서를 찾을 수 없습니다."));
+    }
 }
