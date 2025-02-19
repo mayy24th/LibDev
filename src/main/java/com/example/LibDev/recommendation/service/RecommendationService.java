@@ -6,7 +6,6 @@ import com.example.LibDev.recommendation.strategy.UserBaseRecommendation;
 import com.example.LibDev.user.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
