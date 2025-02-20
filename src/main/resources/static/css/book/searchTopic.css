@@ -1,12 +1,97 @@
-.card {
-    cursor: pointer;
-    transition: transform 0.3s;
+body {
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
-.card:hover {
-    transform: scale(1.05);
+.mt-4 {
+    width: 70%;
+    margin: 0 auto;
 }
 
-.card-body {
+.text-center {
+    text-align: center !important;
+}
+
+.topics {
+    padding: 20px;
+    padding-top: 50px;
     text-align: center;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    overflow: hidden;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+}
+
+.topic {
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.topic a {
+    display: block;
+    text-decoration: none;
+}
+
+.icon {
+    display: block;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 10px;
+    padding: 10px;
+    background-color: #f6f6f6 !important;
+    border-radius: 8px;
+    background-position: center !important;
+}
+
+.icon-0 {
+    background: url('/images/topic0.png') no-repeat;
+}
+
+.icon-1 {
+    background: url('/images/topic1.png') no-repeat;
+}
+
+.icon-2 {
+    background: url('/images/topic2.png') no-repeat;
+}
+
+.icon-3 {
+    background: url('/images/topic3.png') no-repeat;
+}
+
+.icon-4 {
+    background: url('/images/topic4.png') no-repeat;
+}
+
+.icon-5 {
+    background: url('/images/topic5.png') no-repeat;
+}
+
+.icon-6 {
+    background: url('/images/topic6.png') no-repeat;
+}
+
+.icon-7 {
+    background: url('/images/topic7.png') no-repeat;
+}
+
+.icon-8 {
+    background: url('/images/topic8.png') no-repeat;
+}
+
+.icon-9 {
+    background: url('/images/topic9.png') no-repeat;
+}
+
+.topic p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.topic:hover .icon {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
 }
