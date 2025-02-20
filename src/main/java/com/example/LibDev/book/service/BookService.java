@@ -263,4 +263,11 @@ public class BookService {
         return bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("도서를 찾을 수 없습니다."));
     }
+
+    public List<BookResponseDto> findBooksByTopic(int topicId) {
+        List<Book> books = bookRepository.findByTopicId(topicId);
+        return books.stream()
+                .map(BookResponseDto::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

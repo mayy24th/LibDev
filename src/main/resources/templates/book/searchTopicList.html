@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주제별 도서 목록</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/book/searchTopicList.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="text-center">주제별검색</h1>
+
+    <p class="text-center fw-bold">주제별: "<span id="topic-name"></span>"에 대한 검색결과는 총 <span id="search-result-count"></span>건입니다.</p>
+
+    <div id="book-list" class="list-group"></div>
+
+    <nav>
+        <ul class="pagination justify-content-center pagination-mt-4" id="pagination"></ul>
+    </nav>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/book/searchTopicList.js"></script>
+</body>
+</html>

@@ -1,48 +1,37 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const searchButton = document.getElementById("search-button");
-    const searchInput = document.getElementById("search-input");
-    const searchTypeSelect = document.getElementById("search-type");
-
-    let booksData = []; // 전체 도서 데이터
+    let booksData = [];
     let currentPage = 1;
     const booksPerPage = 10;
+    const searchResultCount = document.getElementById("search-result-count");
+    const topicNameSpan = document.getElementById("topic-name");
 
     fetchBooks();
 
-    searchButton.addEventListener("click", searchBooks);
-    searchInput.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-            searchBooks();
-        }
-    });
-
-    function searchBooks() {
-        const query = searchInput.value.trim();
-        const searchType = searchTypeSelect.value;
-
-        if (query === "") {
-            fetchBooks();
-            return;
-        }
-
-        fetch(`/api/v1/books?query=${encodeURIComponent(query)}&searchType=${encodeURIComponent(searchType)}`)
-            .then(response => response.json())
-            .then(data => {
-                booksData = data;
-                currentPage = 1;
-                renderBookList();
-            })
-            .catch(error => console.error("도서 목록을 불러오는 중 오류 발생:", error));
-    }
+    const topicNames = {
+        0: "총류",
+        1: "철학",
+        2: "종교",
+        3: "사회과학",
+        4: "자연과학",
+        5: "기술과학",
+        6: "예술",
+        7: "언어",
+        8: "문학",
+        9: "역사"
+    };
 
     function fetchBooks() {
-        fetch("/api/v1/books")
+        const topicId = window.location.pathname.split('/').pop();
+        fetch(`/api/v1/books/search-topic/${topicId}`)
             .then(response => response.json())
             .then(data => {
                 booksData = data;
+                const topicName = topicNames[topicId];
+                searchResultCount.textContent = booksData.length;
+                topicNameSpan.textContent = topicName;
                 renderBookList();
             })
-            .catch(error => console.error("전체 도서 목록을 불러오는 중 오류 발생:", error));
+            .catch(error => console.error("주제별 도서 목록을 불러오는 중 오류 발생:", error));
     }
 
     function renderBookList() {
@@ -53,19 +42,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const end = start + booksPerPage;
         const booksToDisplay = booksData.slice(start, end);
 
-        document.getElementById("search-result-count").textContent = booksData.length;
-
         booksToDisplay.forEach(book => {
             console.log("도서 정보:", book);
             const listItem = document.createElement("div");
             listItem.classList.add("list-group-item", "p-3", "shadow-sm", "mb-3");
-            listItem.style.cursor = "pointer"; // 마우스를 올리면 클릭할 수 있는 UI로 변경
+            listItem.style.cursor = "pointer";
 
-            // 클릭 시 도서 상세 페이지로 이동
             listItem.addEventListener("click", function () {
                 window.location.href = `/books/${book.bookId}`;
             });
-
 
             listItem.innerHTML = `
                 <div class="d-flex">
@@ -152,5 +137,4 @@ document.addEventListener("DOMContentLoaded", function () {
         nextPageItem.appendChild(nextPageLink);
         pagination.appendChild(nextPageItem);
     }
-
 });
