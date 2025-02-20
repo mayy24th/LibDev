@@ -76,14 +76,10 @@
 
     <div class="text-center btns mt-4">
         <button th:if="${book.isAvailable}" class="btn btn-custom-1 borrow-btn" th:data-book-id="${book.bookId}">대출하기</button>
-        <button th:unless="${book.isAvailable}"
-                class="btn btn-custom-1"
-                th:data-book-id="${book.bookId}">
-            예약하기
-        </button>
+        <button th:unless="${book.isAvailable}" class="btn btn-custom-1" th:data-book-id="${book.bookId}">예약하기</button>
 
-        <button class="btn btn-custom-2 mx-2" th:onclick="|location.href='/review/book/${bookId}'|">한줄평</button>
-        <button class="btn btn-secondary" th:onclick="|location.href='@{/books/search-simple}'|">목록으로</button>
+        <button class="btn btn-custom-2 mx-2" id="reviewBtn">한줄평</button>
+        <button class="btn btn-secondary" id="backToListBtn">목록으로</button>
     </div>
 
     <div class="mt-4">

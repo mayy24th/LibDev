@@ -1,3 +1,11 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const searchButton = document.getElementById('searchButton');
+    const registerBtn = document.getElementById('registerBtn');
+
+    searchButton.addEventListener('click', searchBooks);
+    registerBtn.addEventListener('click', registerBook);
+});
+
 // 검색 함수 (도서 검색 후 결과를 표시)
 function searchBooks() {
     const query = document.getElementById('searchQuery').value;
@@ -61,7 +69,7 @@ function searchBooks() {
                             resultsContainer.appendChild(card);
                         }
                     });
-                    // 이벤트 리스너 추가 (onclick 사용하지 않음)
+                    // 이벤트 리스너 추가
                     document.querySelectorAll('.select-btn').forEach(button => {
                         button.addEventListener('click', function () {
                             selectBook(
