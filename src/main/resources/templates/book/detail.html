@@ -11,21 +11,55 @@
 <body>
 <div class="container mt-4-1">
     <h1 class="text-center">도서 정보</h1>
-    <div class="book-detail-container">
-        <div class="book-thumbnail">
-            <img id="bookThumbnail" alt="도서 표지" th:src="@{${book.thumbnail}}">
-        </div>
-        <div class="book-info">
-            <p><strong>도서명:</strong> <span id="bookTitle" th:text="${book.title}"></span></p>
-            <p><strong>저자:</strong> <span id="bookAuthor" th:text="${book.author}"></span></p>
-            <p><strong>출판사:</strong> <span id="bookPublisher" th:text="${book.publisher}"></span></p>
-            <p><strong>발행일:</strong> <span id="bookPublishedDate" th:text="${book.publishedDate}"></span></p>
-            <p><strong>표준번호:</strong> <span id="bookIsbn" th:text="${book.isbn}"></span></p>
-            <p><strong>청구기호:</strong> <span id="bookCallNumber" th:text="${book.callNumber}"></span></p>
-            <p><strong>주제 ID:</strong> <span id="bookTopicId" th:text="${book.topicId}"></span></p>
-
+    <div class="book-detail-box">
+        <h3 class="book-detail-title" th:text="${book.title}">도서명</h3>
+        <div class="book-detail-container">
+            <div class="book-detail-thumbnail">
+                <img id="bookThumbnail" alt="도서 표지" th:src="@{${book.thumbnail}}">
+            </div>
+            <div class="book-detail-info">
+                <div class="info-item">
+                    <span class="info-label">저자사항</span>
+                    <span class="info-value" th:text="${book.author}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">출판사</span>
+                    <span class="info-value" th:text="${book.publisher}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">발행일</span>
+                    <span class="info-value" th:text="${book.publishedDate}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">표준번호</span>
+                    <span class="info-value" th:text=" ${book.isbn}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">청구기호</span>
+                    <span class="info-value" th:text="${book.callNumber}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">주제분류</span>
+                    <span class="info-value">
+                        <th:block th:switch="${book.topicId}">
+                            <span th:case="0">총류</span>
+                            <span th:case="1">철학</span>
+                            <span th:case="2">종교</span>
+                            <span th:case="3">사회과학</span>
+                            <span th:case="4">자연과학</span>
+                            <span th:case="5">기술과학</span>
+                            <span th:case="6">예술</span>
+                            <span th:case="7">언어</span>
+                            <span th:case="8">문학</span>
+                            <span th:case="9">역사</span>
+                            <span th:case="*">기타</span>
+                        </th:block>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
+
     <div>
         <h5>도서 소개</h5>
         <span id="bookContents" th:text="${book.contents}"></span>
@@ -33,9 +67,10 @@
     </div>
 
     <div class="text-center btns mt-4">
-        <button class="btn btn-custom-1">대출하기</button>
+        <button th:if="${book.isAvailable}" class="btn btn-custom-1">대출하기</button>
+        <button th:unless="${book.isAvailable}" class="btn btn-custom-1">예약하기</button>
         <button class="btn btn-custom-2 mx-2" th:onclick="|location.href='/review/book/${bookId}'|">한줄평</button>
-        <button class="btn btn-secondary">목록으로</button>
+        <button class="btn btn-secondary" th:onclick="|location.href='@{/books/search-simple}'|">목록으로</button>
     </div>
 
     <div class="mt-4">
@@ -71,8 +106,8 @@
                 <!--<td th:text="${book.returnDueDate != null ? book.returnDueDate : '-'}"></td>-->
                 <td th:text="'-'"></td>
                 <td>
-                    <button th:classappend="${book.isAvailable ? 'btn-secondary' : 'btn-secondary'}"
-                            class="btn text-white py-1"
+                    <button th:classappend="${book.isAvailable ? 'btn-secondary' : 'brown-btn'}"
+                            class="btn text-white py-1 small-btn"
                             th:text="${book.isAvailable ? '예약불가' : '예약가능'}"
                             disabled>
                     </button>

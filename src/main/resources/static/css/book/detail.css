@@ -8,36 +8,34 @@ body {
     width: 70%;
 }
 
-.book-detail-container {
-    display: flex;
-    margin-top: 20px;
-    margin-bottom: 20px;
+.book-detail-box {
+    margin-top: 30px;
+    margin-bottom: 30px;
     border: 2px solid #656565;
     border-radius: 10px;
     padding: 20px;
 }
 
-.book-thumbnail {
+.book-detail-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.book-detail-container {
+    display: flex;
+
+}
+
+.book-detail-thumbnail {
     flex: 1;
-    padding-right: 20px;
+    display: flex;
 }
 
 .book-thumbnail img {
-    width: 100%;
-    max-width: 200px;
-}
-
-.book-info {
-    flex: 2;
-}
-
-.book-info p {
-    font-size: 16px;
-    margin: 10px 0;
-}
-
-.book-info p strong {
-    color: #333;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 .fromKakao {
@@ -56,7 +54,7 @@ body {
     border: none;
     color: white;
     width: 100px;
-    padding: 10px;
+    padding: 8px;
 }
 
 .btn-custom-1:hover {
@@ -74,7 +72,7 @@ body {
     border: none;
     color: white;
     width: 100px;
-    padding: 10px;
+    padding: 8px;
 }
 
 .btn-custom-2:hover {
@@ -96,10 +94,45 @@ body {
 
 .btn-secondary {
     width: 100px;
-    padding: 10px;
+    padding: 8px;
 }
 
 td {
     vertical-align: middle;
     text-align: center;
+}
+
+.book-detail-info {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+}
+
+.info-label {
+    font-weight: bold;
+    width: 60px;
+    flex-shrink: 0;
+}
+
+.info-value {
+    margin-left: 10px;
+    color: #333;
+}
+
+.small-btn {
+    font-size: 14px;
+    width: auto;
+    height: auto;
+}
+
+.brown-btn {
+    background-color: #630f0f !important;
+    color: white !important;
 }
