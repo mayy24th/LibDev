@@ -6,23 +6,20 @@ body {
     width: 70%;
 }
 
-
-/* 검색창 스타일 */
 .input-group {
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
-/* 검색 버튼 스타일 */
-#search-button {
+.search-button {
     background-color: #623F3F;
     border: none;
 }
-#search-button:hover {
+
+.search-button:hover {
     background-color: #4e2f2f;
 }
 
-/* 검색 결과 개수 */
 .text-center.fw-bold {
     margin-top: 10px;
     text-align: left !important;
@@ -37,7 +34,6 @@ body {
     width: 100%;
 }
 
-/* 리스트 스타일 */
 .list-group-item {
     background: white;
     border-radius: 10px;
@@ -47,7 +43,6 @@ body {
     transform: scale(1.02);
 }
 
-/* 도서 정보 텍스트 */
 .list-group-item h5 {
     color: #333;
 }
@@ -61,7 +56,6 @@ body {
     color: #535353 !important;
 }
 
-/* 대출 가능 여부 스타일 */
 .list-group-item .p-2 {
     font-size: 0.9rem;
     color: #555;
@@ -69,21 +63,21 @@ body {
     justify-content: space-between;
 }
 
-/* 표지 이미지 스타일 */
 .list-group-item img {
     width: 100px !important;
     margin-right: 1.5rem !important;
 }
 
-/* 페이지네이션 스타일 */
 .pagination .page-item.active .page-link {
     background-color: #623F3F;
     border-color: #623F3F;
     color: white;
 }
+
 .pagination .page-link {
     color: #623F3F;
 }
+
 .pagination .page-link:hover {
     background-color: #f1e3e3;
 }
