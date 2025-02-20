@@ -3,19 +3,16 @@ package com.example.LibDev.reservation.service;
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.reservation.entity.Reservation;
 import com.example.LibDev.reservation.repository.ReservationRepository;
-import com.example.LibDev.review.repository.ReviewRepository;
 import com.example.LibDev.user.entity.User;
 import com.example.LibDev.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,13 +23,6 @@ public class ReservationCleanupService {
     private final ReservationRepository reservationRepository;
     private final ReservationService reservationService;
     private final UserRepository userRepository;
-
-    /*@Autowired
-    public ReservationCleanupService(ReservationRepository reservationRepository,
-                                     ReservationService reservationService) {
-        this.reservationRepository = reservationRepository;
-        this.reservationService = reservationService;
-    }*/
 
     @Transactional
     public void checkAndDeleteExpiredReservations() {
@@ -67,6 +57,17 @@ public class ReservationCleanupService {
                         .collect(Collectors.toSet());
 
                 reservationRepository.deleteAll(expiredReservations);
+
+                // 삭제된 예약이 있는 도서별로 예약 대기열 재정렬
+                for (Book book : affectedBooks) {
+                    List<Reservation> remainingReservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
+
+                    // queue_order를 1부터 다시 부여
+                    for (int i = 0; i < remainingReservations.size(); i++) {
+                        remainingReservations.get(i).updateQueueOrder(i + 1);
+                        reservationRepository.save(remainingReservations.get(i));
+                    }
+                }
 
                 // 삭제된 예약 도서의 다음 예약자 만료일 업데이트
                 for (Book book : affectedBooks) {
