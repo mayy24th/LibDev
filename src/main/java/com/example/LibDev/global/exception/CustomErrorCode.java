@@ -26,8 +26,10 @@ public enum CustomErrorCode {
     USER_RESERVATION_FULL(HttpStatus.BAD_REQUEST, "사용자는 최대 5권까지만 예약할 수 있습니다."),
     BOOK_ALREADY_RESERVED(HttpStatus.BAD_REQUEST, "이미 해당 책을 예약하셨습니다."),
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 정보를 찾을 수 없습니다."),
-    RESERVATION_CANCELLATION_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 예약만 취소할 수 있습니다."),
     USER_PENALIZED(HttpStatus.FORBIDDEN, "패널티가 적용된 사용자입니다. 예약이 불가능합니다."),
+
+    RESERVATION_CANCELLATION_FORBIDDEN(HttpStatus.FORBIDDEN, "본인의 예약만 취소할 수 있습니다."),
+    BOOK_IS_AVAILABLE(HttpStatus.BAD_REQUEST, "대출 가능한 도서는 예약이 불가합니다."),
 
     // review 관련 에러
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "한줄평 정보를 찾을 수 없습니다."),
