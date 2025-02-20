@@ -36,6 +36,17 @@ function searchBooks() {
                         if (book.callNumber !== 'N/A') {
                             const card = document.createElement('div');
                             card.className = 'col';
+                            const safeContents = book.contents
+                                .replace(/\\/g, "\\")
+                                .replace(/'/g, "\\'")
+                                .replace(/"/g, '\\"')
+                                .replace(/@/g, "\\@")
+                                .replace(/</g, "&lt;")
+                                .replace(/>/g, "&gt;")
+                                .replace(/&/g, "&amp;")
+                                .replace(/\n/g, " ")
+                                .replace(/\r/g, " ");
+
                             card.innerHTML = `
                                 <div class="card h-100 text-center p-2">
                                     <img src="${book.thumbnail || '/images/bookImage.jpg'}" class="card-img-top" alt="썸네일" style="max-height: 150px; object-fit: contain;">
@@ -43,12 +54,28 @@ function searchBooks() {
                                         <h5 class="card-title">${book.title}</h5>
                                         <p class="card-text">${book.author} | ${book.publisher}</p>
                                         <p class="card-text">${book.callNumber} | ${book.topicId}</p>
-                                        <button class="btn custom-btn-outline" onclick="selectBook('${book.title}', '${book.author}', '${book.publisher}', '${book.publishedDate}', '${book.isbn}', '${book.callNumber}', '${book.contents}', '${book.thumbnail}', '${book.topicId}')" data-bs-dismiss="modal">선택</button>
+                                        <button class="btn custom-btn-outline select-btn" data-title="${book.title}" data-author="${book.author}" data-publisher="${book.publisher}" data-publishedDate="${book.publishedDate}" data-isbn="${book.isbn}" data-callNumber="${book.callNumber}" data-contents="${safeContents}" data-thumbnail="${book.thumbnail}" data-topicId="${book.topicId}" data-bs-dismiss="modal">선택</button>
                                     </div>
                                 </div>
                             `;
                             resultsContainer.appendChild(card);
                         }
+                    });
+                    // 이벤트 리스너 추가 (onclick 사용하지 않음)
+                    document.querySelectorAll('.select-btn').forEach(button => {
+                        button.addEventListener('click', function () {
+                            selectBook(
+                                this.dataset.title,
+                                this.dataset.author,
+                                this.dataset.publisher,
+                                this.dataset.publisheddate,
+                                this.dataset.isbn,
+                                this.dataset.callnumber,
+                                this.dataset.contents,
+                                this.dataset.thumbnail,
+                                this.dataset.topicid
+                            );
+                        });
                     });
                 })
                 .catch(error => console.error('Error with book requests:', error));
@@ -64,7 +91,7 @@ function selectBook(title, author, publisher, publishedDate, isbn, callNumber, c
     document.getElementById('bookPublishedDate').textContent = publishedDate;
     document.getElementById('bookIsbn').textContent = isbn;
     document.getElementById('bookCallNumber').textContent = callNumber;
-    document.getElementById('bookContents').textContent = contents;
+    document.getElementById('bookContents').innerHTML = contents;
     document.getElementById('bookThumbnail').src = thumbnail || '/images/bookImage.jpg';
     document.getElementById('bookTopicId').textContent = topicId;
 }

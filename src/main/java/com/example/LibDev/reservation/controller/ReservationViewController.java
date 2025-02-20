@@ -13,7 +13,7 @@ public class ReservationViewController {
 
     @GetMapping("/reservations/list")
     public String showReservationList() {
-        return "reservation/reservationList-demo";
+        return "reservation/reservationList";
     }
 
 
