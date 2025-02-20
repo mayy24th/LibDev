@@ -112,7 +112,6 @@ function registerBook() {
         method: 'POST',
         body: JSON.stringify({ title, author, publisher, publishedDate, isbn, callNumber, topicId, contents, thumbnail }),
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
     })
         .then(response => response.text())
         .then(data => alert('도서 등록 성공!'))
