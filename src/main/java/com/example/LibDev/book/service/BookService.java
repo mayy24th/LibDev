@@ -55,11 +55,8 @@ public class BookService {
         ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
         Map<String, Object> responseBody = response.getBody();
 
-        System.out.println("Kakao API Response: " + responseBody);
-
         if (responseBody != null) {
             Object documentsObj = responseBody.get("documents");
-            System.out.println("Documents Object: " + documentsObj);
 
             if (documentsObj instanceof List) {
                 List<Map<String, Object>> books = (List<Map<String, Object>>) documentsObj;
@@ -94,7 +91,6 @@ public class BookService {
 
                     // 청구기호가 "N/A"라면 저장하지 않음
                     if ("N/A".equals(callNumber)) {
-                        System.out.println("청구기호가 없으므로 저장하지 않습니다: " + title);
                         continue; // 현재 루프를 건너뛰고 다음 책으로 진행
                     }
 
@@ -136,8 +132,6 @@ public class BookService {
         Map<String, String> result = Map.of("callNumber", "N/A", "topicId", "0"); // 기본값 설정
 
         if (responseBody != null) {
-            System.out.println("Library API XML Response: " + responseBody);
-
             // 정규식으로 청구기호(call_no) 추출
             Matcher callNumberMatcher = Pattern.compile("<call_no><!\\[CDATA\\[(.*?)]]></call_no>").matcher(responseBody);
             if (callNumberMatcher.find()) {
