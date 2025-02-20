@@ -6,8 +6,10 @@ import com.example.LibDev.recommendation.strategy.UserBaseRecommendation;
 import com.example.LibDev.user.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RecommendationService {
@@ -15,6 +17,7 @@ public class RecommendationService {
     private final SimilarBookRecommendation similarBookRecommendation;
     private final UserBaseRecommendation userBaseRecommendation;
     private final UserService userService;
+    private final RecommendationCacheService recommendationCacheService;
 
     /**
      * 도서 ID를 기준으로 유사한 도서를 추천
@@ -22,7 +25,15 @@ public class RecommendationService {
      * @return 추천 도서 리스트
      */
     public List<RecommendationResponseDto> recommendSimilarBooks(Long bookId) {
-        return similarBookRecommendation.recommend(bookId, null);
+        String cacheKey = "similar_books:" + bookId;
+        List<RecommendationResponseDto> cachedRecommendations = recommendationCacheService.getCachedRecommendations(cacheKey);
+        if (cachedRecommendations != null && !cachedRecommendations.isEmpty()) {
+            return cachedRecommendations;
+        }
+
+        List<RecommendationResponseDto> recommendations = similarBookRecommendation.recommend(bookId, null);
+        recommendationCacheService.cacheRecommendations(cacheKey, recommendations);
+        return recommendations;
     }
 
     /**
@@ -31,6 +42,15 @@ public class RecommendationService {
      */
     public List<RecommendationResponseDto> recommendUserBaseBooks() {
         String email = userService.getUserEmail();
-        return userBaseRecommendation.recommend(null, email);
+        String cacheKey = "user_base_books:" + email;
+
+        List<RecommendationResponseDto> cachedRecommendations = recommendationCacheService.getCachedRecommendations(cacheKey); // ✅ Redis에서 캐시 조회
+        if (cachedRecommendations != null) {
+            return cachedRecommendations;
+        }
+
+        List<RecommendationResponseDto> recommendations = userBaseRecommendation.recommend(null, email);
+        recommendationCacheService.cacheRecommendations(cacheKey, recommendations);
+        return recommendations;
     }
 }
