@@ -20,13 +20,13 @@ public class Reservation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -41,6 +41,15 @@ public class Reservation extends BaseEntity {
         this.expirationDate = expirationDate;
     }
 
+    public void updateQueueOrder(int newQueueOrder) {
+        this.queueOrder = newQueueOrder;
+    }
+
     @Column(nullable = false)
     private int queueOrder; // 대기 순번
+
+    // Getter 추가
+    public Book getBook() {
+        return book;
+    }
 }

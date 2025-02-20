@@ -121,4 +121,16 @@ public class UserService {
             return email;
         }
     }
+
+    /* userId 반환*/
+    public Long getUserId() {
+        String email = getUserEmail();
+        if (email == null) {
+            return null;
+        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+        return user.getId();
+    }
+
 }
