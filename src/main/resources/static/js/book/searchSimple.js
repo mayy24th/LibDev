@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function renderBookList() {
         const bookList = document.getElementById("book-list");
-        const resultText = document.querySelector(".text-center.fw-bold");
         bookList.innerHTML = "";
 
         const start = (currentPage - 1) * booksPerPage;
