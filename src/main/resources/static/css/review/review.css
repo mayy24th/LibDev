@@ -73,6 +73,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding-left: 10px;
 }
 
 /* 구분선 */
@@ -113,26 +114,33 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
+    gap: 2px;
 }
 
 /* 삭제 버튼 */
 .btn-delete {
     background-color: white;
     color: black;
-    padding: 7px 12px;
+    padding: 5px 10px;
     border: 1px solid #ddd;
     cursor: pointer;
     border-radius: 5px;
+    font-weight: normal;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
 }
 
 /* 수정 버튼 */
 .btn-edit {
     background-color: white;
     color: black;
-    padding: 7px 12px;
+    padding: 5px 10px;
     border: 1px solid #ddd;
     cursor: pointer;
     border-radius: 5px;
+    font-weight: normal;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
 }
 
 /* 한줄평 등록 버튼 */
@@ -149,9 +157,37 @@
     right: 0;
     margin-top: 5px;
     display: none;
+    transition: all 0.3s ease-in-out;
 }
 
 /* 버튼 호버 효과 */
 .btn-modify-review:hover {
     background-color: #4F2D2D;
+}
+
+/* 수정 버튼 호버 효과 */
+.btn-edit:hover {
+    background-color: #f0f0f0; /* 연한 회색으로 변경 */
+    border-color: #aaa; /* 테두리 색 변경 */
+    color: #333; /* 글씨 색 변경 */
+}
+
+/* 삭제 버튼 호버 효과 */
+.btn-delete:hover {
+    background-color: #f0f0f0; /* 연한 회색으로 변경 */
+    border-color: #aaa; /* 테두리 색 변경 */
+    color: #333; /* 글씨 색 변경 */
+}
+
+/* 페이지네이션 스타일 */
+.pagination .page-item.active .page-link {
+    background-color: #623F3F;
+    border-color: #623F3F;
+    color: white;
+}
+.pagination .page-link {
+    color: #623F3F;
+}
+.pagination .page-link:hover {
+    background-color: #f1e3e3;
 }

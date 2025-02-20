@@ -62,14 +62,14 @@
     padding: 20px;
     border-radius: 8px;
     text-align: center;
-    width: 500px; /* 등록 모달은 더 넓게 */
+    width: 700px; /* 등록 모달은 더 넓게 */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* 한줄평 입력 필드 스타일 */
 .review-textarea {
     width: 95%;
-    height: 100px;
+    height: 200px;
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
