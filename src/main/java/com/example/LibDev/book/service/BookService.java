@@ -237,25 +237,25 @@ public class BookService {
     public List<BookResponseDto> searchBooks(String query) {
         List<Book> books;
         if (query != null && !query.trim().isEmpty()) {
-            books = bookRepository.findByTitleContainingOrAuthorContainingOrPublisherContaining(query, query, query);
+            books = bookRepository.findByTitleContainingOrAuthorContainingOrPublisherContainingOrderByCreatedAtDesc(query, query, query);
         } else {
-            books = bookRepository.findAll();
+            books = bookRepository.findAllByOrderByCreatedAtDesc();
         }
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
 
     public List<BookResponseDto> searchByTitle(String query) {
-        List<Book> books = bookRepository.findByTitleContaining(query);
+        List<Book> books = bookRepository.findByTitleContainingOrderByCreatedAtDesc(query);
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
 
     public List<BookResponseDto> searchByAuthor(String query) {
-        List<Book> books = bookRepository.findByAuthorContaining(query);
+        List<Book> books = bookRepository.findByAuthorContainingOrderByCreatedAtDesc(query);
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
 
     public List<BookResponseDto> searchByPublisher(String query) {
-        List<Book> books = bookRepository.findByPublisherContaining(query);
+        List<Book> books = bookRepository.findByPublisherContainingOrderByCreatedAtDesc(query);
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
 
@@ -265,7 +265,7 @@ public class BookService {
     }
 
     public List<BookResponseDto> findBooksByTopic(int topicId) {
-        List<Book> books = bookRepository.findByTopicId(topicId);
+        List<Book> books = bookRepository.findByTopicIdOrderByCreatedAtDesc(topicId);
         return books.stream()
                 .map(BookResponseDto::fromEntity)
                 .collect(Collectors.toList());
