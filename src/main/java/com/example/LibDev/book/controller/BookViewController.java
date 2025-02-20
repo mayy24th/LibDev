@@ -54,4 +54,10 @@ public class BookViewController {
         return "book/searchTopicList";
     }
 
+    // 도서 관리 페이지
+    @GetMapping("/book-admin")
+    public String showAdminBookListPage() {
+        return "book/bookAdmin";
+    }
+
 }

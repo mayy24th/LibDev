@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
-    List<Book> findByTitleContaining(String title);
-    List<Book> findByAuthorContaining(String author);
-    List<Book> findByPublisherContaining(String publisher);
-    List<Book> findByTitleContainingOrAuthorContainingOrPublisherContaining(String title, String author, String publisher);
+    List<Book> findByTitleContainingOrderByCreatedAtDesc(String title);
+    List<Book> findByAuthorContainingOrderByCreatedAtDesc(String author);
+    List<Book> findByPublisherContainingOrderByCreatedAtDesc(String publisher);
+    List<Book> findByTitleContainingOrAuthorContainingOrPublisherContainingOrderByCreatedAtDesc(String title, String author, String publisher);
+    List<Book> findAllByOrderByCreatedAtDesc();
 
     List<Book> findByCallNumberStartingWith(String callNumber);
-    List<Book> findByTopicId(int topicId);
+    List<Book> findByTopicIdOrderByCreatedAtDesc(int topicId);
 }

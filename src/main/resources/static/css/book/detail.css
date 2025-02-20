@@ -117,8 +117,9 @@ td {
 
 .info-label {
     font-weight: bold;
-    width: 60px;
+    min-width: 70px;
     flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .info-value {
