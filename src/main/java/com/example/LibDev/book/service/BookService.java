@@ -264,4 +264,14 @@ public class BookService {
                 .map(BookResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    // 도서 삭제
+    @Transactional
+    public boolean deleteBook(Long bookId) {
+        if (bookRepository.existsById(bookId)) {
+            bookRepository.deleteById(bookId);
+            return true;
+        }
+        return false;
+    }
 }

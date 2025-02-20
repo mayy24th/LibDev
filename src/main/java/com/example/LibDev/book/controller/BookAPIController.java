@@ -97,4 +97,14 @@ public class BookAPIController {
         return ResponseEntity.ok(books);
     }
 
+    // 도서 삭제 API
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
+        boolean isDeleted = bookService.deleteBook(bookId);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
