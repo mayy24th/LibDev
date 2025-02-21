@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum CustomErrorCode {
     //global 에러
     DATA_INTEGRITY_VIOLATION(HttpStatus.BAD_REQUEST, "데이터 무결성 오류가 발생했습니다."),
+    CODE_VERIFY_FAIL(HttpStatus.BAD_REQUEST, "인증번호가 일치하지 않습니다."),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버에 오류가 발생했습니다."),
 
     //user 관련 에러
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"),
