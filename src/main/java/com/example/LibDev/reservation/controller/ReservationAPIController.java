@@ -44,16 +44,8 @@ public class ReservationAPIController {
         return ResponseEntity.ok(reservations);
     }
 
-    /*// 예약 취소
-    @DeleteMapping("/{reservationId}")
-    public ResponseEntity<?> cancelReservation(@AuthenticationPrincipal Long userId, @PathVariable Long reservationId) {
-        reservationService.cancelReservation(userId, reservationId);
-        return ResponseEntity.ok("예약이 취소되었습니다.");
-    }*/
-
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<?> cancelReservation(@PathVariable Long reservationId) {
-        /*Long userId = 1L;  // 임시로 userId를 1로 설정*/
         Long userId = getCurrentUserId();
 
         if (userId == null) {
@@ -62,6 +54,12 @@ public class ReservationAPIController {
 
         reservationService.cancelReservation(userId, reservationId);
         return ResponseEntity.ok("예약이 취소되었습니다.");
+    }
+
+    @GetMapping("/count/{bookId}")
+    public ResponseEntity<Integer> getReservationCount(@PathVariable Long bookId) {
+        int count = reservationService.getReservationCountByBook(bookId);
+        return ResponseEntity.ok(count);
     }
 
     private Long getCurrentUserId() {

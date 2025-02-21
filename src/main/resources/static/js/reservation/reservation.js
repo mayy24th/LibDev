@@ -48,6 +48,7 @@ export async function createReservation(bookId) {
             throw new Error(data.message || `${response.status} ${response.statusText}`);
         }
 
+        alert(`"${data.book.title}" 도서의 예약이 완료되었습니다!`);
         showAlertToast(`"${data.book.title}" 도서의 예약이 완료되었습니다!`);
     } catch (error) {
         showAlertToast(error.message);
