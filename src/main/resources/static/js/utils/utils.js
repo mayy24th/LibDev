@@ -1,5 +1,4 @@
 export function showAlertToast(message) {
-    /*console.log("showAlertToast 함수 실행됨:", message);*/
     Toastify({
         text: message,
         duration: -1,
