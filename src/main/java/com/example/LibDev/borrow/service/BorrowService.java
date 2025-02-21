@@ -35,7 +35,7 @@ public class BorrowService {
     private final BookRepository bookRepository;
     private final ReservationRepository reservationRepository;
 
-    private static final int MAX_BORROW_LIMIT = 5; // 최대 대출 가능 권 수
+    private static final int MAX_BORROW_LIMIT = 7; // 최대 대출 가능 권 수
 
     /* 회원별 대출 현황 조회 */
     public List<BorrowResDto> getCurrentBorrowsByUser() {
