@@ -66,6 +66,16 @@ public class JwtProvider {
 
     }
 
+    public String generateTempToken(String email) {
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setSubject(email)
+                .setExpiration(new Date(now.getTime() + accessTokenValidTime))
+                .signWith(signingkey)
+                .compact();
+    }
+
     public Claims getClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(signingkey).parseClaimsJws(token).getBody();
     }
