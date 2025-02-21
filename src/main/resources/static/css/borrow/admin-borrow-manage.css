@@ -8,11 +8,13 @@ h2 {
 }
 
 .btn {
+    border: none;
     color: white;
     background-color: #5B3A1E;
 }
 
 .btn:hover {
+    border: none;
     color: white;
     background-color: #4F2D2D;
 }
