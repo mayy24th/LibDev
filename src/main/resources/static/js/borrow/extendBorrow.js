@@ -1,4 +1,6 @@
-async function extendBorrow(borrowId) {
+import { formatDate } from "./utils.js";
+
+export async function extendBorrow(borrowId) {
     try {
         const response = await fetch(`/api/v1/extend/${borrowId}`, {
             method: "PATCH"
