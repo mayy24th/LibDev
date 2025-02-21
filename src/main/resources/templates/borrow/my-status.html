@@ -7,17 +7,17 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/borrow/my-status.css">
-  <script src="/js/borrow/getMyBorrowStatus.js" defer></script>
-  <script src="/js/borrow/extendBorrow.js" defer></script>
-  <script src="/js/borrow/requestReturn.js" defer></script>
+  <script type="module" src="/js/borrow/myBorrowList.js"></script>
+  <script type="module" src="/js/borrow/extendBorrow.js"></script>
+  <script type="module" src="/js/borrow/requestReturn.js"></script>
 </head>
 <body>
 <div class="info-container mt-5">
   <h2 class="text-center">대출 현황 / 연장</h2>
   <div class="info mt-3">
-    <p><i class="bi bi-check"></i> 대출 도서는 1회에 한해 대출 기간을 7일 연장 가능합니다.</p>
-    <p><i class="bi bi-check"></i> 다른 회원이 대출 예약한 도서는 연장이 제한됩니다.</p>
-    <p><i class="bi bi-check"></i> 반납일이 경과했거나 연체된 다른 도서가 있는 경우 연장이 제한됩니다.</p>
+    <p class="info-content"><i class="bi bi-check"></i> 대출 도서는 1회에 한해 대출 기간을 7일 연장 가능합니다.</p>
+    <p class="info-content"><i class="bi bi-check"></i> 다른 회원이 대출 예약한 도서는 연장이 제한됩니다.</p>
+    <p class="info-content"><i class="bi bi-check"></i> 반납일이 경과했거나 연체된 다른 도서가 있는 경우 연장이 제한됩니다.</p>
   </div>
 </div>
 

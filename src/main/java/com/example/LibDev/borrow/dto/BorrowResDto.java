@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 public class BorrowResDto {
     private final Long id;
-    private final String bookTitle;
+    private final String bookTitle; // 도서명
+    private final String userEmail; // 대출자
     private final String status; // 대출 상태
     private final LocalDateTime borrowDate; // 대출일
     private final LocalDateTime dueDate; // 반납 예정일
