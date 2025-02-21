@@ -1,35 +1,11 @@
-import {reissue} from "../utils/reissue.js";
+import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    try{
-        let response = await fetch("/api/v1/users", {
-            method: "GET",
-        })
-
-        if (response.status === 401 || response.status === 500) {
-            const reissued = await reissue();
-
-            if (reissued) {
-                response = await fetch("/api/v1/users", {
-                    method: "GET",
-                });
-            } else {
-                return;
-            }
-        }
-
-        if (!response.ok) {
-            throw new Error("회원정보 조회 실패");
-        }
-        const result =  await response.json()
-        const userInfo = result.data;
-
-        populateUserInfo(userInfo);
-
-    } catch(error){
-        alert("회원정보 조회 실패");
-        console.error(error);
-        window.location.href="/users/login"
+    const result = await apiRequestRetry("/api/v1/users",{method: "GET"});
+    if(result){
+        populateUserInfo(result.data);
+    } else {
+        window.location.href = "/users/login"
     }
 })
 

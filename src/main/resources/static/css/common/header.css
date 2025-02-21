@@ -1,0 +1,36 @@
+.top-bar {
+    background-color: #f1f1f1;
+    text-align: right;
+    padding: 5px 20px;
+    font-size: 14px;
+    width: 100vw;
+    margin-right: 50px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 2px solid black;
+    justify-content: center;
+}
+.logo {
+    width: 40px;
+    height: 40px;
+    background-color: lightgray;
+    margin-right: 15px;
+}
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 30px;
+}
+.nav {
+    display: flex;
+    gap: 15px;
+}
+.header-text {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+}

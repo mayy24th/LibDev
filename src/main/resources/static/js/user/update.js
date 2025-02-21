@@ -1,5 +1,6 @@
 import {reissue} from "../utils/reissue.js";
 import {duplicateCheckEmail} from "./duplicateCheckEmail.js"
+import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
 
 document.addEventListener("DOMContentLoaded",() => {
     const form = document.getElementById("updateForm")
@@ -54,25 +55,12 @@ document.addEventListener("DOMContentLoaded",() => {
         const fullEmail = `${email}@${domain}`;
 
         try {
-            let response = await  fetch("/api/v1/users",{
+            const result = await apiRequestRetry("/api/v1/users",{
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email: fullEmail, phone }),
-            });
-            if(response.status === 401){
-                const reissued = await reissue();
-
-                if(reissued){
-                    response = await fetch("/api/v1/users",{
-                        method: "PATCH",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ name, email: fullEmail, phone }),
-                    })
-                }
-            }
-
-            const result = await response.json();
-            alert(result.message);
+            })
+            alert(result.data);
 
             if (password.trim() !== "") {
                 if (password !== confirmPassword) {
@@ -80,28 +68,14 @@ document.addEventListener("DOMContentLoaded",() => {
                     return;
                 }
 
-                let passwordResponse = await fetch("/api/v1/users/password", {
+                const passwordResult = await apiRequestRetry("/api/v1/users/password", {
                     method: "PATCH",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({password}),
                 });
 
-                if (passwordResponse.status === 401) {
-                    const reissued = await reissue();
-                    if (reissued) {
-                        passwordResponse = await fetch("/api/v1/users/password", {
-                            method: "PATCH",
-                            headers: {"Content-Type": "application/json"},
-                            body: JSON.stringify({password}),
-                        });
-                    }
-                }
-
-                const passwordResult = await passwordResponse.json();
-                alert(passwordResult.message);
+                alert(passwordResult.data);
             }
-
-
 
         } catch (error) {
             alert("회원정보 수정 중 오류가 발생했습니다.");

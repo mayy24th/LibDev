@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도서관 헤더</title>
+
+</head>
+<body>
+<div th:fragment="header">
+    <div class="top-bar">
+        <a class="header-text" href="/users/login">로그인</a>
+        <span>|</span>
+        <a class="header-text" href="/users/join">회원가입</a>
+    </div>
+
+    <div class="header">
+        <div class="logo"></div>
+        <div class="title">도서관</div>
+        <div class="nav">
+            <a class="header-text" href="#">도서관안내</a>
+            <a class="header-text" href="#">자료검색</a>
+            <a class="header-text" href="#">도서정보</a>
+            <a class="header-text" href="#">나만의도서관</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
