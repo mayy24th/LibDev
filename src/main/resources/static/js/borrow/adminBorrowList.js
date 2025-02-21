@@ -1,4 +1,5 @@
 import {formatDate, statusColor} from "./utils.js";
+import {approveReturn} from "./approveReturn.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
@@ -20,6 +21,7 @@ function displayBorrowList(borrowList) {
 
     borrowList.forEach((borrow) => {
         const borrowItem = document.createElement("tr");
+        borrowItem.id = `borrow-${borrow.id}`;
 
         const borrowId = document.createElement("td");
         borrowId.textContent = borrow.id;
@@ -38,6 +40,7 @@ function displayBorrowList(borrowList) {
 
         const returnDate = document.createElement("td");
         returnDate.textContent = borrow.status == "반납 완료" ? formatDate(borrow.returnDate) : "-";
+        returnDate.classList.add("return-date");
 
         const extended = document.createElement("td");
         extended.textContent = borrow.extended ? "Y" : "N";
@@ -48,12 +51,14 @@ function displayBorrowList(borrowList) {
         const borrowStatus = document.createElement("td");
         borrowStatus.textContent = borrow.status;
         borrowStatus.style.color = statusColor(borrow.status);
+        borrowStatus.classList.add("borrow-status");
 
         const returnbtn = document.createElement("td");
         if (borrow.status == "반납 신청") {
             const btn = document.createElement("button");
             btn.textContent = "반납 확인";
             btn.classList.add("btn", "return-approve-btn");
+            btn.addEventListener("click", () => approveReturn(borrow.id));
             returnbtn.appendChild(btn);
         }
 

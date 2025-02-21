@@ -52,8 +52,8 @@ public class BorrowAPIController {
 
     /* 도서 반납 승인 */
     @PatchMapping("/api/v1/approve-return/{borrowId}")
-    public ResponseEntity<?> approveReturn(@PathVariable Long borrowId) {
-        borrowService.approveReturn(borrowId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ReturnResDto> approveReturn(@PathVariable Long borrowId) {
+        log.debug("반납 승인 - borrowId:{}", borrowId);
+        return ResponseEntity.ok(borrowService.approveReturn(borrowId));
     }
 }

@@ -130,7 +130,7 @@ public class BorrowService {
 
     /* 도서 반납 승인 */
     @Transactional
-    public void approveReturn(Long borrowId) {
+    public ReturnResDto approveReturn(Long borrowId) {
         Borrow borrow = borrowRepository.findById(borrowId).orElseThrow(() -> new CustomException(CustomErrorCode.BORROW_NOT_FOUND));
 
         borrow.updateReturnDate(LocalDateTime.now());
@@ -143,6 +143,12 @@ public class BorrowService {
         borrow.updateStatus(Status.RETURNED);
 
         updateBookIsAvailable(borrow.getBook());
+
+        return ReturnResDto.builder()
+                .id(borrow.getId())
+                .status(borrow.getStatus().getDescription())
+                .returnDate(borrow.getReturnDate())
+                .build();
     }
 
     /* 회원 패널티 만료일 업데이트 */
