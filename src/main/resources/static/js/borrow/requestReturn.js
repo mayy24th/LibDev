@@ -1,4 +1,6 @@
-async function requestReturn(borrowId) {
+import { statusColor } from "./utils.js";
+
+export async function requestReturn(borrowId) {
     try {
         const response = await fetch(`/api/v1/return/${borrowId}`, {
             method: "PATCH"
@@ -18,13 +20,19 @@ async function requestReturn(borrowId) {
 }
 
 function updateBorrowStatus(borrow) {
-    const button = document.querySelector(`#return-btn-${borrow.id}`);
-    if (button) {
-        button.disabled = true;
+    const requestReturnBtn = document.querySelector(`#request-return-btn-${borrow.id}`);
+    if (requestReturnBtn) {
+        requestReturnBtn.disabled = true;
+    }
+
+    const extendBtn = document.querySelector(`#extend-btn-${borrow.id}`);
+    if (extendBtn) {
+        extendBtn.disabled = true;
     }
 
     const borrowStatus = document.querySelector(`#borrow-status-${borrow.id}`);
     if (borrowStatus) {
         borrowStatus.textContent = borrow.status;
+        borrowStatus.style.color = statusColor(borrow.status);
     }
 }

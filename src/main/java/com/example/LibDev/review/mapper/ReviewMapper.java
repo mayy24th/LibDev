@@ -16,6 +16,7 @@ public class ReviewMapper {
                 .email(review.getUser().getEmail())
                 .userName(review.getUser().getName())
                 .bookName(review.getBook().getTitle())
+                .thumbnail(review.getBook().getThumbnail())
                 .content(review.getContent())
                 .createdAt(review.getCreatedAt())
                 .isOwner((userEmail != null && userEmail.equals(review.getUser().getEmail()))
