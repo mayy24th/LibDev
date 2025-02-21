@@ -9,10 +9,14 @@
     <link rel="stylesheet" href="/css/common/common.css">
     <link rel="stylesheet" href="/css/user/user-form.css">
     <script type="module" src="/js/user/join.js"></script>
+    <link rel="stylesheet" href="/css/common/header.css">
+    <link rel="stylesheet" href="/css/common/footer.css">
+    <script type="module" src="/js/utils/headerAccessInfo.js"></script>
 </head>
-<body>
+<body class="wrapper body-form">
+<div th:replace="~{layout/header :: header}"></div>
 <div class="container py-5 d-flex justify-content-center">
-    <div style="max-width: 500px; width: 100%;">
+    <div class = "form-content">
         <h2 class="mb-4 text-center">회원가입</h2>
         <form id="joinForm" class="row g-3 form-join">
             <div class="col-md-12 form-group">
@@ -56,5 +60,6 @@
         </form>
     </div>
 </div>
+<div th:replace="~{layout/footer :: footer}"></div>
 </body>
 </html>
