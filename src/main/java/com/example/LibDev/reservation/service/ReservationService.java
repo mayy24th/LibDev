@@ -158,7 +158,7 @@ public class ReservationService {
             updateFirstReservationExpiration(book);
         }
 
-        log.info("📡 WebSocket 알림 전송 준비: userId = {}", user.getId());
+        log.info("WebSocket 알림 전송 준비: userId = {}", user.getId());
 //        sendReservationNotification(user.getId(), reservation, "예약 완료");
 
         return reservation;
@@ -311,5 +311,13 @@ public class ReservationService {
             );
         }
     }*/
+
+    // 특정 도서의 예약자 수(WAITING 상태) 조회 메서드 추가
+    @Transactional(readOnly = true)
+    public int getReservationCountByBook(Long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
+        return reservationRepository.countByBookAndStatus(book, ReservationStatus.WAITING);
+    }
 
 }

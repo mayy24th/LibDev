@@ -138,9 +138,11 @@ async function cancelReservation(reservationId) {
             throw new Error(`예약 취소 실패: ${response.status}`);
         }
 
+        await fetchReservations();
+
         showAlertToast("예약이 취소되었습니다.");
-        showAlertToast(`"${data.book.title}" 도서의 예약이 취소되었습니다!`);
-        await fetchReservations(); // 취소 후 목록 새로고침
+        /*showAlertToast(`"${data.book.title}" 도서의 예약이 취소되었습니다!`);*/
+
 
     } catch (error) {
         showAlertToast("예약 취소 실패: " + error.message);
