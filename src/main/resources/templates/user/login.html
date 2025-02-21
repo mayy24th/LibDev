@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/common/common.css">
     <link rel="stylesheet" href="/css/user/login.css">
     <script type="module" src="/js/user/login.js"></script>
+    <script type="module" src="/js/utils/capsLockAlert.js"></script>
 
     <link rel="stylesheet" href="/css/common/header.css">
     <link rel="stylesheet" href="/css/common/footer.css">
@@ -29,8 +30,11 @@
                     <div class="mb-3">
                         <input type="text" name="email" class="form-control" placeholder="이메일" required>
                     </div>
-                    <div class="mb-3">
-                        <input type="password" name="password" class="form-control" placeholder="비밀번호" required>
+                    <div class="mb-3 position-relative">
+                        <input type="password" id="passwordInput" name="password" class="form-control" placeholder="비밀번호" required>
+                        <div id="capsLockAlert" class="position-absolute text-danger small rounded bg-white shadow px-2 py-1 d-none">
+                            🔔 Caps Lock이 켜져 있습니다!
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-login w-100">로그인</button>
                 </form>
@@ -40,7 +44,7 @@
                     <a href="/users/join" class="text-decoration-none">회원가입</a>
                 </div>
 
-                <p class="text-center text-muted mt-3" >
+                <p class="text-center text-muted mt-3">
                     로그인이 안되는 경우 한/영 키와 Caps Lock 키가 눌려져 있지 않은지 확인하세요.<br>
                     계속해서 로그인이 안되시는 경우 관리자에게 문의하시기 바랍니다.
                 </p>
@@ -50,4 +54,5 @@
 </div>
 <div th:replace="~{layout/footer :: footer}"></div>
 </body>
+
 </html>
