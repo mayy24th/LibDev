@@ -30,7 +30,7 @@ public class RedisTokenService {
         return Boolean.TRUE.equals(redisTemplate.hasKey(email));
     }
 
-    public void setBlackList(String accessToken, String msg, Long expireTime) {
+    public void setBlackList(String accessToken, String msg, long expireTime) {
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(msg.getClass()));
         redisTemplate.opsForValue().set(accessToken, msg, expireTime, TimeUnit.MINUTES);
     }
