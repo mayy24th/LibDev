@@ -23,6 +23,12 @@ public class BorrowAPIController {
         return ResponseEntity.ok(borrowService.getCurrentBorrowsByUser());
     }
 
+    /* 전체 대출 조회 */
+    @GetMapping("/api/v1/borrow-list")
+    public ResponseEntity<List<BorrowResDto>> getBorrowList() {
+        return ResponseEntity.ok(borrowService.getAllBorrows());
+    }
+
     /* 대출 생성 */
     @PostMapping("/api/v1/borrow")
     public ResponseEntity<?> borrow(@RequestParam Long bookId) {
@@ -33,13 +39,14 @@ public class BorrowAPIController {
     /* 대출 연장 */
     @PatchMapping("/api/v1/extend/{borrowId}")
     public ResponseEntity<ExtendResDto> extend(@PathVariable Long borrowId) {
+        log.debug("대출 연장 - borrowId:{}", borrowId);
         return ResponseEntity.ok(borrowService.extendReturnDate(borrowId));
     }
 
     /* 도서 반납 신청 */
     @PatchMapping("/api/v1/return/{borrowId}")
     public ResponseEntity<ReturnResDto> requestReturn(@PathVariable Long borrowId) {
-        log.debug("반납 신청 - borrowId = {}", borrowId);
+        log.debug("반납 신청 - borrowId:{}", borrowId);
         return ResponseEntity.ok(borrowService.requestReturn(borrowId));
     }
 

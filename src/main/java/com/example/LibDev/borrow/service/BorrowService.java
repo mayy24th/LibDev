@@ -53,6 +53,15 @@ public class BorrowService {
                 .collect(Collectors.toList());
     }
 
+    /* 전체 대출 내역 조회 */
+    public List<BorrowResDto> getAllBorrows() {
+        List<Borrow> borrowList = borrowRepository.findAll();
+
+        return borrowList.stream()
+                .map(this::toBorrowResDto)
+                .collect(Collectors.toList());
+    }
+
     /* 대출 생성 */
     @Transactional
     public void borrow(Long bookId) {
@@ -85,9 +94,10 @@ public class BorrowService {
     public ExtendResDto extendReturnDate(Long borrowId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+        log.debug("대출 연장 - 대출자:{}", email);
 
         Borrow borrow = borrowRepository.findById(borrowId).orElseThrow(() -> new CustomException(CustomErrorCode.BORROW_NOT_FOUND));
-        log.debug("extend - BorrowId: {}", borrow.getId());
+        log.debug("대출 연장 - BorrowId:{}", borrow.getId());
 
         // 예약자 존재 여부 확인
         if (reservationRepository.existsByBookAndStatus(borrow.getBook(), ReservationStatus.WAITING)) {
@@ -174,6 +184,7 @@ public class BorrowService {
         return BorrowResDto.builder()
                 .id(borrow.getId())
                 .bookTitle(borrow.getBook().getTitle())
+                .userEmail(borrow.getUser().getEmail())
                 .status(borrow.getStatus().getDescription())
                 .borrowDate(borrow.getCreatedAt())
                 .dueDate(borrow.getDueDate())
