@@ -4,23 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>한줄평 목록</title>
+
+    <!-- Bootstrap 추가 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="/css/review/review.css">
     <link rel="stylesheet" href="/css/review/modal.css">
     <script type="module" src="/js/review/review.js"></script>
 </head>
 <body class="body-submit">
-<div class="title-container">
-    <h2 id="pageTitle">한줄평 목록</h2>
+<div class="container mt-4">
+    <div class="title-container">
+        <h2 id="pageTitle">한줄평 목록</h2>
+    </div>
+
+    <div class="button-container">
+        <div id="pageInfo" class="page-info"></div>
+        <button class="btn-modify-review" id="openModifyModalBtn">한줄평 작성하기</button>
+    </div>
+
+    <!-- 한줄평 목록 -->
+    <div id="reviewContainer" class="review-container"></div>
+
+    <!-- 페이지네이션 -->
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center" id="paginationContainer"></ul>
+    </nav>
 </div>
 
-<div class="button-container">
-    <button class="btn-modify-review" id="openModifyModalBtn">한줄평 등록하기</button>
-</div>
-
-<!-- 한줄평 작성/수정 모달 -->
+<!-- 모달 -->
 <div id="modifyModal" class="modal-overlay">
     <div class="modal-modify">
-        <h3 id="modalTitle">한줄평 작성</h3>
+        <h5 id="modalTitle">한줄평 작성</h5>
         <textarea id="reviewContent" class="review-textarea" placeholder="한줄평을 입력하세요"></textarea>
         <div class="modal-buttons">
             <button class="btn-submit" id="submitModifyBtn">작성하기</button>
@@ -29,14 +44,9 @@
     </div>
 </div>
 
-<div id="reviewContainer" class="review-container">
-    <!-- 한줄평 목록 삽입 -->
-</div>
-
-<!-- 삭제 확인 모달 -->
 <div id="deleteModal" class="modal-overlay">
     <div class="modal-delete">
-        <h3>글을 삭제하시겠습니까?</h3>
+        <h5>글을 삭제하시겠습니까?</h5>
         <p>삭제된 글은 복구가 불가능합니다.</p>
         <div class="modal-buttons">
             <button class="btn-delete-confirm" id="confirmDeleteBtn">삭제</button>
@@ -44,5 +54,8 @@
         </div>
     </div>
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
