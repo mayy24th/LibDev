@@ -1,6 +1,16 @@
+.body-form{
+    display: block;
+    height: auto;
+}
+
 .form-join {
     display: inline-block;
     text-align: left;
+}
+
+.form-content{
+    max-width: 500px;
+    width: 100%;
 }
 
 .form-group {

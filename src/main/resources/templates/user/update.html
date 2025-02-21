@@ -11,8 +11,12 @@
     <script type="module" src="/js/user/info.js"></script>
     <script type="module" src="/js/user/update.js"></script>
     <script type="module" src="/js/user/withdraw.js"></script>
+    <link rel="stylesheet" href="/css/common/header.css">
+    <link rel="stylesheet" href="/css/common/footer.css">
+    <script type="module" src="/js/utils/headerAccessInfo.js"></script>
 </head>
-<body>
+<body class="wrapper body-form">
+<div th:replace="~{layout/header :: header}"></div>
 <div class="container py-5 d-flex justify-content-center">
     <div style="max-width: 500px; width: 100%;">
         <h2 class="mb-4 text-center">회원정보 수정</h2>
@@ -73,5 +77,6 @@
         </form>
     </div>
 </div>
+<div th:replace="~{layout/footer :: footer}"></div>
 </body>
 </html>
