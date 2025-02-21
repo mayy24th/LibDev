@@ -16,8 +16,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -40,10 +38,6 @@ public class SecurityConfig {
 
 
 
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {return new BCryptPasswordEncoder();}
-
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
@@ -59,12 +53,11 @@ public class SecurityConfig {
                                 "/api/v1/users",
                                 "/api/v1/users/check-email/**",
                                 "/reservations/**",
-                                "/api/v1/reservations/**").permitAll()
+                                "/api/v1/reservations/**",
+                                "/api/v1/auth/password-find/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/api/**").authenticated()
                                 .anyRequest().permitAll()
-                        //csr 랜더링 시 jwt 적용을 위해서 페이지 접근 자체는 전부 열어둠
-                        // api만 jwt로 인증 받도록
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
