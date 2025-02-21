@@ -108,7 +108,8 @@
                     <span th:unless="${book.isAvailable}">
                         대출불가<br>
                         [대출중]<br>
-                        (예약: <span th:text="${book.reservationCount}"></span>명)
+                        (예약: <span class="reservation-count">0명</span>)
+
                     </span>
                 </td>
                 <!--<td th:text="${book.returnDueDate != null ? book.returnDueDate : '-'}"></td>-->
