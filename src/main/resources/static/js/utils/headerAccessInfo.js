@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (reissued) {
                 response = await fetch("/api/v1/users", {
                     method: "GET",
-                    credentials: "include",
                 });
             } else {
                 showLoginButtons();
