@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="/css/common/common.css">
     <link rel="stylesheet" href="/css/user/login.css">
+    <link rel="stylesheet" href="/css/user/capslock-alert.css">
+
     <script type="module" src="/js/user/login.js"></script>
     <script type="module" src="/js/utils/capsLockAlert.js"></script>
 
@@ -32,7 +34,7 @@
                     </div>
                     <div class="mb-3 position-relative">
                         <input type="password" id="passwordInput" name="password" class="form-control" placeholder="비밀번호" required>
-                        <div id="capsLockAlert" class="position-absolute text-danger small rounded bg-white shadow px-2 py-1 d-none">
+                        <div id="capsLockAlert" class="capslock-alert d-none">
                             🔔 Caps Lock이 켜져 있습니다!
                         </div>
                     </div>

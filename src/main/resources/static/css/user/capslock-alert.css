@@ -1,0 +1,17 @@
+.capslock-alert {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: red;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+}
+.d-none {
+    opacity: 0;
+    visibility: hidden;
+}
