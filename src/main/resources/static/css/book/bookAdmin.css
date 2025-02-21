@@ -24,7 +24,6 @@ body {
     margin-top: 10px;
     text-align: left !important;
 }
-
 .d-flex {
     display: flex !important;
     align-items: center;
@@ -34,11 +33,16 @@ body {
     width: 100%;
 }
 
+.d-flex.justify-content-between {
+    justify-content: space-between;
+}
+
 .list-group-item {
     background: white;
     border-radius: 10px;
     transition: transform 0.2s ease-in-out;
 }
+
 .list-group-item:hover {
     transform: scale(1.02);
 }
@@ -80,4 +84,20 @@ body {
 
 .pagination .page-link:hover {
     background-color: #f1e3e3;
+}
+
+.delete-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    padding: 5px 20px;
+    border-radius: 4px;
+    z-index: 9999;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
 }

@@ -69,18 +69,12 @@ public class BookAPIController {
 
     // 도서 목록 조회 API
     @GetMapping
-    public ResponseEntity<List<BookResponseDto>> getBooks(@RequestParam(required = false) String query) {
-        List<BookResponseDto> books = bookService.searchBooks(query);
-        return ResponseEntity.ok(books);
-    }
-
-    public ResponseEntity<List<BookResponseDto>> searchBooks(
-            @RequestParam(value = "query") String query,
+    public ResponseEntity<List<BookResponseDto>> getBooks(
+            @RequestParam(required = false, value = "query") String query,
             @RequestParam(value = "searchType", defaultValue = "전체") String searchType) {
 
         List<BookResponseDto> books;
 
-        // 전체 검색
         if ("전체".equals(searchType)) {
             books = bookService.searchBooks(query); // 검색어로 도서 전체 조회
         } else if ("제목".equals(searchType)) {
@@ -103,4 +97,14 @@ public class BookAPIController {
         return ResponseEntity.ok(books);
     }
 
+    // 도서 삭제 API
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
+        boolean isDeleted = bookService.deleteBook(bookId);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

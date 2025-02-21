@@ -10,8 +10,13 @@
     <link rel="stylesheet" href="/css/user/user-form.css">
     <script type="module" src="/js/user/info.js"></script>
     <script type="module" src="/js/user/update.js"></script>
+    <script type="module" src="/js/user/withdraw.js"></script>
+    <link rel="stylesheet" href="/css/common/header.css">
+    <link rel="stylesheet" href="/css/common/footer.css">
+    <script type="module" src="/js/utils/headerAccessInfo.js"></script>
 </head>
-<body>
+<body class="wrapper body-form">
+<div th:replace="~{layout/header :: header}"></div>
 <div class="container py-5 d-flex justify-content-center">
     <div style="max-width: 500px; width: 100%;">
         <h2 class="mb-4 text-center">회원정보 수정</h2>
@@ -48,6 +53,23 @@
                     <input type="text" id="phone3" name="phone3" maxlength="4" class="form-control" required>
                 </div>
             </div>
+            <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteConfirmLabel">회원탈퇴 확인</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            정말로 회원탈퇴 하시겠습니까?.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="button" class="btn btn-danger" id="confirm-delete">탈퇴하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-12 d-flex justify-content-between">
                 <button type="submit" class="btn btn-submit">회원정보 수정확인</button>
                 <button type="button" class="btn btn-danger" id="btn-delete">회원탈퇴</button>
@@ -55,5 +77,6 @@
         </form>
     </div>
 </div>
+<div th:replace="~{layout/footer :: footer}"></div>
 </body>
 </html>

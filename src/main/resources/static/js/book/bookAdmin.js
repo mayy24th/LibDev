@@ -45,6 +45,31 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("전체 도서 목록을 불러오는 중 오류 발생:", error));
     }
 
+    function deleteBook(bookId) {
+        if (confirm("정말 이 도서를 삭제하시겠습니까?")) {
+            fetch(`/api/v1/books/${bookId}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        const bookItem = document.getElementById(`book-item-${bookId}`);
+                        if (bookItem) {
+                            bookItem.remove();
+                        }
+                        alert("도서가 삭제되었습니다.");
+                        booksData = booksData.filter(book => book.bookId !== bookId);
+                        renderBookList();
+                    } else {
+                        alert("도서 삭제에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("삭제 오류:", error);
+                    alert("도서 삭제 중 오류가 발생했습니다.");
+                });
+        }
+    }
+
     function renderBookList() {
         const bookList = document.getElementById("book-list");
         bookList.innerHTML = "";
@@ -69,33 +94,44 @@ document.addEventListener("DOMContentLoaded", function () {
             const listItem = document.createElement("div");
             listItem.classList.add("list-group-item", "p-3", "shadow-sm", "mb-3");
             listItem.style.cursor = "pointer";
+            listItem.style.position = "relative";
+            listItem.id = `book-item-${book.bookId}`;
 
             listItem.addEventListener("click", function () {
                 window.location.href = `/books/${book.bookId}`;
             });
 
-            listItem.innerHTML = `
-                <div class="d-flex">
-                    <img src="${book.thumbnail || '/images/bookImage.jpg'}" alt="표지" class="me-3" style="width: 80px; height: auto;">
-                    <div>
-                        <h5 class="fw-bold">${book.title}</h5>
-                        <p class="mb-1 text-muted">저자: ${book.author} | 출판사: ${book.publisher} | 발행일: ${book.publishedDate}</p>
-                        <p class="mb-1 text-muted">ISBN: ${book.isbn} | 청구기호: ${book.callNumber}</p>
-                        <div class="p-2 mt-2" style="background-color: #f2f2f2;">
-                            <span class="${book.isAvailable ? 'text-success' : 'text-danger'} fw-bold">
-                                ${book.isAvailable ? '대출가능[비치중]' : '대출불가[대출중]'}
-                            </span>
-                            <span class="ms-3 text-muted">
-                                ${book.isAvailable ? '도서 예약 불가' : '도서 예약 가능'}
-                            </span>
-                        </div>
-                    </div>
-                </div>    
-            `;
+            // 삭제 버튼
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("delete-button");
+            deleteButton.textContent = "삭제";
+            deleteButton.addEventListener("click", function (event) {
+                event.stopPropagation();
+                deleteBook(book.bookId);
+            });
 
+            listItem.innerHTML = `
+            <div class="d-flex">
+                <img src="${book.thumbnail || '/images/bookImage.jpg'}" alt="표지" class="me-3" style="width: 80px; height: auto;">
+                <div class="w-100">
+                    <h5 class="fw-bold">${book.title}</h5>
+                    <p class="mb-1 text-muted">저자: ${book.author} | 출판사: ${book.publisher} | 발행일: ${book.publishedDate}</p>
+                    <p class="mb-1 text-muted">ISBN: ${book.isbn} | 청구기호: ${book.callNumber}</p>
+                    <div class="d-flex justify-content-between align-items-center p-2 mt-2" style="background-color: #f2f2f2;">
+                        <span class="${book.isAvailable ? 'text-success' : 'text-danger'} fw-bold">
+                            ${book.isAvailable ? '대출가능[비치중]' : '대출불가[대출중]'}
+                        </span>
+                        <span class="ms-3 text-muted">
+                            ${book.isAvailable ? '도서 예약 불가' : '도서 예약 가능'}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            listItem.appendChild(deleteButton);
             bookList.appendChild(listItem);
         });
-
         renderPagination();
     }
 

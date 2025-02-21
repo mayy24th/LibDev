@@ -21,7 +21,11 @@ public class CustomUserDetailService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
-        return new CustomUserDetails(user);
+        if(!user.isWithdraw()){
+            return new CustomUserDetails(user);
+        }
+
+        return null;
 
     }
 }

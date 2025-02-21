@@ -22,5 +22,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 예약 버튼 클릭 시 예약 함수 호출
     reserveButton.addEventListener("click", () => createReservation(bookId));
+
+    // 한줄평 버튼
+    const reviewBtn = document.getElementById("reviewBtn");
+    if (reviewBtn) {
+        reviewBtn.addEventListener("click", function () {
+            location.href = `/review/book/${bookId}`;
+        });
+    }
+
+    // 목록 버튼
+    const backToListBtn = document.getElementById("backToListBtn");
+    if (backToListBtn) {
+        backToListBtn.addEventListener("click", function () {
+            location.href = "/books/search-simple";
+        });
+    }
 });
 
