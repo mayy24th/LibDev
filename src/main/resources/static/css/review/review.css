@@ -14,11 +14,10 @@
 /* 버튼 컨테이너 */
 .button-container {
     display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto 15px auto;
-    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    width: 800px;
+    margin: 0 auto 10px;
 }
 
 /* 한줄평 목록 컨테이너 */
@@ -49,6 +48,7 @@
 
 /* 한줄평 도서 제목 */
 .review-header{
+    font-size: 19px;
     font-weight: bold;
 }
 
@@ -79,7 +79,7 @@
 /* 구분선 */
 .review-divider {
     border: none;
-    border-top: 1px solid #ddd;
+    border-top: 2px dotted #656565;
     margin: 8px 0;
 }
 
@@ -107,6 +107,7 @@
     text-align: left;
     word-break: break-word;
     align-self: flex-start;
+    color: #535353;
 }
 
 /* 한줄평 하단 버튼 영역 */
@@ -147,11 +148,11 @@
 .btn-modify-review {
     background-color: #623F3F;
     color: white;
-    padding: 10px 15px;
+    padding: 8px 13px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: normal;
     position: relative;
     right: 0;
@@ -190,4 +191,27 @@
 }
 .pagination .page-link:hover {
     background-color: #f1e3e3;
+}
+
+/* 페이지 정보 스타일 */
+.page-info {
+    width: 500px;
+    margin-bottom: 0;
+    margin-left: 0;
+    justify-content: flex-start;
+    text-align: left;
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 전체 개수 텍스트 스타일 */
+.page-info span {
+    color: #333;
+}
+
+/* 현재 페이지 강조 스타일 */
+.page-info .current-page {
+    color: #ff0000; /* 빨간색 */
+    font-weight: bold;
 }

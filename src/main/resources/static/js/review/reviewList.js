@@ -13,8 +13,7 @@ export async function loadReviews(apiEndpoint) {
         reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         updateReviewWriteButton();
-        setupPagination(reviews, 1); // 첫 번째 페이지로 초기화
-
+        setupPagination(reviews, 1); // 첫 페이지 초기화
     } catch (error) {
         console.error("한줄평 목록 불러오기 실패:", error);
         alert("한줄평 목록을 불러오는 중 오류가 발생했습니다.");
@@ -42,7 +41,7 @@ function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
 
         const header = document.createElement("div");
         header.classList.add("review-header");
-        header.innerText = review.bookName;
+        header.appendChild(document.createTextNode(review.bookName));
 
         const divider = document.createElement("hr");
         divider.classList.add("review-divider");
@@ -52,11 +51,11 @@ function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
 
         const label = document.createElement("span");
         label.classList.add("review-label");
-        label.innerText = "한줄서평";
+        label.appendChild(document.createTextNode("한줄서평"));
 
         const text = document.createElement("span");
         text.classList.add("review-text");
-        text.innerText = review.content;
+        text.appendChild(document.createTextNode(review.content));
 
         reviewRow.appendChild(label);
         reviewRow.appendChild(text);
@@ -66,11 +65,11 @@ function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
 
         const authorLabel = document.createElement("span");
         authorLabel.classList.add("review-label");
-        authorLabel.innerText = "작성자";
+        authorLabel.appendChild(document.createTextNode("작성자"));
 
         const authorText = document.createElement("span");
         authorText.classList.add("review-author");
-        authorText.innerText = review.userName;
+        authorText.appendChild(document.createTextNode(review.userName));
 
         authorRow.appendChild(authorLabel);
         authorRow.appendChild(authorText);
@@ -81,14 +80,14 @@ function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
         if (review.owner) {
             const editBtn = document.createElement("button");
             editBtn.classList.add("btn-edit", "edit-btn");
-            editBtn.innerText = "수정";
+            editBtn.appendChild(document.createTextNode("수정"));
             editBtn.dataset.id = review.id;
             editBtn.dataset.content = review.content;
             editBtn.addEventListener("click", () => openModifyModal(review.id, review.content));
 
             const deleteBtn = document.createElement("button");
             deleteBtn.classList.add("btn-delete", "delete-btn");
-            deleteBtn.innerText = "삭제";
+            deleteBtn.appendChild(document.createTextNode("삭제"));
             deleteBtn.dataset.id = review.id;
             deleteBtn.addEventListener("click", () => openDeleteModal(review.id));
 
@@ -108,7 +107,34 @@ function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
         container.appendChild(reviewCard);
     });
 
-    window.scrollTo({ top: 0, behavior: "smooth" }); // 페이지 이동 시 최상단으로 스크롤 이동
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function updatePageInfo(reviews, currentPage, reviewsPerPage) {
+    const totalReviews = reviews.length;
+    const totalPages = Math.ceil(totalReviews / reviewsPerPage);
+    const pageInfoElement = document.getElementById("pageInfo");
+
+    // 페이지 정보 초기화
+    pageInfoElement.innerHTML = "";
+
+    // 전체 리뷰 개수
+    const totalReviewsText = document.createElement("span");
+    totalReviewsText.appendChild(document.createTextNode(`전체 ${totalReviews}개 (페이지 `));
+
+    // 현재 페이지 강조
+    const currentPageText = document.createElement("span");
+    currentPageText.classList.add("current-page");
+    currentPageText.appendChild(document.createTextNode(`${currentPage}`));
+
+    // 전체 페이지 수
+    const totalPageText = document.createElement("span");
+    totalPageText.appendChild(document.createTextNode(`/${totalPages})`));
+
+    // 요소 삽입
+    pageInfoElement.appendChild(totalReviewsText);
+    pageInfoElement.appendChild(currentPageText);
+    pageInfoElement.appendChild(totalPageText);
 }
 
 function setupPagination(reviews, currentPage) {
@@ -126,7 +152,7 @@ function setupPagination(reviews, currentPage) {
         const pageLink = document.createElement("a");
         pageLink.classList.add("page-link");
         pageLink.href = "#";
-        pageLink.innerText = text;
+        pageLink.appendChild(document.createTextNode(text));
 
         if (!disabled) {
             pageLink.addEventListener("click", (event) => {
@@ -140,7 +166,6 @@ function setupPagination(reviews, currentPage) {
         return pageItem;
     };
 
-    // << 버튼
     paginationContainer.appendChild(createPageItem("<<", 1, currentPage === 1));
 
     for (let i = 1; i <= totalPages; i++) {
@@ -149,9 +174,9 @@ function setupPagination(reviews, currentPage) {
         paginationContainer.appendChild(pageItem);
     }
 
-    // >> 버튼
     paginationContainer.appendChild(createPageItem(">>", totalPages, currentPage === totalPages));
 
+    updatePageInfo(reviews, currentPage, reviewsPerPage);
     displayReviews(reviews, currentPage, reviewsPerPage);
 }
 
@@ -160,8 +185,8 @@ function updateReviewWriteButton() {
     const currentPath = window.location.pathname;
 
     if (currentPath.startsWith("/review/book/")) {
-        writeButton.style.display = "block"; // 도서별 리뷰 조회에서만 보이게 설정
+        writeButton.style.display = "block";
     } else {
-        writeButton.style.display = "none"; // 다른 페이지에서는 숨김
+        writeButton.style.display = "none";
     }
 }
