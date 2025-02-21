@@ -66,10 +66,10 @@ public class UserApiController {
     public ResponseEntity<GlobalResponseDto> deleteUsers(HttpServletRequest request) {
         userService.deleteUser(request);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, CookieUtil.createCookie(ACCESS_COOKIE_HEADER,null,TOKEN_DEL).toString())
                 .header(HttpHeaders.SET_COOKIE, CookieUtil.createCookie(REFRESH_COOKIE_HEADER,null,TOKEN_DEL).toString())
-                .body(GlobalResponseDto.success(HttpStatus.NO_CONTENT,"회원탈퇴 완료"));
+                .body(GlobalResponseDto.success(HttpStatus.OK,"회원탈퇴 완료"));
     }
 
 
