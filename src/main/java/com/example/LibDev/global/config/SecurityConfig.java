@@ -54,7 +54,7 @@ public class SecurityConfig {
                                 "/api/v1/users/check-email/**",
                                 "/reservations/**",
                                 "/api/v1/reservations/**",
-                                "/api/v1/auth/password-find/**").permitAll()
+                                "/api/v1/auths/password-find/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/api/**").authenticated()
                                 .anyRequest().permitAll()

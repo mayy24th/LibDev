@@ -97,7 +97,7 @@ public class AuthApiController {
     }
 
     //인증번호 전송 요청
-    @PostMapping("/api/v1/auth/password-find/verify")
+    @PostMapping("/api/v1/auths/password-find/verify")
     public ResponseEntity<GlobalResponseDto> verificationCodeTOEmail(@RequestBody VerificationEmailDto verificationEmailDto){
         String email = verificationEmailDto.getEmail();
         authService.sendVerificationCodeToEmail(email);
@@ -105,7 +105,7 @@ public class AuthApiController {
     }
 
     //인증번호 확인 후 임시 토큰 발급
-    @PostMapping("/api/v1/auth/password-find/code")
+    @PostMapping("/api/v1/auths/password-find/code")
     public ResponseEntity<GlobalResponseDto> verifyCode(@RequestBody VerificationCodeDto verificationCodeDto){
         String tempToken = authService.verifyCode(verificationCodeDto);
 
@@ -116,7 +116,7 @@ public class AuthApiController {
     }
 
     //임시토큰으로 비밀번호 변경
-    @PatchMapping("/api/v1/auth/password-find/reset")
+    @PatchMapping("/api/v1/auths/password-find/reset")
     public ResponseEntity<GlobalResponseDto> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto,
                                                            HttpServletRequest request){
         String tempToken = null;
