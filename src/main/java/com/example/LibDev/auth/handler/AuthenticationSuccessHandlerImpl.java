@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     private final AuthService authService;
     private final ObjectMapper mapper;
 
-    private static final String SET_COOKIE_HEADER = "Set-Cookie";
     private static final String ACCESS_TOKEN_HEADER = "access-token";
     private static final String REFRESH_COOKIE_HEADER = "refresh-token";
     private final JwtProvider jwtProvider;
@@ -37,8 +37,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
         TokenResDto tokenResDto = authService.generateToken(authentication);
 
-        response.addHeader(SET_COOKIE_HEADER,CookieUtil.createCookie(ACCESS_TOKEN_HEADER,tokenResDto.getAccessToken(), jwtProvider.getAccessTokenValidTime()).toString() );
-        response.addHeader(SET_COOKIE_HEADER,CookieUtil.createCookie(REFRESH_COOKIE_HEADER,tokenResDto.getRefreshToken(),jwtProvider.getRefreshTokenValidTime()).toString());
+        response.addHeader(HttpHeaders.SET_COOKIE,CookieUtil.createCookie(ACCESS_TOKEN_HEADER,tokenResDto.getAccessToken(), jwtProvider.getAccessTokenValidTime()).toString() );
+        response.addHeader(HttpHeaders.SET_COOKIE,CookieUtil.createCookie(REFRESH_COOKIE_HEADER,tokenResDto.getRefreshToken(),jwtProvider.getRefreshTokenValidTime()).toString());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
