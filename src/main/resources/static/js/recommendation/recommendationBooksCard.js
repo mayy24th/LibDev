@@ -1,22 +1,29 @@
 window.onload = () => {
-    fetchRecommendedBooks();
+    // 유사 도서 추천 (bookId 기반)
+    const bookId = window.location.pathname.split("/").pop();
+    if (bookId && !isNaN(bookId)) {
+        fetchRecommendedBooks(`/api/recommendation/similar/${bookId}`);
+    } else {
+        // 사용자 기반 추천
+        fetchRecommendedBooks(`/api/recommendation/user`);
+    }
 };
 
-// 추천 도서 불러오기 함수
-async function fetchRecommendedBooks() {
+async function fetchRecommendedBooks(apiEndpoint) {
     try {
-        const bookId = window.location.pathname.split("/").pop();
-        const response = await fetch(`/api/recommendation/user`);
+        const response = await fetch(apiEndpoint);
         const data = await response.json();
 
         const bookList = document.querySelector('.book-list');
-        bookList.innerHTML = "";
+        bookList.innerHTML = ""; // 기존 리스트 초기화
 
+        // 데이터가 없을 경우 메시지 출력
         if (!data || data.length === 0) {
             bookList.insertAdjacentHTML("beforeend", "<p>추천 도서가 없습니다.</p>");
             return;
         }
 
+        // 추천 도서 데이터를 카드 형태로 출력
         data.forEach(book => {
             const bookHTML = `
                 <div class="book-card">
