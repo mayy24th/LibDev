@@ -1,0 +1,53 @@
+export function renderPagination(totalPages, currentPage, loadPageCallback) {
+    const paginationContainer = document.getElementById("pagination");
+    paginationContainer.innerHTML = ""; // 이전 페이지네이션 삭제
+
+    const pageGroupSize = 5;
+    const currentGroup = Math.floor(currentPage / pageGroupSize);
+    const startPage = currentGroup * pageGroupSize;
+    let endPage = startPage + pageGroupSize;
+    if (endPage > totalPages) endPage = totalPages;
+
+    // 이전 그룹 버튼 («)
+    if (startPage > 0) {
+        const prevLi = document.createElement("li");
+        prevLi.classList.add("page-item");
+        const prevLink = document.createElement("a");
+        prevLink.classList.add("page-link");
+        prevLink.href = "#";
+        prevLink.textContent = "«";
+        prevLink.addEventListener("click", () => loadPageCallback(startPage - 1)); // 이전 그룹의 마지막 페이지
+        prevLi.appendChild(prevLink);
+        paginationContainer.appendChild(prevLi);
+    }
+
+    // 페이지 번호 버튼
+    for (let i = startPage; i < endPage; i++) {
+        const li = document.createElement("li");
+        li.classList.add("page-item");
+        if (i === currentPage) {
+            li.classList.add("active");
+        }
+        const a = document.createElement("a");
+        a.classList.add("page-link");
+        a.href = "#";
+        a.textContent = (i + 1);
+        a.addEventListener("click", () => loadPageCallback(i));
+        li.appendChild(a);
+        paginationContainer.appendChild(li);
+    }
+
+    // 다음 그룹 버튼 (»)
+    if (endPage < totalPages) {
+        const nextLi = document.createElement("li");
+        nextLi.classList.add("page-item");
+        const nextLink = document.createElement("a");
+        nextLink.classList.add("page-link");
+        nextLink.href = "#";
+        nextLink.textContent = "»";
+        nextLink.addEventListener("click", () => loadPageCallback(endPage)); // 다음 그룹의 첫 번째 페이지
+        nextLi.appendChild(nextLink);
+        paginationContainer.appendChild(nextLi);
+    }
+}
+
