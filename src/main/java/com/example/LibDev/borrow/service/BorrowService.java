@@ -46,7 +46,24 @@ public class BorrowService {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
 
-        List<Borrow> borrowList = borrowRepository.findByUserAndStatusNot(user, Status.RETURNED);
+        List<Borrow> borrowList = borrowRepository.findByUserAndStatusNotOrderByIdDesc(user, Status.RETURNED);
+
+        return borrowList.stream()
+                .map(this::toBorrowResDto)
+                .collect(Collectors.toList());
+    }
+
+    /* 회원별 대출 이력 조회 */
+    public List<BorrowResDto> getBorrowsByUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findLoginUserByEmail(email);
+        log.debug("대출 이력 조회 회원:{}", email);
+
+        if (user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
+        }
+
+        List<Borrow> borrowList = borrowRepository.findByUserAndStatusOrderByIdDesc(user, Status.RETURNED);
 
         return borrowList.stream()
                 .map(this::toBorrowResDto)
@@ -55,7 +72,7 @@ public class BorrowService {
 
     /* 전체 대출 내역 조회 */
     public List<BorrowResDto> getAllBorrows() {
-        List<Borrow> borrowList = borrowRepository.findAll();
+        List<Borrow> borrowList = borrowRepository.findAllByOrderByIdDesc();
 
         return borrowList.stream()
                 .map(this::toBorrowResDto)

@@ -12,6 +12,8 @@ public class BorrowViewController {
     public String myBorrowStatus(){ return "borrow/my-status"; }
 
     /* 회원 대출 이력 조회 페이지 */
+    @GetMapping("/my-history")
+    public String myBorrowHistory(){ return "borrow/my-history"; }
 
     /* 전체 대출 조회 페이지(관리자) */
     @GetMapping("/admin")

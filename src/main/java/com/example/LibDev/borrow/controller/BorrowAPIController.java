@@ -23,6 +23,13 @@ public class BorrowAPIController {
         return ResponseEntity.ok(borrowService.getCurrentBorrowsByUser());
     }
 
+    /* 회원별 대출 이력 조회 */
+    @GetMapping("/api/v1/my/borrow-history")
+    public ResponseEntity<List<BorrowResDto>> getBorrowHistory() {
+        log.debug("회원별 대출 이력 조회");
+        return ResponseEntity.ok(borrowService.getBorrowsByUser());
+    }
+
     /* 전체 대출 조회 */
     @GetMapping("/api/v1/borrow-list")
     public ResponseEntity<List<BorrowResDto>> getBorrowList() {
