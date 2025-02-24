@@ -1,6 +1,13 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+}
+
+.top-bar {
+    margin-right: 0px !important;
+}
+
+.text-center {
+    margin-top: 25px;
 }
 
 .custom-btn {
