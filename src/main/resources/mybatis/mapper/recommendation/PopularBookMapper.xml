@@ -6,7 +6,7 @@
     <!-- 메인페이지 추천 : 사용자의 대출내역이 존재하지 않거나 비회원일 경우 인기도서 (대출 수 기반) -->
     <!-- 대출 내역이 존재하는 경우 findUserBaseBooks 도서 데이터 조회 이후 부족한 도서 데이터는 인기도서 -->
     <select id="findPopularBooks" resultType="com.example.LibDev.recommendation.vo.RecommendedBookVO">
-        SELECT b.book_id, b.title, b.author, b.thumbnail
+        SELECT b.book_id, b.title, b.author, b.thumbnail, b.publisher, b.contents, b.published_date
         FROM book b
         WHERE 1=1
             <if test="excludedBooks != null and !excludedBooks.isEmpty()">
