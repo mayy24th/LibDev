@@ -61,7 +61,7 @@ public class ReservationService {
 
             // 현재 예약이 해당 도서의 첫 번째 예약자인지 확인
             List<Reservation> bookReservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
-            boolean isFirstReservation = !bookReservations.isEmpty() && bookReservations.get(0).equals(reservation);
+            boolean isFirstReservation = !bookReservations.isEmpty() && bookReservations.getFirst().equals(reservation);
 
             // 첫 번째 예약자인 경우에만 Map에 저장 (나중에 한 번만 update 호출)
             if (isFirstReservation) {
@@ -209,7 +209,7 @@ public class ReservationService {
             return;
         }
 
-        Reservation firstReservation = reservations.get(0);
+        Reservation firstReservation = reservations.getFirst();
         log.info("새로운 1순위 예약자: {} (User ID: {}, Expiration: {})",
                 firstReservation.getUser().getEmail(), firstReservation.getUser().getId(), firstReservation.getExpirationDate());
 
@@ -262,7 +262,7 @@ public class ReservationService {
 
         // 현재 취소하는 예약자가 첫 번째 예약자인지 확인
         List<Reservation> reservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
-        boolean isFirstReservation = !reservations.isEmpty() && reservations.get(0).equals(reservation);
+        boolean isFirstReservation = !reservations.isEmpty() && reservations.getFirst().equals(reservation);
 
         // 예약 삭제
         reservationRepository.delete(reservation);
@@ -293,7 +293,7 @@ public class ReservationService {
 
             List<Reservation> reservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
             if (!reservations.isEmpty()) {
-                Reservation firstReservation = reservations.get(0); // 현재 1순위 예약자
+                Reservation firstReservation = reservations.getFirst(); // 현재 1순위 예약자
                 log.info("반납 후 첫 번째 예약자: {} (User ID: {})",
                         firstReservation.getUser().getEmail(), firstReservation.getUser().getId());
 
