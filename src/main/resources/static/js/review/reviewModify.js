@@ -1,5 +1,6 @@
 import { loadReviews } from "./reviewList.js";
 import { getReviewApiEndpoint } from "../utils/pathUtils.js";
+import { showAlertToast } from "../utils/utils.js";
 
 export function openModifyModal(reviewId = null, content = "") {
     const modal = document.getElementById("modifyModal");
@@ -25,7 +26,7 @@ export async function submitModifyReview() {
     const content = document.getElementById("reviewContent").value.trim();
 
     if (!content) {
-        alert("한줄평을 입력해주세요.");
+        showAlertToast("한줄평을 입력해주세요.");
         return;
     }
 
@@ -49,12 +50,12 @@ async function createReview(bookId, content) {
 
         if (!response.ok) throw new Error("한줄평 등록 실패");
 
-        alert("한줄평을 등록했습니다.");
+        showAlertToast("한줄평을 등록했습니다.");
         loadReviews(getReviewApiEndpoint());
         closeModifyModal();
     } catch (error) {
         console.error(error);
-        alert("한줄평 등록에 실패했습니다.");
+        showAlertToast("한줄평을 등록에 실패했습니다.");
     }
 }
 
@@ -68,11 +69,11 @@ async function updateReview(reviewId, content) {
 
         if (!response.ok) throw new Error("한줄평 수정 실패");
 
-        alert("한줄평을 수정하였습니다.");
+        showAlertToast("한줄평을 수정하였습니다.");
         loadReviews(getReviewApiEndpoint());
         closeModifyModal();
     } catch (error) {
         console.error(error);
-        alert("한줄평 수정에 실패했습니다.");
+        showAlertToast("한줄평 수정에 실패했습니다.");
     }
 }
