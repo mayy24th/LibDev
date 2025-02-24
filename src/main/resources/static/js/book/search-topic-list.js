@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const booksToDisplay = booksData.slice(start, end);
 
         booksToDisplay.forEach(book => {
-            console.log("도서 정보:", book);
             const listItem = document.createElement("div");
             listItem.classList.add("list-group-item", "p-3", "shadow-sm", "mb-3");
             listItem.style.cursor = "pointer";

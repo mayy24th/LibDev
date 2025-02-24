@@ -1,7 +1,9 @@
 import { reissue } from "./reissue.js";
+import {apiRequestRetry} from "./apiRequsetRetry.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const topBar = document.querySelector(".top-bar");
+    const roleMenu = document.querySelector(".role-menu");
 
     try {
         let response = await fetch("/api/v1/users", {
@@ -15,22 +17,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                     method: "GET",
                 });
             } else {
-                showLoginButtons();
+                showLoginButton();
                 return;
             }
         }
 
         if (response.ok) {
+            const userInfo = await response.json();
+            updateRoleMenu(userInfo.data.role);
             showLogoutButton();
         } else {
-            showLoginButtons();
+            showLoginButton();
         }
     } catch (error) {
         console.error("로그인 상태 확인 실패:", error);
-        showLoginButtons();
+        showLoginButton();
     }
 
-    function showLoginButtons() {
+    function showLoginButton() {
         clearTopBar();
         const loginLink = createNavLink("/users/login", "로그인");
         const separator = document.createElement("span");
@@ -49,15 +53,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         topBar.appendChild(logoutLink);
     }
 
+    function updateRoleMenu(role) {
+        const firstMenuItem = roleMenu.querySelector("li:first-child a");
+        if (role === "ADMIN") {
+            firstMenuItem.href = "/admin/management";
+            firstMenuItem.textContent = "관리";
+        } else {
+            firstMenuItem.href = "/users/mypage";
+            firstMenuItem.textContent = "기본정보";
+        }
+    }
+
     async function handleLogout(event) {
         event.preventDefault();
         try {
-            const response = await fetch("/api/v1/auths/logout", {
+            const response = await apiRequestRetry("/api/v1/auths/logout", {
                 method: "POST",
             });
 
             if (response.ok) {
-                showLoginButtons();
+                alert("로그아웃 되었습니다.")
+                showLoginButton();
             }
         } catch (error) {
             console.error("로그아웃 실패:", error);
