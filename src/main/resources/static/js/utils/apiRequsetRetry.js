@@ -16,6 +16,11 @@ export async function apiRequestRetry(url, options = {}){
 
         const result = response.json();
 
+        if(response.status === 403){
+            alert("권한이 없습니다.")
+            window.location.href="/"
+        }
+
         if (!response.ok) {
             throw new Error(result.data);
         }
