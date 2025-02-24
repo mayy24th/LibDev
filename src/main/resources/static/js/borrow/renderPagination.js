@@ -1,5 +1,5 @@
 export function renderPagination(totalPages, currentPage, loadPageCallback) {
-    const paginationContainer = document.getElementById("pagination");
+    const paginationContainer = document.querySelector("#pagination");
     paginationContainer.innerHTML = ""; // 이전 페이지네이션 삭제
 
     const pageGroupSize = 5;
@@ -9,17 +9,19 @@ export function renderPagination(totalPages, currentPage, loadPageCallback) {
     if (endPage > totalPages) endPage = totalPages;
 
     // 이전 그룹 버튼 («)
+    const prevLi = document.createElement("li");
+    prevLi.classList.add("page-item");
+    const prevLink = document.createElement("a");
+    prevLink.classList.add("page-link");
+    prevLink.href = "#";
+    prevLink.textContent = "«";
     if (startPage > 0) {
-        const prevLi = document.createElement("li");
-        prevLi.classList.add("page-item");
-        const prevLink = document.createElement("a");
-        prevLink.classList.add("page-link");
-        prevLink.href = "#";
-        prevLink.textContent = "«";
-        prevLink.addEventListener("click", () => loadPageCallback(startPage - 1)); // 이전 그룹의 마지막 페이지
-        prevLi.appendChild(prevLink);
-        paginationContainer.appendChild(prevLi);
+        prevLink.addEventListener("click", () => loadPageCallback(startPage - 1)); // 이전 그룹의 마지막 페이지로 이동
+    } else {
+        prevLi.classList.add("disabled");
     }
+    prevLi.appendChild(prevLink);
+    paginationContainer.appendChild(prevLi);
 
     // 페이지 번호 버튼
     for (let i = startPage; i < endPage; i++) {
@@ -38,16 +40,18 @@ export function renderPagination(totalPages, currentPage, loadPageCallback) {
     }
 
     // 다음 그룹 버튼 (»)
+    const nextLi = document.createElement("li");
+    nextLi.classList.add("page-item");
+    const nextLink = document.createElement("a");
+    nextLink.classList.add("page-link");
+    nextLink.href = "#";
+    nextLink.textContent = "»";
     if (endPage < totalPages) {
-        const nextLi = document.createElement("li");
-        nextLi.classList.add("page-item");
-        const nextLink = document.createElement("a");
-        nextLink.classList.add("page-link");
-        nextLink.href = "#";
-        nextLink.textContent = "»";
-        nextLink.addEventListener("click", () => loadPageCallback(endPage)); // 다음 그룹의 첫 번째 페이지
-        nextLi.appendChild(nextLink);
-        paginationContainer.appendChild(nextLi);
+        nextLink.addEventListener("click", () => loadPageCallback(endPage)); // 다음 그룹의 첫 번째 페이지로 이동
+    } else {
+        nextLi.classList.add("disabled");
     }
+    nextLi.appendChild(nextLink);
+    paginationContainer.appendChild(nextLi);
 }
 
