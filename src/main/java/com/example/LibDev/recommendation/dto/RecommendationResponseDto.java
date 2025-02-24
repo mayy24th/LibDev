@@ -1,5 +1,6 @@
 package com.example.LibDev.recommendation.dto;
 
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,4 +11,7 @@ public class RecommendationResponseDto {
     private String title;
     private String author;
     private String thumbnail;
+    private String publisher;
+    private String contents;
+    private LocalDate publishedDate;
 }
