@@ -31,10 +31,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     /*토큰 생성*/
-    public TokenResDto generateToken(Authentication authentication) {
-        String email = authentication.getName();
-        String role =  authentication.getAuthorities().stream().findFirst().get().getAuthority();
-
+    public TokenResDto generateToken(String email, String role) {
         long accessTokenValidTime = jwtProvider.getAccessTokenValidTime();
         long refreshTokenValidTime = jwtProvider.getRefreshTokenValidTime();
 

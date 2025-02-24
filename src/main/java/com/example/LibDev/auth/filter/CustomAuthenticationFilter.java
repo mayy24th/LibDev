@@ -65,7 +65,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     private void handleSuccessAuthentication(HttpServletResponse response, Authentication authentication) throws IOException {
-        TokenResDto tokenResDto = authService.generateToken(authentication);
+        String email = authentication.getName();
+        String role = authentication.getAuthorities().toString();
+
+        TokenResDto tokenResDto = authService.generateToken(email, role);
 
         String accessToken = tokenResDto.getAccessToken();
         String refreshToken = tokenResDto.getRefreshToken();
