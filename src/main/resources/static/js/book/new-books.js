@@ -26,33 +26,50 @@ document.addEventListener("DOMContentLoaded", function () {
         const booksToDisplay = booksData.slice(start, end);
 
         booksToDisplay.forEach(book => {
-            const listItem = document.createElement("div");
-            listItem.classList.add("list-group-item", "p-3", "shadow-sm", "mb-3");
-            listItem.style.cursor = "pointer";
+            const bookLink = document.createElement("a");
+            bookLink.href = `/books/${book.bookId}`;
+            bookLink.classList.add("book-link");
 
-            listItem.addEventListener("click", function () {
-                window.location.href = `/books/${book.bookId}`;
-            });
+            const bookCard = document.createElement("div");
+            bookCard.classList.add("book-card");
 
-            listItem.innerHTML = `
-                        <div class="d-flex">
-                            <img src="${book.thumbnail || '/images/bookImage.jpg'}" alt="표지" class="me-3" style="width: 80px; height: auto;">
-                            <div>
-                                <h5 class="fw-bold">${book.title}</h5>
-                                <p class="mb-1 text-muted">저자: ${book.author} | 출판사: ${book.publisher} | 발행일: ${book.publishedDate}</p>
-                                <p class="mb-1 text-muted">ISBN: ${book.isbn} | 청구기호: ${book.callNumber}</p>
-                                <div class="p-2 mt-2" style="background-color: #f2f2f2;">
-                                    <span class="${book.isAvailable ? 'text-success' : 'text-danger'} fw-bold">
-                                        ${book.isAvailable ? '대출가능[비치중]' : '대출불가[대출중]'}
-                                    </span>
-                                    <span class="ms-3 text-muted">
-                                        ${book.isAvailable ? '도서 예약 불가' : '도서 예약 가능'}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>    
-                    `;
-            bookList.appendChild(listItem);
+            const bookThumbnail = document.createElement("div");
+            bookThumbnail.classList.add("book-thumbnail");
+            const thumbnailImage = document.createElement("img");
+            thumbnailImage.src = book.thumbnail || '/images/bookImage.jpg';
+            thumbnailImage.alt = `${book.title} 이미지`;
+            bookThumbnail.appendChild(thumbnailImage);
+
+            const bookInfo = document.createElement("div");
+            bookInfo.classList.add("book-info");
+
+            const bookTitle = document.createElement("h3");
+            bookTitle.classList.add("book-title");
+            bookTitle.textContent = book.title;
+
+            const bookMeta = document.createElement("div");
+            bookMeta.classList.add("book-meta-inline");
+            bookMeta.insertAdjacentHTML("beforeend", `<span><strong>저자:</strong> ${book.author}</span>`);
+            bookMeta.insertAdjacentHTML("beforeend", `<span><strong>출판사:</strong> ${book.publisher}</span>`);
+            bookMeta.insertAdjacentHTML("beforeend", `<span><strong>발행일:</strong> ${book.publishedDate}</span>`);
+
+            const divider = document.createElement("hr");
+            divider.classList.add("book-divider");
+
+            const bookDescription = document.createElement("p");
+            bookDescription.classList.add("book-description");
+            bookDescription.textContent = book.contents;
+
+            bookInfo.appendChild(bookTitle);
+            bookInfo.appendChild(bookMeta);
+            bookInfo.appendChild(divider);
+            bookInfo.appendChild(bookDescription);
+
+            bookCard.appendChild(bookThumbnail);
+            bookCard.appendChild(bookInfo);
+
+            bookLink.appendChild(bookCard);
+            bookList.appendChild(bookLink);
         });
 
         renderPagination();
