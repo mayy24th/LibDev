@@ -60,4 +60,10 @@ public class BookViewController {
         return "book/bookAdmin";
     }
 
+    // 신착자료 페이지
+    @GetMapping("/new-books")
+    public String showNewBooksPage() {
+        return "book/new-books";
+    }
+
 }

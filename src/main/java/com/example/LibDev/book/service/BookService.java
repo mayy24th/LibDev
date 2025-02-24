@@ -283,4 +283,11 @@ public class BookService {
         return BookResponseDto.fromEntity(book);
     }
 
+    // 신착자료
+    public List<BookResponseDto> findNewBooks() {
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        List<Book> books = bookRepository.findByCreatedAtAfter(oneWeekAgo);
+        return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
+    }
+
 }
