@@ -2,9 +2,11 @@ package com.example.LibDev.global.config;
 
 import com.example.LibDev.auth.filter.CustomAuthenticationFilter;
 import com.example.LibDev.auth.filter.CustomLogoutFilter;
+import com.example.LibDev.auth.handler.OAuth2LoginSuccessHandler;
 import com.example.LibDev.auth.jwt.JwtFilter;
 import com.example.LibDev.auth.jwt.JwtProvider;
 import com.example.LibDev.auth.service.AuthService;
+import com.example.LibDev.auth.service.CustomOauth2UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -29,12 +31,11 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 public class SecurityConfig {
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
-    private final AuthenticationSuccessHandler authenticationSuccessHandler;
-    private final AuthenticationFailureHandler authenticationFailureHandler;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtProvider jwtProvider;
     private final AuthService authservice;
     private final ObjectMapper objectMapper;
+    private final CustomOauth2UserService customOauth2UserService;
 
 
 
@@ -57,15 +58,20 @@ public class SecurityConfig {
                                 "/api/v1/auths/password-find/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/api/**").authenticated()
-                                .anyRequest().permitAll()
+                        .anyRequest().permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-
-                .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new CustomLogoutFilter(authservice,objectMapper), LogoutFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+
+                .addFilterAt(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomLogoutFilter(authservice, objectMapper), LogoutFilter.class)
+                .oauth2Login((oauth2) -> oauth2
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                                .userService(customOauth2UserService))
+                        .successHandler(new OAuth2LoginSuccessHandler(jwtProvider, authservice)))
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(accessDeniedHandler)
                         .authenticationEntryPoint(authenticationEntryPoint))
@@ -75,15 +81,11 @@ public class SecurityConfig {
 
     @Bean
     public CustomAuthenticationFilter authenticationFilter() throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration));
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration)
+                ,objectMapper,authservice,jwtProvider );
 
         //로그인 필터 url 설정
         customAuthenticationFilter.setFilterProcessesUrl("/api/v3/auths/login");
-        //실패 핸들러 등록
-        customAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
-        //성공 핸들러 등록
-        customAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
-
         customAuthenticationFilter.afterPropertiesSet();
 
         return customAuthenticationFilter;
