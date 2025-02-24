@@ -11,6 +11,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 
+@Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper;
     private final AuthService authService;
@@ -66,7 +68,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     private void handleSuccessAuthentication(HttpServletResponse response, Authentication authentication) throws IOException {
         String email = authentication.getName();
-        String role = authentication.getAuthorities().toString();
+        String role = authentication.getAuthorities().iterator().next().getAuthority();
 
         TokenResDto tokenResDto = authService.generateToken(email, role);
 

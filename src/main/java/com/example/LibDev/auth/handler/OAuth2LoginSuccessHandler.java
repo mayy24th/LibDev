@@ -37,7 +37,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
 
         String email = customOAuth2User.getEmail();
-        String role = authentication.getAuthorities().toString();
+        String role = authentication.getAuthorities().iterator().next().getAuthority();
 
         TokenResDto tokenResDto = authService.generateToken(email, role);
 
