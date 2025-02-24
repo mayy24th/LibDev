@@ -2,6 +2,8 @@ package com.example.LibDev.reservation.service;
 
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.repository.BookRepository;
+import com.example.LibDev.borrow.entity.type.Status;
+import com.example.LibDev.borrow.repository.BorrowRepository;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.reservation.dto.ReservationRequestDto;
@@ -31,13 +33,14 @@ import java.util.stream.Collectors;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final BorrowRepository borrowRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final MailService mailService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    private static final int MAX_BOOK_RESERVATION_LIMIT = 5; // 특정 책 최대 예약 가능 인원
-    private static final int MAX_USER_RESERVATION_LIMIT = 5; // 사용자 최대 예약 가능 권수
+    private static final int MAX_BOOK_RESERVATION_LIMIT = 7; // 특정 책 최대 예약 가능 인원
+    private static final int MAX_USER_RESERVATION_LIMIT = 7; // 사용자 최대 예약 가능 권수
 
     // 패널티 체크
     @Transactional
@@ -84,20 +87,29 @@ public class ReservationService {
         }
     }
 
-    // 유저 별 예약 가능 여부 확인
-    private void checkUserReservationLimit(User user) {
+    // 유저 별 예약 가능 여부 + 대출 중인 책인지 확인
+    private void checkUserReservationLimit(User user, Book book) {
         int reservationCount = reservationRepository.countByUserAndStatus(user, ReservationStatus.WAITING);
         if (reservationCount >= MAX_USER_RESERVATION_LIMIT) {
             throw new CustomException(CustomErrorCode.USER_RESERVATION_FULL);
         }
+
+        // 반납 완료(RETURNED)가 아닌 대출 내역이 있는지 확인
+        boolean hasUnreturnedBorrow = borrowRepository.existsByUserAndBookAndStatusNot(user, book, Status.RETURNED);
+
+        if (hasUnreturnedBorrow) {
+            throw new CustomException(CustomErrorCode.ALREADY_BORROWED_BOOK);
+        }
     }
+
+
 
     // 예약 대기 순번 계산
     private int getNextQueueOrder(Book book) {
         return reservationRepository.findByBookOrderByQueueOrderAsc(book).size() + 1;
     }
 
-    /* WebSocket을 통해 특정 유저에게 알림 전송 */
+    // WebSocket을 통해 특정 유저에게 알림 전송
     private void sendReservationNotification(Long userId, Reservation reservation, String message) {
         String destination = "/topic/reservations/" + userId;
         String finalMessage = message + " (도서 ID: " + reservation.getBook().getBookId() + ")";
@@ -118,11 +130,10 @@ public class ReservationService {
         Book book = bookRepository.findById(requestDto.getBookId())
                 .orElseThrow(() -> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
 
-        log.info("📝 예약 생성: 사용자 ID = {}", user.getId());
-        /*// 대출 가능 여부 체크 (대출 가능하면 예약 불가)
-        if (book.isAvailable()) {
+        // 대출 가능 여부 체크 (대출 가능하면 예약 불가)
+        if (book.getIsAvailable()) {
             throw new CustomException(CustomErrorCode.BOOK_IS_AVAILABLE);
-        }*/
+        }
 
         // 사용자의 penalty_expiration 체크
         if (user.getPenaltyExpiration() != null) {
@@ -138,7 +149,7 @@ public class ReservationService {
         }
 
         // 예약 제한 체크
-        checkUserReservationLimit(user);
+        checkUserReservationLimit(user, book);
         checkBookReservationLimit(book);
 
         int queueOrder = getNextQueueOrder(book);
@@ -157,9 +168,6 @@ public class ReservationService {
         if (queueOrder == 1) {
             updateFirstReservationExpiration(book);
         }
-
-        log.info("WebSocket 알림 전송 준비: userId = {}", user.getId());
-//        sendReservationNotification(user.getId(), reservation, "예약 완료");
 
         return reservation;
     }
