@@ -274,4 +274,13 @@ public class BookService {
         }
         return false;
     }
+
+    // bookId 도서 정보 조회해서 반환
+    @Transactional(readOnly = true)
+    public BookResponseDto getBookDetails(Long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 도서를 찾을 수 없습니다."));
+        return BookResponseDto.fromEntity(book);
+    }
+
 }
