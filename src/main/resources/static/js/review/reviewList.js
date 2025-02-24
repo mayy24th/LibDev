@@ -1,5 +1,6 @@
 import { openModifyModal } from "./reviewModify.js";
 import { openDeleteModal } from "./reviewDelete.js";
+import { showAlertToast } from "../utils/utils.js"
 
 export async function loadReviews(apiEndpoint) {
     try {
@@ -16,7 +17,7 @@ export async function loadReviews(apiEndpoint) {
         setupPagination(reviews, 1); // 첫 페이지 초기화
     } catch (error) {
         console.error("한줄평 목록 불러오기 실패:", error);
-        alert("한줄평 목록을 불러오는 중 오류가 발생했습니다.");
+        showAlertToast("한줄평 목록을 불러오는 중 오류가 발생했습니다.");
     }
 }
 
