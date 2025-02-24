@@ -2,7 +2,7 @@ body {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-.mt-4 {
+.container {
     width: 70%;
 }
 
@@ -24,6 +24,16 @@ body {
     color: #535353 !important;
 }
 
+.list-group-item {
+    background: white;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.list-group-item:hover {
+    transform: scale(1.02);
+}
+
 .list-group-item .p-2 {
     font-size: 0.9rem;
     color: #555;
@@ -34,6 +44,11 @@ body {
 .list-group-item img {
     width: 100px !important;
     margin-right: 1.5rem !important;
+}
+
+.list-group-item p {
+    font-size: 0.9rem;
+    color: #555;
 }
 
 .pagination .page-item.active .page-link {
