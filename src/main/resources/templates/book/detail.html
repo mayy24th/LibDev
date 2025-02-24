@@ -78,7 +78,7 @@
 
     <div class="text-center btns mt-4">
         <button th:if="${book.isAvailable}" class="btn btn-custom-1 borrow-btn" th:data-book-id="${book.bookId}">대출하기</button>
-        <button th:unless="${book.isAvailable}" class="btn btn-custom-1" th:data-book-id="${book.bookId}">예약하기</button>
+        <button th:unless="${book.isAvailable}" class="btn btn-custom-1 reserve-btn" th:data-book-id="${book.bookId}">예약하기</button>
 
         <button class="btn btn-custom-2 mx-2" id="reviewBtn">한줄평</button>
         <button class="btn btn-secondary" id="backToListBtn">목록으로</button>
@@ -102,22 +102,15 @@
                 <td th:text="${book.title}"></td>
                 <td th:text="${book.isbn}"></td>
                 <td th:text="${book.callNumber}"></td>
-                <td class="text-center">
-                    <span th:if="${book.isAvailable}">
-                        대출가능<br>
-                        [비치중]
-                    </span>
-                    <span th:unless="${book.isAvailable}">
-                        대출불가<br>
-                        [대출중]<br>
-                        (예약: <span class="reservation-count">0명</span>)
-
-                    </span>
+                <td id="bookStatus">
+                    <span th:if="${book.isAvailable}">대출가능<br>[비치중]</span>
+                    <span th:unless="${book.isAvailable}">대출불가<br>[대출중](예약: <span class="reservation-count">0명</span>)</span>
                 </td>
+                <td id="bookReturnDueDate" th:text="'-'"></td>
                 <!--<td th:text="${book.returnDueDate != null ? book.returnDueDate : '-'}"></td>-->
-                <td th:text="'-'"></td>
                 <td>
-                    <button th:classappend="${book.isAvailable ? 'btn-secondary' : 'brown-btn'}"
+                    <button id="reservationStatusButton"
+                            th:classappend="${book.isAvailable ? 'btn-secondary' : 'brown-btn'}"
                             class="btn text-white py-1 small-btn"
                             th:text="${book.isAvailable ? '예약불가' : '예약가능'}"
                             disabled>

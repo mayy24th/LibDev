@@ -107,4 +107,11 @@ public class BookAPIController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    // 개별 도서 정보 조회 ( 대출상태, 반납예정일, 예약가능 여부 )
+    @GetMapping("/{bookId}")
+    public ResponseEntity<BookResponseDto> getBookDetails(@PathVariable Long bookId) {
+        BookResponseDto bookResponseDto = bookService.getBookDetails(bookId);
+        return ResponseEntity.ok(bookResponseDto);
+    }
 }
