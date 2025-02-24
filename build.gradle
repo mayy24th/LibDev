@@ -52,6 +52,9 @@ dependencies {
 	//oauth2
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 
+	//layout
+	implementation('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect')
+
 }
 
 tasks.named('test') {
