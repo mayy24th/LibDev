@@ -1,72 +1,66 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"  data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="/css/common/common.css">
-    <link rel="stylesheet" href="/css/user/login.css">
-    <link rel="stylesheet" href="/css/user/capslock-alert.css">
 
-    <script type="module" src="/js/user/login.js"></script>
-    <script type="module" src="/js/utils/capsLockAlert.js"></script>
-    <script type="module" src="/js/user/socialLoginLink.js"></script>
-
-    <link rel="stylesheet" href="/css/common/header.css">
-    <link rel="stylesheet" href="/css/common/footer.css">
-    <script type="module" src="/js/utils/headerAccessInfo.js"></script>
+    <th:block layout:fragment="extraHead">
+        <link rel="stylesheet" href="/css/user/login.css">
+        <link rel="stylesheet" href="/css/user/capslock-alert.css">
+        <script type="module" src="/js/user/login.js"></script>
+        <script type="module" src="/js/utils/capsLockAlert.js"></script>
+        <script type="module" src="/js/user/socialLoginLink.js"></script>
+    </th:block>
 </head>
-<body class="d-block align-items-center justify-content-center vh-100 bg-light wrapper">
-<div th:replace="~{layout/header :: header}"></div>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow p-5 text-center">
-                <h2 class="mb-4">로그인</h2>
+<body class="body-login">
+<main layout:fragment="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow p-5 text-center">
+                    <h2 class="mb-4">로그인</h2>
 
-                <p class="text-center text-muted"><strong>도서관 방문을 환영합니다.</strong></p>
-                <p class="text-center text-muted">로그인을 하시면 보다 더 많은 정보와 서비스를 이용하실 수 있습니다.</p>
+                    <p class="text-center text-muted"><strong>도서관 방문을 환영합니다.</strong></p>
+                    <p class="text-center text-muted">로그인을 하시면 보다 더 많은 정보와 서비스를 이용하실 수 있습니다.</p>
 
-                <form id="loginForm">
-                    <div class="mb-3">
-                        <input type="text" name="email" class="form-control" placeholder="이메일" required>
-                    </div>
-                    <div class="mb-3 position-relative">
-                        <input type="password" id="passwordInput" name="password" class="form-control" placeholder="비밀번호" required>
-                        <div id="capsLockAlert" class="capslock-alert d-none">
-                            🔔 Caps Lock이 켜져 있습니다!
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <input type="text" name="email" class="form-control" placeholder="이메일" required>
                         </div>
+                        <div class="mb-3 position-relative">
+                            <input type="password" id="passwordInput" name="password" class="form-control" placeholder="비밀번호" required>
+                            <div id="capsLockAlert" class="capslock-alert d-none">
+                                🔔 Caps Lock이 켜져 있습니다!
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-login w-100">로그인</button>
+                    </form>
+
+                    <div class="position-relative my-4">
+                        <hr class="text-muted">
+                        <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted">또는</span>
                     </div>
-                    <button type="submit" class="btn btn-login w-100">로그인</button>
-                </form>
-                <div class="position-relative my-4">
-                    <hr class="text-muted">
-                    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted">또는</span>
-                </div>
 
-                <div class="d-flex flex-column gap-2">
-                    <button class="btn btn-outline-primary w-100" id="social-btn-naver">naver 로그인
-                    </button>
-                    <button class="btn btn-outline-dark w-100" id="social-btn-google">google 로그인
-                    </button>
-                </div>
+                    <div class="d-flex flex-column gap-2">
+                        <button class="btn btn-outline-primary w-100" id="social-btn-naver">naver 로그인
+                        </button>
+                        <button class="btn btn-outline-dark w-100" id="social-btn-google">google 로그인
+                        </button>
+                    </div>
 
-                <div class="d-flex justify-content-between mt-3">
-                    <a href="/auths/password-find" class="text-decoration-none">비밀번호 찾기</a>
-                    <a href="/users/join" class="text-decoration-none">회원가입</a>
-                </div>
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="/auths/password-find" class="text-decoration-none">비밀번호 찾기</a>
+                        <a href="/users/join" class="text-decoration-none">회원가입</a>
+                    </div>
 
-                <p class="text-center text-muted mt-3">
-                    로그인이 안되는 경우 한/영 키와 Caps Lock 키가 눌려져 있지 않은지 확인하세요.<br>
-                    계속해서 로그인이 안되시는 경우 관리자에게 문의하시기 바랍니다.
-                </p>
+                    <p class="text-center text-muted mt-3">
+                        로그인이 안되는 경우 한/영 키와 Caps Lock 키가 눌려져 있지 않은지 확인하세요.<br>
+                        계속해서 로그인이 안되시는 경우 관리자에게 문의하시기 바랍니다.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div th:replace="~{layout/footer :: footer}"></div>
+</main>
 </body>
-
 </html>
