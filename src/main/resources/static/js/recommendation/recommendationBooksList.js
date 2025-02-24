@@ -6,10 +6,10 @@ window.onload = () => {
 
     if (currentPath.includes("/recommendation/popular")) {
         apiEndpoint = "/api/recommendation/popular";
-        pageTitle = "인기 도서";
+        pageTitle = "인기자료";
     } else if (currentPath.includes("/recommendation/list")) {
         apiEndpoint = "/api/recommendation/user";
-        pageTitle = "추천 도서";
+        pageTitle = "추천자료";
     }
 
     document.title = pageTitle;

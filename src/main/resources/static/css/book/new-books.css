@@ -1,55 +1,109 @@
-body {
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-.container {
-    width: 70%;
-}
-
 .text-center.fw-bold {
     margin-top: 10px;
     text-align: left !important;
 }
 
-.d-flex {
-    display: flex !important;
-    align-items: center;
+.books-container {
+    width: 70%;
+    margin: 40px auto;
+    text-align: center;
+    padding: 20px;
 }
 
-.d-flex > div {
-    width: 100%;
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    background-color: #623F3F;
+    color: white;
+    display: inline-block;
+    padding: 10px 70px;
+    border-radius: 30px;
 }
 
-.text-muted {
-    color: #535353 !important;
-}
-
-.list-group-item {
-    background: white;
-    border-radius: 10px;
-    transition: transform 0.2s ease-in-out;
-}
-
-.list-group-item:hover {
-    transform: scale(1.02);
-}
-
-.list-group-item .p-2 {
-    font-size: 0.9rem;
-    color: #555;
+.book-list {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.list-group-item img {
-    width: 100px !important;
-    margin-right: 1.5rem !important;
+.book-card {
+    display: flex;
+    background: #fff;
+    padding: 20px;
+    align-items: flex-start;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
-.list-group-item p {
-    font-size: 0.9rem;
+.book-thumbnail {
+    flex: 0 0 120px;
+    height: 180px;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9;
+    overflow: hidden;
+}
+
+.book-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+.book-info {
+    flex: 1;
+    text-align: left;
+}
+
+.book-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.book-meta-inline {
+    font-size: 14px;
     color: #555;
+    margin-bottom: 10px;
 }
+
+.book-meta-inline span {
+    margin-right: 30px; /* 메타 정보 간 간격 */
+}
+
+.book-divider {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+.book-description {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+}
+
+.book-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.book-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
 
 .pagination .page-item.active .page-link {
     background-color: #623F3F;

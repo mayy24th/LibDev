@@ -12,15 +12,16 @@
     <link rel="stylesheet" href="/css/common/footer.css">
     <link rel="stylesheet" href="/css/review/review.css">
     <link rel="stylesheet" href="/css/review/modal.css">
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <script type="module" src="/js/review/review.js"></script>
 </head>
 <body class="body-submit">
 <div th:replace="~{layout/header :: header}"></div>
 <div class="container mt-4">
-    <div class="title-container">
-        <h2 id="pageTitle">한줄평 목록</h2>
-    </div>
-
+    <h2 class="title-container" id="page-title">한줄평 목록</h2>
     <div class="button-container">
         <div id="pageInfo" class="page-info"></div>
         <button class="btn-modify-review" id="openModifyModalBtn">한줄평 작성하기</button>
