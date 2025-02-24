@@ -1,23 +1,29 @@
 import {formatDate, statusColor} from "./utils.js";
+import {renderPagination} from "./renderPagination.js";
 import {approveReturn} from "./approveReturn.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        const response = await fetch("/api/v1/borrow-list");
+    loadBorrowList(0); // 첫 페이지 로드
+});
 
+async function loadBorrowList(page) {
+    try {
+        const response = await fetch(`/api/v1/borrow-list?page=${page}`);
         if (!response.ok) {
             throw new Error("대출 내역을 불러오는데 실패했습니다.");
         }
+        const data = await response.json();
 
-        const borrowList = await response.json();
-        displayBorrowList(borrowList);
+        displayBorrowList(data.content);
+        renderPagination(data.totalPages, data.number, loadBorrowList);
     } catch (error) {
         console.error(error.message);
     }
-});
+}
 
 function displayBorrowList(borrowList) {
     const borrowListContainer = document.querySelector(".borrow-list");
+    borrowListContainer.innerHTML = ""; // 기존 내용 초기화
 
     borrowList.forEach((borrow) => {
         const borrowItem = document.createElement("tr");
