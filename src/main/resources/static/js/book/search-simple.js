@@ -140,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 event.preventDefault();
                 currentPage = page;
                 renderBookList();
+                window.scrollTo({ top: 0, behavior: "smooth" });
             });
         }
 
