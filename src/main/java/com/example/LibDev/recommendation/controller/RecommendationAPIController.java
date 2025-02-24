@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/recommendation")
 @RequiredArgsConstructor
-public class RecommendationController {
+public class RecommendationAPIController {
 
     private final RecommendationService recommendationService;
 
@@ -28,6 +28,13 @@ public class RecommendationController {
     @GetMapping("/user")
     public ResponseEntity<List<RecommendationResponseDto>> recommendUserBaseBooks(){
         List<RecommendationResponseDto> recommendedBooks = recommendationService.recommendUserBaseBooks();
+        return ResponseEntity.ok(recommendedBooks);
+    }
+
+    /** 인기도서 **/
+    @GetMapping("/popular")
+    public ResponseEntity<List<RecommendationResponseDto>> recommendPopularBooks(){
+        List<RecommendationResponseDto> recommendedBooks = recommendationService.recommendPopularBooks();
         return ResponseEntity.ok(recommendedBooks);
     }
 }
