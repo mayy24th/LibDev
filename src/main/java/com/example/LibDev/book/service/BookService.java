@@ -286,7 +286,7 @@ public class BookService {
     // 신착자료
     public List<BookResponseDto> findNewBooks() {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-        List<Book> books = bookRepository.findByCreatedAtAfter(oneWeekAgo);
+        List<Book> books = bookRepository.findByCreatedAtAfterOrderByCreatedAtDesc(oneWeekAgo);
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
 
