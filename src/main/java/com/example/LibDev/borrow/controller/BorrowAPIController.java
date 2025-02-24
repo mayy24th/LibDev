@@ -6,6 +6,7 @@ import com.example.LibDev.borrow.dto.ReturnResDto;
 import com.example.LibDev.borrow.service.BorrowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,15 +26,14 @@ public class BorrowAPIController {
 
     /* 회원별 대출 이력 조회 */
     @GetMapping("/api/v1/my/borrow-history")
-    public ResponseEntity<List<BorrowResDto>> getBorrowHistory() {
-        log.debug("회원별 대출 이력 조회");
-        return ResponseEntity.ok(borrowService.getBorrowsByUser());
+    public ResponseEntity<Page<BorrowResDto>> getBorrowHistory(@RequestParam(value = "page", defaultValue = "0") int page) {
+        return ResponseEntity.ok(borrowService.getBorrowsByUser(page));
     }
 
     /* 전체 대출 조회 */
     @GetMapping("/api/v1/borrow-list")
-    public ResponseEntity<List<BorrowResDto>> getBorrowList() {
-        return ResponseEntity.ok(borrowService.getAllBorrows());
+    public ResponseEntity<Page<BorrowResDto>> getBorrowList(@RequestParam(value = "page", defaultValue = "0") int page) {
+        return ResponseEntity.ok(borrowService.getAllBorrows(page));
     }
 
     /* 대출 생성 */

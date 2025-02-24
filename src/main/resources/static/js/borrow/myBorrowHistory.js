@@ -1,12 +1,13 @@
 import { formatDate } from "./utils.js";
+import {renderPagination} from "./renderPagination.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-    fetchBorrowHistory();
+    loadBorrowHistory(0);
 });
 
-async function fetchBorrowHistory() {
+async function loadBorrowHistory(page) {
     try {
-        const response = await fetch("/api/v1/my/borrow-history", {
+        const response = await fetch(`/api/v1/my/borrow-history?page=${page}`, {
             method: "GET",
             credentials:"include"
         });
@@ -16,14 +17,16 @@ async function fetchBorrowHistory() {
         }
 
         const data = await response.json();
-        renderBorrowHistory(data);
+        renderBorrowHistory(data.content, page);
+        renderPagination(data.totalPages, data.number, loadBorrowHistory);
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
-function renderBorrowHistory(borrowList) {
+function renderBorrowHistory(borrowList, currentPage) {
     const borrowListContainer = document.querySelector(".borrow-list");
+    borrowListContainer.innerHTML = ""; // 기존 내용 초기화
 
     // 데이터가 없을 경우
     if (!borrowList || borrowList.length === 0) {
@@ -39,7 +42,7 @@ function renderBorrowHistory(borrowList) {
 
         const borrowNumber = document.createElement("div");
         borrowNumber.classList.add("borrow-number");
-        borrowNumber.textContent = index + 1;
+        borrowNumber.textContent = (currentPage * 10) + index + 1;
 
         const borrowContentBox = document.createElement("div");
         borrowContentBox.classList.add("borrow-content-box");

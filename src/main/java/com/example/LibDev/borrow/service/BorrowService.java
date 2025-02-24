@@ -15,6 +15,10 @@ import com.example.LibDev.user.entity.User;
 import com.example.LibDev.borrow.repository.BorrowRepository;
 import com.example.LibDev.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +58,7 @@ public class BorrowService {
     }
 
     /* 회원별 대출 이력 조회 */
-    public List<BorrowResDto> getBorrowsByUser() {
+    public Page<BorrowResDto> getBorrowsByUser(int page) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findLoginUserByEmail(email);
         log.debug("대출 이력 조회 회원:{}", email);
@@ -63,20 +67,19 @@ public class BorrowService {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
 
-        List<Borrow> borrowList = borrowRepository.findByUserAndStatusOrderByIdDesc(user, Status.RETURNED);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        Page<Borrow> borrowList = borrowRepository.findByUserAndStatus(user, Status.RETURNED, pageable);
 
-        return borrowList.stream()
-                .map(this::toBorrowResDto)
-                .collect(Collectors.toList());
+        return borrowList
+                .map(this::toBorrowResDto);
     }
 
     /* 전체 대출 내역 조회 */
-    public List<BorrowResDto> getAllBorrows() {
-        List<Borrow> borrowList = borrowRepository.findAllByOrderByIdDesc();
+    public Page<BorrowResDto> getAllBorrows(int page) {
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").descending());
+        Page<Borrow> borrowList = borrowRepository.findAll(pageable);
 
-        return borrowList.stream()
-                .map(this::toBorrowResDto)
-                .collect(Collectors.toList());
+        return borrowList.map(this::toBorrowResDto);
     }
 
     /* 대출 생성 */
