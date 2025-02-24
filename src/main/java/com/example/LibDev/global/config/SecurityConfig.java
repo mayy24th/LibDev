@@ -2,9 +2,11 @@ package com.example.LibDev.global.config;
 
 import com.example.LibDev.auth.filter.CustomAuthenticationFilter;
 import com.example.LibDev.auth.filter.CustomLogoutFilter;
+import com.example.LibDev.auth.handler.OAuth2LoginSuccessHandler;
 import com.example.LibDev.auth.jwt.JwtFilter;
 import com.example.LibDev.auth.jwt.JwtProvider;
 import com.example.LibDev.auth.service.AuthService;
+import com.example.LibDev.auth.service.CustomOauth2UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -16,13 +18,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
@@ -31,18 +29,13 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 public class SecurityConfig {
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
-    private final AuthenticationSuccessHandler authenticationSuccessHandler;
-    private final AuthenticationFailureHandler authenticationFailureHandler;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtProvider jwtProvider;
     private final AuthService authservice;
     private final ObjectMapper objectMapper;
+    private final CustomOauth2UserService customOauth2UserService;
 
 
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {return new BCryptPasswordEncoder();}
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -59,20 +52,24 @@ public class SecurityConfig {
                                 "/api/v1/users",
                                 "/api/v1/users/check-email/**",
                                 "/reservations/**",
-                                "/api/v1/reservations/**").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                                "/api/v1/reservations/**",
+                                "/api/v1/auths/password-find/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").authenticated()
-                                .anyRequest().permitAll()
-                        //csr 랜더링 시 jwt 적용을 위해서 페이지 접근 자체는 전부 열어둠
-                        // api만 jwt로 인증 받도록
+                        .anyRequest().permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-
-                .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new CustomLogoutFilter(authservice,objectMapper), LogoutFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+
+                .addFilterAt(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomLogoutFilter(authservice, objectMapper), LogoutFilter.class)
+                .oauth2Login((oauth2) -> oauth2
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                                .userService(customOauth2UserService))
+                        .successHandler(new OAuth2LoginSuccessHandler(jwtProvider, authservice)))
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(accessDeniedHandler)
                         .authenticationEntryPoint(authenticationEntryPoint))
@@ -82,15 +79,11 @@ public class SecurityConfig {
 
     @Bean
     public CustomAuthenticationFilter authenticationFilter() throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration));
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration)
+                ,objectMapper,authservice,jwtProvider );
 
         //로그인 필터 url 설정
         customAuthenticationFilter.setFilterProcessesUrl("/api/v3/auths/login");
-        //실패 핸들러 등록
-        customAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
-        //성공 핸들러 등록
-        customAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
-
         customAuthenticationFilter.afterPropertiesSet();
 
         return customAuthenticationFilter;
