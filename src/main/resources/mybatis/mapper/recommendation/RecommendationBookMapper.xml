@@ -6,11 +6,7 @@
     <!-- 도서 상세페이지 추천 : 해당 도서와 유사한 도서 추천 -->
     <select id="findBooksByTopic" resultType="com.example.LibDev.recommendation.vo.RecommendedBookVO">
         -- 1. 동일한 주제에서 대출 횟수가 많은 도서 (최대 5개)
-        SELECT
-            b.book_id AS bookId,
-            b.title AS title,
-            b.author AS author,
-            b.thumbnail AS thumbnail
+        SELECT b.book_id, b.title, b.author, b.thumbnail, b.publisher, b.contents, b.published_date
         FROM book b
         LEFT JOIN (
             SELECT book_id, COUNT(*) AS borrow_count
@@ -27,11 +23,7 @@
     </select>
     <select id="findBooksByAuthor" resultType="com.example.LibDev.recommendation.vo.RecommendedBookVO">
         -- 2. 동일한 저자의 도서 중 최신 출판 도서
-        SELECT
-            b.book_id AS bookId,
-            b.title AS title,
-            b.author AS author,
-            b.thumbnail AS thumbnail
+        SELECT b.book_id, b.title, b.author, b.thumbnail, b.publisher, b.contents, b.published_date
         FROM book b
         LEFT JOIN (
             SELECT book_id, COUNT(*) AS borrow_count
@@ -48,11 +40,7 @@
     </select>
     <select id="findLatestPublishedBooks" resultType="com.example.LibDev.recommendation.vo.RecommendedBookVO">
         -- 3. 최신 출판 도서 추가 (이미 선택된 도서 제외)
-        SELECT
-            b.book_id AS bookId,
-            b.title AS title,
-            b.author AS author,
-            b.thumbnail AS thumbnail
+        SELECT b.book_id, b.title, b.author, b.thumbnail, b.publisher, b.contents, b.published_date
         FROM book b
         WHERE b.book_id NOT IN
         <foreach collection="excludedBooks" item="excludedBook" open="(" separator="," close=")">
@@ -64,12 +52,8 @@
 
     <!-- 메인페이지 : 대출 내역이 존재하는 경우 가장 대출 빈도수가 높고 최근에 대출한 도서의 주제를 기반으로 추천 -->
     <select id="findUserBaseBooks" resultType="com.example.LibDev.recommendation.vo.RecommendedBookVO">
-        SELECT
-            b.book_id AS bookId,
-            b.title AS title,
-            b.author AS author,
-            b.thumbnail AS thumbnail,
-            IFNULL(br.borrow_count, 0) AS borrowCount -- 대출 횟수 (없으면 0 처리)
+        SELECT b.book_id, b.title, b.author, b.thumbnail, b.publisher, b.contents, b.published_date,
+               IFNULL(br.borrow_count, 0) AS borrowCount -- 대출 횟수 (없으면 0 처리)
         FROM book b
         LEFT JOIN (
             SELECT book_id, COUNT(*) AS borrow_count, MAX(created_at) AS latestBorrowDate
