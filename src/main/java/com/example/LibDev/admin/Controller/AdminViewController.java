@@ -1,4 +1,4 @@
-package com.example.LibDev.admin;
+package com.example.LibDev.admin.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,4 +15,5 @@ public class AdminViewController {
     public String usermanagement() {
         return "admin/admin-user-management";
     }
+
 }
