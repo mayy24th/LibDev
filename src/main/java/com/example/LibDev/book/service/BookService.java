@@ -6,6 +6,7 @@ import com.example.LibDev.book.dto.KakaoBookResponseDto;
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BookService {
+    @Value("${kakao.api.key}")
+    private String KAKAO_API_KEY;
+
+    @Value("${library.api.key}")
+    private String LIBRARY_API_KEY;
+
     private final BookRepository bookRepository;
 
     /*
@@ -38,9 +45,6 @@ public class BookService {
     */
 
     private final RestTemplate restTemplate = new RestTemplate(); // API 호출을 위한 RestTemplate
-
-    private static final String KAKAO_API_KEY = "KakaoAK 77a416b84bd8bc56ccf085a8b028dce6"; // 실제 API 키로 변경
-    private static final String LIBRARY_API_KEY = "47d8bf9a7a5de436887527621acaf71b54853c2418438855dd869ffbcaf10981";
 
     // Kakao API에서 도서 정보를 가져와 DB에 저장
     public void saveBookFromKakao(String query) {
