@@ -1,4 +1,4 @@
-package com.example.LibDev.admin.Controller;
+package com.example.LibDev.admin.controller;
 
 import com.example.LibDev.global.dto.GlobalResponseDto;
 import com.example.LibDev.user.service.UserService;
