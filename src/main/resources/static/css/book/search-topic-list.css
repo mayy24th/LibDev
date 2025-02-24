@@ -1,0 +1,61 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.mt-4 {
+    width: 70%;
+}
+
+.text-center.fw-bold {
+    margin-top: 10px;
+    text-align: left !important;
+}
+
+.d-flex {
+    display: flex !important;
+    align-items: center;
+}
+
+.d-flex > div {
+    width: 100%;
+}
+
+.text-muted {
+    color: #535353 !important;
+}
+
+.list-group-item {
+    background: white;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.list-group-item:hover {
+    transform: scale(1.02);
+}
+
+.list-group-item .p-2 {
+    font-size: 0.9rem;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-group-item img {
+    width: 100px !important;
+    margin-right: 1.5rem !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #623F3F;
+    border-color: #623F3F;
+    color: white;
+}
+
+.pagination .page-link {
+    color: #623F3F;
+}
+
+.pagination .page-link:hover {
+    background-color: #f1e3e3;
+}

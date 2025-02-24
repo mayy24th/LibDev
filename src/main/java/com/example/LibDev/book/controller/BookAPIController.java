@@ -114,4 +114,11 @@ public class BookAPIController {
         BookResponseDto bookResponseDto = bookService.getBookDetails(bookId);
         return ResponseEntity.ok(bookResponseDto);
     }
+
+    // 신착자료
+    @GetMapping("/new")
+    public ResponseEntity<List<BookResponseDto>> getNewBooks() {
+        List<BookResponseDto> newBooks = bookService.findNewBooks();
+        return ResponseEntity.ok(newBooks);
+    }
 }
