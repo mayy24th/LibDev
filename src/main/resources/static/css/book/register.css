@@ -23,6 +23,24 @@ body {
     color: white;
 }
 
+.custom-btn-2 {
+    background-color: #623F3F;
+    color: white;
+    border: none;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 70px;
+}
+
+.custom-btn-2:hover {
+    background-color: #4F2D2D !important;
+    color: white;
+}
+
+.btn-secondary {
+    width: 70px;
+}
+
 .book-detail-container {
     display: flex;
     align-items: stretch;
