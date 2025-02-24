@@ -1,4 +1,5 @@
 import { reissue } from "./reissue.js";
+import {apiRequestRetry} from "./apiRequsetRetry.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const topBar = document.querySelector(".top-bar");
@@ -52,11 +53,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function handleLogout(event) {
         event.preventDefault();
         try {
-            const response = await fetch("/api/v1/auths/logout", {
+            const response = await apiRequestRetry("/api/v1/auths/logout", {
                 method: "POST",
             });
 
             if (response.ok) {
+                alert("로그아웃 되었습니다.")
                 showLoginButtons();
             }
         } catch (error) {
