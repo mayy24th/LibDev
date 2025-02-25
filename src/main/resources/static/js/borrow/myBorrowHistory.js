@@ -17,7 +17,12 @@ async function loadBorrowHistory(page) {
         }
 
         renderBorrowHistory(data.content, page);
-        renderPagination(data.totalPages, data.number, loadBorrowHistory);
+
+        if (data.content.length === 0) {
+            document.querySelector("#pagination").style.display = "none";
+        } else {
+            renderPagination(data.totalPages, data.number, loadBorrowHistory);
+        }
     } catch (error) {
         console.error('Error:', error);
     }
@@ -31,6 +36,7 @@ function renderBorrowHistory(borrowList, currentPage) {
     if (!borrowList || borrowList.length === 0) {
         const blankMessage = document.createElement("p");
         blankMessage.textContent = "대출 이력이 없습니다.";
+        blankMessage.classList.add("blank-message");
         borrowListContainer.appendChild(blankMessage);
         return;
     }

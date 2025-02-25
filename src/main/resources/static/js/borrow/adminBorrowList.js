@@ -22,13 +22,25 @@ async function loadBorrowList(page, status) {
         }
 
         displayBorrowList(data.content);
-        renderPagination(data.totalPages, data.number, (newPage) => loadBorrowList(newPage, statusFilter.value));
+
+        if (data.content.length === 0) {
+            document.querySelector("#pagination").style.display = "none";
+        } else {
+            document.querySelector("#pagination").style.removeProperty("display");
+            renderPagination(data.totalPages, data.number, (newPage) => loadBorrowList(newPage, statusFilter.value));
+        }
     } catch (error) {
         console.error(error.message);
     }
 }
 
 function displayBorrowList(borrowList) {
+    const tableContainer = document.querySelector(".table-container");
+    const existingBlankMessage = document.querySelector(".blank-message");
+    if(existingBlankMessage) {
+        existingBlankMessage.remove();
+    }
+
     const borrowListContainer = document.querySelector(".borrow-list");
     borrowListContainer.innerHTML = ""; // 기존 내용 초기화
 
@@ -36,10 +48,9 @@ function displayBorrowList(borrowList) {
     if (!borrowList || borrowList.length === 0) {
         const blankMessage = document.createElement("p");
         blankMessage.textContent = "대출 정보가 없습니다.";
-        blankMessage.style.fontSize = "1.2rem";
-        blankMessage.style.marginTop = "1rem";
+        blankMessage.classList.add("blank-message");
 
-        borrowListContainer.appendChild(blankMessage);
+        tableContainer.appendChild(blankMessage);
         return;
     }
 

@@ -1,3 +1,9 @@
+.blank-message {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 1.2rem;
+}
+
 .pagination .page-item.active .page-link {
     background-color: #623F3F;
     border-color: #623F3F;
