@@ -9,19 +9,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     searchInput.focus();
 
-    fetchBooks();
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query');
+    const searchType = urlParams.get('searchType');
 
-    searchButton.addEventListener("click", searchBooks);
+    if (query) {
+        searchInput.value = query;
+        searchTypeSelect.value = searchType || "전체";
+        searchBooks(query, searchType || "전체");
+    } else {
+        fetchBooks();
+    }
+
+    searchButton.addEventListener("click", function() {
+        searchBooks(searchInput.value.trim(), searchTypeSelect.value);
+    });
+
     searchInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
-            searchBooks();
+            searchBooks(searchInput.value.trim(), searchTypeSelect.value);
         }
     });
 
-    function searchBooks() {
-        const query = searchInput.value.trim();
-        const searchType = searchTypeSelect.value;
-
+    function searchBooks(query, searchType) {
         if (query === "") {
             fetchBooks();
             return;
@@ -67,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         booksToDisplay.forEach(book => {
-            console.log("도서 정보:", book);
             const listItem = document.createElement("div");
             listItem.classList.add("list-group-item", "p-3", "shadow-sm", "mb-3");
             listItem.style.cursor = "pointer";
