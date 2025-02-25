@@ -13,6 +13,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fetchBooks();
 
+    // 도서 등록 버튼
+    const goToRegisterBtn = document.getElementById("goToRegisterBtn");
+    if (goToRegisterBtn) {
+        goToRegisterBtn.addEventListener("click", function () {
+            location.href = "/books/register";
+        });
+    }
+
     searchButton.addEventListener("click", searchBooks);
     searchInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
