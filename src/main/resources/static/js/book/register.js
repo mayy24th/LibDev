@@ -125,6 +125,11 @@ function registerBook() {
     const contents = document.getElementById('bookContents').textContent;
     const thumbnail = document.getElementById('bookThumbnail').src;
 
+    if (!title) {
+        showAlertToast("등록할 도서를 선택해주세요");
+        return;
+    }
+
     fetch('/api/v1/books/register', {
         method: 'POST',
         body: JSON.stringify({ title, author, publisher, publishedDate, isbn, callNumber, topicId, contents, thumbnail }),
