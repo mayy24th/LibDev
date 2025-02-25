@@ -7,10 +7,8 @@ import com.example.LibDev.borrow.repository.BorrowRepository;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.reservation.entity.Reservation;
-import com.example.LibDev.reservation.entity.type.ReservationStatus;
 import com.example.LibDev.reservation.repository.ReservationRepository;
 import com.example.LibDev.reservation.service.ReservationService;
-import com.example.LibDev.review.repository.ReviewRepository;
 import com.example.LibDev.user.dto.JoinReqDto;
 import com.example.LibDev.user.dto.UserResDto;
 import com.example.LibDev.user.dto.UserServiceCountResDto;
@@ -40,7 +38,6 @@ public class UserService {
     private final AuthService authService;
     private final ReservationService reservationService;
     private final ReservationRepository reservationRepository;
-    private final ReviewRepository reviewRepository;
     private final UserMapper userMapper;
 
     public UserResDto join(JoinReqDto joinReqDto) {
