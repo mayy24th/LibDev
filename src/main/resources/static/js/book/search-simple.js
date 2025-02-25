@@ -7,19 +7,31 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentPage = 1;
     const booksPerPage = 10;
 
-    fetchBooks();
+    searchInput.focus();
 
-    searchButton.addEventListener("click", searchBooks);
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query');
+    const searchType = urlParams.get('searchType');
+
+    if (query) {
+        searchInput.value = query;
+        searchTypeSelect.value = searchType || "전체";
+        searchBooks(query, searchType || "전체");
+    } else {
+        fetchBooks();
+    }
+
+    searchButton.addEventListener("click", function() {
+        searchBooks(searchInput.value.trim(), searchTypeSelect.value);
+    });
+
     searchInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
-            searchBooks();
+            searchBooks(searchInput.value.trim(), searchTypeSelect.value);
         }
     });
 
-    function searchBooks() {
-        const query = searchInput.value.trim();
-        const searchType = searchTypeSelect.value;
-
+    function searchBooks(query, searchType) {
         if (query === "") {
             fetchBooks();
             return;
@@ -65,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         booksToDisplay.forEach(book => {
-            console.log("도서 정보:", book);
             const listItem = document.createElement("div");
             listItem.classList.add("list-group-item", "p-3", "shadow-sm", "mb-3");
             listItem.style.cursor = "pointer";
@@ -102,6 +113,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function renderPagination() {
         const pagination = document.getElementById("pagination");
         pagination.innerHTML = "";
+
+        if (booksData.length === 0) {
+            pagination.style.display = "none";
+            return;
+        } else {
+            pagination.style.display = "";
+        }
 
         const totalPages = Math.ceil(booksData.length / booksPerPage);
         const pageGroupSize = 5;
