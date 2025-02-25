@@ -9,6 +9,7 @@ body {
 .input-group {
     padding-top: 20px;
     padding-bottom: 20px;
+    z-index: 1;
 }
 
 .search-button {

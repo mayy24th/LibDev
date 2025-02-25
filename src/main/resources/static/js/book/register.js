@@ -1,3 +1,5 @@
+import { showAlertToast } from "../utils/utils.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     const searchButton = document.getElementById('searchButton');
     const registerBtn = document.getElementById('registerBtn');
@@ -122,6 +124,6 @@ function registerBook() {
         headers: { 'Content-Type': 'application/json' },
     })
         .then(response => response.text())
-        .then(data => alert('도서 등록 성공!'))
-        .catch(error => alert('도서 등록 실패'));
+        .then(data => showAlertToast('도서 등록 성공!'))
+        .catch(error => showAlertToast('도서 등록 실패'));
 }
