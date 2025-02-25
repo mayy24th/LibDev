@@ -75,11 +75,16 @@ public class BorrowService {
     }
 
     /* 전체 대출 내역 조회 */
-    public Page<BorrowResDto> getAllBorrows(int page) {
+    public Page<BorrowResDto> getAllBorrows(int page, String status) {
         Pageable pageable = PageRequest.of(page, 20, Sort.by("id").descending());
-        Page<Borrow> borrowList = borrowRepository.findAll(pageable);
 
-        return borrowList.map(this::toBorrowResDto);
+        if("ALL".equals(status)) {
+            Page<Borrow> borrowList = borrowRepository.findAll(pageable);
+            return borrowList.map(this::toBorrowResDto);
+        } else {
+            Page<Borrow> borrowList = borrowRepository.findByStatus(Status.valueOf(status), pageable);
+            return borrowList.map(this::toBorrowResDto);
+        }
     }
 
     /* 대출 생성 */

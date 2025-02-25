@@ -26,14 +26,17 @@ public class BorrowAPIController {
 
     /* 회원별 대출 이력 조회 */
     @GetMapping("/api/v1/my/borrow-history")
-    public ResponseEntity<Page<BorrowResDto>> getBorrowHistory(@RequestParam(value = "page", defaultValue = "0") int page) {
+    public ResponseEntity<Page<BorrowResDto>> getBorrowHistory(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                               @RequestParam(value = "status", defaultValue = "ALL") String status) {
         return ResponseEntity.ok(borrowService.getBorrowsByUser(page));
     }
 
     /* 전체 대출 조회 */
     @GetMapping("/api/v1/borrow-list")
-    public ResponseEntity<Page<BorrowResDto>> getBorrowList(@RequestParam(value = "page", defaultValue = "0") int page) {
-        return ResponseEntity.ok(borrowService.getAllBorrows(page));
+    public ResponseEntity<Page<BorrowResDto>> getBorrowList(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                            @RequestParam(value = "status", defaultValue = "ALL") String status) {
+        log.debug("대출 상태 필터:{}", status);
+        return ResponseEntity.ok(borrowService.getAllBorrows(page, status));
     }
 
     /* 대출 생성 */
