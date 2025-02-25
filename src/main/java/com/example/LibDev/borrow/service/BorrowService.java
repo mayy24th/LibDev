@@ -60,7 +60,7 @@ public class BorrowService {
     }
 
     /* 회원별 대출 이력 조회 */
-    public Page<BorrowResDto> getBorrowsByUser(int page) {
+    public Page<BorrowResDto> getBorrowsByUser(int page, String order) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findLoginUserByEmail(email);
         log.debug("대출 이력 조회 회원:{}", email);
@@ -69,7 +69,8 @@ public class BorrowService {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
 
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        Sort sort = "asc".equals(order) ? Sort.by("id").ascending() : Sort.by("id").descending();
+        Pageable pageable = PageRequest.of(page, 10, sort);
         Page<Borrow> borrowList = borrowRepository.findByUserAndStatus(user, Status.RETURNED, pageable);
 
         return borrowList

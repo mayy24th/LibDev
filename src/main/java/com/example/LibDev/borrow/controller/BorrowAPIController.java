@@ -27,8 +27,9 @@ public class BorrowAPIController {
 
     /* 회원별 대출 이력 조회 */
     @GetMapping("/api/v1/my/borrow-history")
-    public ResponseEntity<Page<BorrowResDto>> getBorrowHistory(@RequestParam(value = "page", defaultValue = "0") int page) {
-        return ResponseEntity.ok(borrowService.getBorrowsByUser(page));
+    public ResponseEntity<Page<BorrowResDto>> getBorrowHistory(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                               @RequestParam(value = "order", defaultValue = "desc") String order) {
+        return ResponseEntity.ok(borrowService.getBorrowsByUser(page, order));
     }
 
     /* 전체 대출 조회 */

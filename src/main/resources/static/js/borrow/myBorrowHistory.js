@@ -2,11 +2,17 @@ import { formatDate } from "./utils.js";
 import { renderPagination } from "./renderPagination.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
 
-loadBorrowHistory(0);
+const orderSelect = document.querySelector("#order-select");
 
-async function loadBorrowHistory(page) {
+orderSelect.addEventListener("change", () => {
+    loadBorrowHistory(0, orderSelect.value);
+});
+
+loadBorrowHistory(0, orderSelect.value);
+
+async function loadBorrowHistory(page, order) {
     try {
-        const response = await fetch(`/api/v1/my/borrow-history?page=${page}`, {
+        const response = await fetch(`/api/v1/my/borrow-history?page=${page}&order=${order}`, {
             method: "GET",
         });
         const data = await response.json();
