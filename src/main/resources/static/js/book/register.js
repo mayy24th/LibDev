@@ -3,9 +3,16 @@ import { showAlertToast } from "../utils/showAlertToast.js";
 document.addEventListener("DOMContentLoaded", () => {
     const searchButton = document.getElementById('searchButton');
     const registerBtn = document.getElementById('registerBtn');
+    const cancelBtn = document.getElementById("cancelBtn");
 
     searchButton.addEventListener('click', searchBooks);
     registerBtn.addEventListener('click', registerBook);
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", function () {
+            location.href = "/books/book-admin";
+        });
+    }
 });
 
 // 검색 함수 (도서 검색 후 결과를 표시)
