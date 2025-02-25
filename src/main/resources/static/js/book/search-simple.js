@@ -104,60 +104,48 @@ document.addEventListener("DOMContentLoaded", function () {
         pagination.innerHTML = "";
 
         const totalPages = Math.ceil(booksData.length / booksPerPage);
-
-        // << 버튼 (첫 페이지로 이동)
-        const prevPageItem = document.createElement("li");
-        prevPageItem.classList.add("page-item");
-        const prevPageLink = document.createElement("a");
-        prevPageLink.classList.add("page-link");
-        prevPageLink.href = "#";
-        prevPageLink.innerHTML = "<<";
-        prevPageLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            currentPage = 1;
-            renderBookList();
-        });
-        prevPageItem.appendChild(prevPageLink);
-        pagination.appendChild(prevPageItem);
-
-        // 페이지 번호들
         const pageGroupSize = 5;
         const startPage = Math.floor((currentPage - 1) / pageGroupSize) * pageGroupSize + 1;
         const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
 
+        // << 버튼 (앞 그룹의 마지막 페이지로 이동)
+        const prevPageItem = createPageItem("<<", startPage - 1, startPage === 1);
+        pagination.appendChild(prevPageItem);
+
+        // 페이지 번호들
         for (let i = startPage; i <= endPage; i++) {
-            const pageItem = document.createElement("li");
-            pageItem.classList.add("page-item");
+            const pageItem = createPageItem(i, i, false);
             if (i === currentPage) pageItem.classList.add("active");
-
-            const pageLink = document.createElement("a");
-            pageLink.classList.add("page-link");
-            pageLink.href = "#";
-            pageLink.textContent = i;
-            pageLink.addEventListener("click", function (event) {
-                event.preventDefault();
-                currentPage = i;
-                renderBookList();
-            });
-
-            pageItem.appendChild(pageLink);
             pagination.appendChild(pageItem);
         }
 
-        // >> 버튼 (다음 페이지로 이동)
-        const nextPageItem = document.createElement("li");
-        nextPageItem.classList.add("page-item");
-        const nextPageLink = document.createElement("a");
-        nextPageLink.classList.add("page-link");
-        nextPageLink.href = "#";
-        nextPageLink.innerHTML = ">>";
-        nextPageLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            currentPage = Math.min(currentPage + 1, totalPages);
-            renderBookList();
-        });
-        nextPageItem.appendChild(nextPageLink);
+        // >> 버튼 (다음 그룹의 첫 페이지로 이동)
+        const nextPageItem = createPageItem(">>", endPage + 1, endPage >= totalPages);
         pagination.appendChild(nextPageItem);
+    }
+
+    // 페이지 아이템 생성 함수
+    function createPageItem(text, page, disabled = false) {
+        const pageItem = document.createElement("li");
+        pageItem.classList.add("page-item");
+        if (disabled) pageItem.classList.add("disabled");
+
+        const pageLink = document.createElement("a");
+        pageLink.classList.add("page-link");
+        pageLink.href = "#";
+        pageLink.appendChild(document.createTextNode(text));
+
+        if (!disabled) {
+            pageLink.addEventListener("click", (event) => {
+                event.preventDefault();
+                currentPage = page;
+                renderBookList();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        }
+
+        pageItem.appendChild(pageLink);
+        return pageItem;
     }
 
 });

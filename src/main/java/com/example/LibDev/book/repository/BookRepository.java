@@ -16,5 +16,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findByCallNumberStartingWith(String callNumber);
     List<Book> findByTopicIdOrderByCreatedAtDesc(int topicId);
-    List<Book> findByCreatedAtAfter(LocalDateTime date);
+    List<Book> findByCreatedAtAfterOrderByCreatedAtDesc(LocalDateTime date);
 }
