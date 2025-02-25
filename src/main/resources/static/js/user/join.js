@@ -1,4 +1,5 @@
 import { duplicateCheckEmail } from "./duplicateCheckEmail.js"
+import {showAlertToast} from "../utils/showAlertToast.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("joinForm");
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
 
         if (!isEmailChecked) {
-            alert("이메일 중복 체크를 진행해주세요.");
+            showAlertToast("이메일 중복 체크를 진행해주세요.");
             return;
         }
 
@@ -31,12 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const phone = `${formData.get("phone1")}-${formData.get("phone2")}-${formData.get("phone3")}`;
 
         if (!name || !email || !domain || !password || !confirmPassword) {
-            alert("모든 필드를 입력하세요.");
+            showAlertToast("모든 필드를 입력하세요.");
             return;
         }
 
         if (password !== confirmPassword) {
-            alert("비밀번호가 일치하지 않습니다.");
+            showAlertToast("비밀번호가 일치하지 않습니다.");
             return;
         }
 
@@ -53,17 +54,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) {
                 console.error("회원가입 실패:", result);
-                alert(result.message || "회원가입에 실패했습니다.");
+                showAlertToast(result.message || "회원가입에 실패했습니다.");
                 if (result.data) {
                     showValidationErrors(result.data);
                 }
                 return;
             }
 
-            alert("회원가입이 완료되었습니다.");
+            showAlertToast("회원가입이 완료되었습니다.");
             window.location.href = "/users/login"; // 성공 시 로그인 페이지로 이동
         } catch (error) {
-            alert("회원가입 중 오류가 발생했습니다.");
+            showAlertToast("회원가입 중 오류가 발생했습니다.");
             console.error("네트워크 또는 서버 오류:", error);
         }
     });

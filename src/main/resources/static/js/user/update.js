@@ -1,7 +1,6 @@
-import {reissue} from "../utils/reissue.js";
 import {duplicateCheckEmail} from "./duplicateCheckEmail.js"
 import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
-
+import {showAlertToast} from "../utils/showAlertToast.js";
 document.addEventListener("DOMContentLoaded",() => {
     const form = document.getElementById("updateForm")
     const checkEmailButton = document.getElementById("btn-check");
@@ -39,7 +38,7 @@ document.addEventListener("DOMContentLoaded",() => {
         event.preventDefault();
 
         if (btn && !isEmailChecked) {
-            alert("이메일 중복 체크를 진행해주세요.");
+            showAlertToast("이메일 중복 체크를 진행해주세요.");
             return;
         }
 
@@ -60,11 +59,11 @@ document.addEventListener("DOMContentLoaded",() => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email: fullEmail, phone }),
             })
-            alert(result.data);
+            showAlertToast(result.data);
 
             if (password.trim() !== "") {
                 if (password !== confirmPassword) {
-                    alert("비밀번호가 일치하지 않습니다.");
+                    showAlertToast("비밀번호가 일치하지 않습니다.");
                     return;
                 }
 
@@ -74,11 +73,11 @@ document.addEventListener("DOMContentLoaded",() => {
                     body: JSON.stringify({password}),
                 });
 
-                alert(passwordResult.data);
+                showAlertToast(passwordResult.data);
             }
 
         } catch (error) {
-            alert("회원정보 수정 중 오류가 발생했습니다.");
+            showAlertToast("회원정보 수정 중 오류가 발생했습니다.");
             console.error(error);
         }
     })
