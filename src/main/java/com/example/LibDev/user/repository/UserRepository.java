@@ -22,8 +22,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /*패널티 만료 여부 조회*/
     List<User> findByPenaltyExpirationBeforeAndBorrowAvailableFalse(LocalDateTime now);
-
-    /*미탈퇴 회원 목록 조회*/
-    Page<User> findUsersByWithdrawFalse(Pageable pageable);
-
 }
