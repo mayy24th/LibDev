@@ -23,10 +23,15 @@ public class AdminApiController {
     }
 
     @GetMapping("/api/admin/v1/admins/user-list")
-    public ResponseEntity<GlobalResponseDto> getAllUsers(@RequestParam(value = "page", defaultValue = "0") int page) {
+    public ResponseEntity<GlobalResponseDto> getAllUsers(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "role", required = false) String role,
+            @RequestParam(value = "email", required = false) String email) {
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(GlobalResponseDto.success(HttpStatus.OK, adminService.findAllUsers(page)));
+                .body(GlobalResponseDto.success(HttpStatus.OK, adminService.findAllUsers(page, role, email)));
     }
+
 
     @PatchMapping("/api/admin/v1/admins/change-role")
     public ResponseEntity<GlobalResponseDto> changeRole(@RequestBody UpdateRoleDto updateRoleDto) {

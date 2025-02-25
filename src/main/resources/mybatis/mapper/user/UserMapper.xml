@@ -17,6 +17,12 @@
         LEFT JOIN borrow b ON u.id = b.user_id
         AND b.status = 'OVERDUE'  <!-- 연체 상태인 대출 기록만 포함 -->
         WHERE u.withdraw = FALSE
+        <if test="role != null and role != 'ALL'">
+            AND u.role = #{role}
+        </if>
+        <if test="email != null and email != ''">
+            AND u.email LIKE CONCAT('%', #{email}, '%')
+        </if>
         GROUP BY u.id, u.name, u.email, u.phone, u.role, u.created_at, u.updated_at, u.penalty_expiration
         ORDER BY u.id DESC
         LIMIT #{size} OFFSET #{offset}

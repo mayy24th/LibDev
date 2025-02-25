@@ -28,10 +28,10 @@ public class AdminService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
 
-    public Page<UserResDto> findAllUsers(int page) {
+    public Page<UserResDto> findAllUsers(int page, String role, String email) {
         int offset = page * defaultSize;
 
-        List<UserResDto> users = userMapper.findAllUsersWithOverdueDays(defaultSize, offset);
+        List<UserResDto> users = userMapper.findAllUsersWithOverdueDays(defaultSize, offset, role, email);
 
         int totalCount = userMapper.countAllUsers();
 

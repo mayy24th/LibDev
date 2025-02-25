@@ -2,21 +2,36 @@ import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
 import {renderPagination} from "../borrow/renderPagination.js";
 import {showAlertToast} from "../utils/showAlertToast.js";
 
+const roleFilter = document.getElementById('roleFilter');
+
 document.addEventListener("DOMContentLoaded", async () => {
-    await loadUserList(0);
+    loadUserList(0)
+});
+
+// 권한 셀렉터 변경 시 이벤트 리스너
+roleFilter.addEventListener('change', function() {
+    loadUserList(0);
+});
+
+// 이메일 검색창 내용이 변경될 때마다 이벤트 리스너
+document.getElementById('emailSearch').addEventListener('keyup', function() {
+    loadUserList(0);
 });
 
 async function loadUserList(page) {
+    const role = document.getElementById('roleFilter').value;
+    const email = document.getElementById('emailSearch').value;
+
     try {
-        const response = await apiRequestRetry(`/api/admin/v1/admins/user-list?page=${page}`,{
+        const response = await apiRequestRetry(`/api/admin/v1/admins/user-list?page=${page}&role=${role}&email=${email}`, {
             method: "GET"
-        })
+        });
 
         const userList = response.data.content;
         displayUserList(userList);
         renderPagination(response.data.totalPages, response.data.number, loadUserList);
 
-    } catch (error){
+    } catch (error) {
         console.error(error.message);
     }
 }
