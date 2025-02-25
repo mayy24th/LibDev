@@ -1,3 +1,5 @@
+import {showAlertToast} from "../utils/showAlertToast.js";
+
 const emailBtn = document.getElementById("emailSubmit");
 
 emailBtn.addEventListener("click", async () => {
@@ -5,7 +7,7 @@ emailBtn.addEventListener("click", async () => {
     console.log(email);
 
     if (!email) {
-        alert("이메일을 입력해주세요.");
+        showAlertToast("이메일을 입력해주세요.");
         return;
     }
 
@@ -21,15 +23,15 @@ emailBtn.addEventListener("click", async () => {
         const result = await response.json();
 
         if(result.status === 404){
-            alert("해당 이메일을 찾을 수 없습니다.")
+            showAlertToast("해당 이메일을 찾을 수 없습니다.")
             return;
         }
 
-        alert(result.data);
+        showAlertToast(result.data);
 
         window.location.href = "/auths/password-find/codeVerify";
     } catch (error){
-        alert("인증 과정 중 오류가 발생했습니다");
+        showAlertToast("인증 과정 중 오류가 발생했습니다");
         console.log(error);
     }
 })
