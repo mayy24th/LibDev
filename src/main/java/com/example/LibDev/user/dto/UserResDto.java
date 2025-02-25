@@ -17,6 +17,8 @@ public class UserResDto {
     private final String role;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+    private final LocalDateTime penaltyExpiration;
+    private final Long totalOverdueDays;
 
 
 }

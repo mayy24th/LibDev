@@ -52,6 +52,8 @@ public class User extends BaseEntity {
 
     public void updatePenaltyExpiration(LocalDateTime penaltyExpiration) {this.penaltyExpiration = penaltyExpiration;}
 
+    public void updateRole(Role role) {this.role = role;}
+
     public void deleteUser(){
         this.email = null;
         this.password = null;
