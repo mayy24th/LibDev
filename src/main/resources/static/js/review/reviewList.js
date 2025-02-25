@@ -1,6 +1,6 @@
 import { openModifyModal } from "./reviewModify.js";
 import { openDeleteModal } from "./reviewDelete.js";
-import { showAlertToast } from "../utils/utils.js"
+import { showAlertToast } from "../utils/showAlertToast.js"
 
 export async function loadReviews(apiEndpoint) {
     try {

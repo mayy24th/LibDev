@@ -191,7 +191,6 @@ public class ReservationService {
                     + "<p>3일 이내로 대출을 완료해주세요.</p>"
                     + "<br/><a href='" + cancelUrl + "' style='display:inline-block;padding:10px 20px;margin:10px;color:white;background-color:#f44336;text-decoration:none;border-radius:5px;'>예약 취소</a>";
 //                    + "<br/><a href='http://localhost:8080/book/" + book.getBookId() + "' style='color:blue;'>도서 상세 정보 보기</a>";
-
             try {
                 mailService.sendMail(to, subject, content);
             } catch (MessagingException e) {
@@ -222,13 +221,12 @@ public class ReservationService {
             log.info("새로운 1순위 예약자 만료일 설정 완료: {}", firstReservation.getExpirationDate());
         }
 
-        // 이메일 발송 전 확인 (queueOrder가 1인지 체크)
-        log.info("이메일 발송 체크: 예약자 Queue Order: {}", firstReservation.getQueueOrder());
-
-        // 조건 체크 후 이메일 발송
+        // todo : ready 인지 추가 체크 필요!!!!
+        // 조건 체크 후 이메일 발송 + 알림 발송
         if (isNewFirstReservation || firstReservation.getQueueOrder() == 1) {
             log.info("이메일 발송 시작: {}", firstReservation.getUser().getEmail());
             sendReservationMail(firstReservation.getUser(), book, firstReservation.getQueueOrder());
+//            notifyNextUser(book);
         } else {
             log.info("이메일 발송 조건 미충족: queueOrder={}, Expiration={}",
                     firstReservation.getQueueOrder(), firstReservation.getExpirationDate());
@@ -274,8 +272,8 @@ public class ReservationService {
             reservationRepository.save(updatedReservations.get(i));
         }
 
-
-        // 현재 예약이 첫 번째 예약자였던 경우에만 다음 예약자에게 만료일 설정 및 이메일 발송
+        // todo : ready 체크!!
+        // 현재 예약이 첫 번째 예약자였던 경우에만 다음 예약자에게 만료일 설정 및 이메일 발송 및 알림발송
         if (isFirstReservation) {
             updateFirstReservationExpiration(book);
         }
@@ -294,6 +292,7 @@ public class ReservationService {
             List<Reservation> reservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
             if (!reservations.isEmpty()) {
                 Reservation firstReservation = reservations.getFirst(); // 현재 1순위 예약자
+
                 log.info("반납 후 첫 번째 예약자: {} (User ID: {})",
                         firstReservation.getUser().getEmail(), firstReservation.getUser().getId());
 
@@ -308,7 +307,7 @@ public class ReservationService {
     private void notifyNextUser(Book book) {
         List<Reservation> reservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
         if (!reservations.isEmpty()) {
-            Reservation nextReservation = reservations.get(0);
+            Reservation nextReservation = reservations.getFirst();
             nextReservation.setStatus(ReservationStatus.READY);
             reservationRepository.save(nextReservation);
 
