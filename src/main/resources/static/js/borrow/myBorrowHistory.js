@@ -1,5 +1,6 @@
 import { formatDate } from "./utils.js";
-import {renderPagination} from "./renderPagination.js";
+import { renderPagination } from "./renderPagination.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     loadBorrowHistory(0);
@@ -9,14 +10,14 @@ async function loadBorrowHistory(page) {
     try {
         const response = await fetch(`/api/v1/my/borrow-history?page=${page}`, {
             method: "GET",
-            credentials:"include"
         });
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error('대출 이력 조회 실패');
+            showAlertToast(data.message);
+            return;
         }
 
-        const data = await response.json();
         renderBorrowHistory(data.content, page);
         renderPagination(data.totalPages, data.number, loadBorrowHistory);
     } catch (error) {

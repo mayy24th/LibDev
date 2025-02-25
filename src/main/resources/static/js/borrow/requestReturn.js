@@ -1,19 +1,20 @@
 import { statusColor } from "./utils.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
 export async function requestReturn(borrowId) {
     try {
         const response = await fetch(`/api/v1/return/${borrowId}`, {
             method: "PATCH"
         });
+        const data = await response.json();
 
         if (!response.ok) {
-            alert("반납 신청 요청 실패");
-            throw new Error("반납 신청 요청 실패");
+            showAlertToast(data.message);
+            return;
         }
 
-        const data = await response.json();
         updateBorrowStatus(data);
-        alert("반납 신청이 완료되었습니다.");
+        showAlertToast("반납 신청이 완료되었습니다.");
     } catch (error) {
         console.error("Error:", error);
     }

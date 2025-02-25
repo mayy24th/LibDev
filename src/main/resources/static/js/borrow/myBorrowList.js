@@ -1,6 +1,7 @@
 import { formatDate, statusColor } from "./utils.js";
 import { extendBorrow } from "./extendBorrow.js";
 import { requestReturn } from "./requestReturn.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     fetchCurrentBorrows();
@@ -10,14 +11,14 @@ async function fetchCurrentBorrows() {
     try {
         const response = await fetch("/api/v1/my/borrow-status", {
             method: "GET",
-            credentials:"include"
         });
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error('대출 현황 조회 실패');
+            showAlertToast(data.message);
+            return;
         }
 
-        const data = await response.json();
         renderCurrentBorrows(data);
     } catch (error) {
         console.error('Error:', error);

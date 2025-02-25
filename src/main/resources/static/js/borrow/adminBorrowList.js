@@ -1,6 +1,7 @@
-import {formatDate, statusColor} from "./utils.js";
-import {renderPagination} from "./renderPagination.js";
-import {approveReturn} from "./approveReturn.js";
+import { formatDate, statusColor } from "./utils.js";
+import { renderPagination } from "./renderPagination.js";
+import { approveReturn } from "./approveReturn.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
 const statusFilter = document.querySelector("#status-filter");
 
@@ -13,10 +14,13 @@ loadBorrowList(0, statusFilter.value); // 첫 페이지 로드
 async function loadBorrowList(page, status) {
     try {
         const response = await fetch(`/api/v1/borrow-list?page=${page}&status=${status}`);
-        if (!response.ok) {
-            throw new Error("대출 내역을 불러오는데 실패했습니다.");
-        }
+
         const data = await response.json();
+
+        if (!response.ok) {
+            showAlertToast(data.message);
+            return;
+        }
 
         displayBorrowList(data.content);
         renderPagination(data.totalPages, data.number, (newPage) => loadBorrowList(newPage, statusFilter.value));
