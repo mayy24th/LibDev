@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
             pagination.style.display = "none";
             return;
         } else {
-            pagination.style.display = "block";
+            pagination.style.display = "";
         }
 
         const totalPages = Math.ceil(booksData.length / booksPerPage);
