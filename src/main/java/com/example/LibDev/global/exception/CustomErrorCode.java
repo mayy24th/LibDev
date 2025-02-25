@@ -37,6 +37,8 @@ public enum CustomErrorCode {
     // review 관련 에러
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "한줄평 정보를 찾을 수 없습니다."),
     REVIEW_DELETE_FORBIDDEN(HttpStatus.BAD_REQUEST, "본인이 작성한 한줄평만 삭제할 수 있습니다."),
+    PROFANITY_DETECTED(HttpStatus.BAD_REQUEST, "비속어가 포함된 내용은 작성할 수 없습니다."),
+    PROFANITY_FILTER_SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "비속어 필터 API 요청에 실패했습니다."),
 
     // Redis cache 관련 에러
     CACHE_CONVERSION_FAILED(HttpStatus.NOT_FOUND, "캐시 데이터 변환 중 오류가 발생했습니다.");
