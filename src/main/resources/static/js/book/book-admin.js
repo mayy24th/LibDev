@@ -151,6 +151,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const pagination = document.getElementById("pagination");
         pagination.innerHTML = "";
 
+        if (booksData.length === 0) {
+            pagination.style.display = "none";
+            return;
+        } else {
+            pagination.style.display = "block";
+        }
+
         const totalPages = Math.ceil(booksData.length / booksPerPage);
         const pageGroupSize = 5;
         const startPage = Math.floor((currentPage - 1) / pageGroupSize) * pageGroupSize + 1;
