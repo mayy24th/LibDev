@@ -1,10 +1,12 @@
+import {showAlertToast} from "../utils/showAlertToast.js";
+
 const codeBtn = document.getElementById("codeSubmit");
 
 codeBtn.addEventListener("click", async () => {
     const verificationCode = document.getElementById("code").value.trim();
 
     if (!verificationCode) {
-        alert("인증번호를 입력해주세요.");
+        showAlertToast("인증번호를 입력해주세요.");
         return;
     }
 
@@ -20,16 +22,16 @@ codeBtn.addEventListener("click", async () => {
         const result = await response.json();
 
         if(!response.ok){
-            alert("유효하지 않은 인증번호입니다.")
+            showAlertToast("유효하지 않은 인증번호입니다.")
             return;
         }
 
-        alert(result.data);
+        showAlertToast(result.data);
 
         window.location.href = "/auths/password-find/reset"
 
     } catch (error){
-        alert("인증 과정 중 오류가 발생했습니다");
+        showAlertToast("인증 과정 중 오류가 발생했습니다");
         console.log(error);
     }
 })
