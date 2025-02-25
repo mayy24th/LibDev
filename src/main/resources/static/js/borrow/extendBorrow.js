@@ -1,18 +1,20 @@
 import { formatDate } from "./utils.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
 export async function extendBorrow(borrowId) {
     try {
         const response = await fetch(`/api/v1/extend/${borrowId}`, {
             method: "PATCH"
         });
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error("연장 요청 실패");
+            showAlertToast(data.message);
+            return;
         }
 
-        const data = await response.json();
         updateBorrow(data);
-        alert("대출 기간이 7일 연장되었습니다.");
+        showAlertToast("대출 기간이 7일 연장되었습니다.");
     } catch (error) {
         console.error("Error:", error);
     }

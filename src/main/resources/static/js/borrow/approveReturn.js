@@ -1,26 +1,26 @@
 import { formatDate, statusColor } from "./utils.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
+import { showConfirmToast } from "../utils/showConfirmToast.js";
 
 export async function approveReturn(borrowId) {
-    if (!confirm("해당 도서를 반납 처리 하시겠습니까?")) {
-        return;
-    }
+    showConfirmToast("해당 도서를 반납 처리 하시겠습니까?", async () => {
+        try {
+            const response = await fetch(`/api/v1/approve-return/${borrowId}`, {
+                method: "PATCH"
+            });
+            const data = await response.json();
 
-    try {
-        const response = await fetch(`/api/v1/approve-return/${borrowId}`, {
-            method: "PATCH"
-        });
+            if (!response.ok) {
+                showAlertToast(data.message);
+                return;
+            }
 
-        if (!response.ok) {
-            alert("반납 승인 실패");
-            throw new Error("반납 승인 실패");
+            updateReturnStatus(data);
+            showAlertToast("해당 도서가 반납 처리 되었습니다.");
+        } catch (error) {
+            console.error("Error:", error);
         }
-
-        const data = await response.json();
-        updateReturnStatus(data);
-        alert("해당 도서가 반납 처리 되었습니다.");
-    } catch (error) {
-        console.error("Error:", error);
-    }
+    });
 }
 
 function updateReturnStatus(borrow) {

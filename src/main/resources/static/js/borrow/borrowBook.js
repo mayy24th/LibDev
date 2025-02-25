@@ -1,5 +1,6 @@
 import { fetchBookDetails } from "/js/book/detail.js";
 import { attachReservationEvent } from "/js/reservation/reservation.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
 const borrowButton = document.querySelector(".borrow-btn");
 
@@ -17,12 +18,13 @@ async function borrowBook(bookId) {
         });
 
         if (!response.ok) {
-            alert("도서 대출 실패");
-            throw new Error("도서 대출 실패");
+            const data = await response.json();
+            showAlertToast(data.message);
+            return;
         }
 
         updateBorrowBtn(bookId);
-        alert("해당 도서가 대출되었습니다.");
+        showAlertToast("해당 도서가 대출되었습니다.");
 
         await fetchBookDetails(bookId);
     } catch (error) {
