@@ -1,3 +1,7 @@
+import { showAlertToast } from "../utils/showAlertToast.js";
+import { showConfirmToast } from "../utils/showConfirmToast.js";
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const searchButton = document.getElementById("search-button");
     const searchInput = document.getElementById("search-input");
@@ -46,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function deleteBook(bookId) {
-        if (confirm("정말 이 도서를 삭제하시겠습니까?")) {
+        showConfirmToast("정말 이 도서를 삭제하시겠습니까?", () => {
             fetch(`/api/v1/books/${bookId}`, {
                 method: 'DELETE'
             })
@@ -56,18 +60,18 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (bookItem) {
                             bookItem.remove();
                         }
-                        alert("도서가 삭제되었습니다.");
+                        showAlertToast("도서가 삭제되었습니다.");
                         booksData = booksData.filter(book => book.bookId !== bookId);
                         renderBookList();
                     } else {
-                        alert("도서 삭제에 실패했습니다.");
+                        showAlertToast("도서 삭제에 실패했습니다.");
                     }
                 })
                 .catch(error => {
                     console.error("삭제 오류:", error);
-                    alert("도서 삭제 중 오류가 발생했습니다.");
+                    showAlertToast("도서 삭제 중 오류가 발생했습니다.");
                 });
-        }
+        });
     }
 
     function renderBookList() {

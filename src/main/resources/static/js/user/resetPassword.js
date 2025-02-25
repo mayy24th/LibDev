@@ -1,3 +1,5 @@
+import {showAlertToast} from "../utils/showAlertToast.js";
+
 const resetBtn = document.getElementById("resetSubmit");
 
 resetBtn.addEventListener("click", async() => {
@@ -5,12 +7,12 @@ resetBtn.addEventListener("click", async() => {
     const confirmPassword = document.getElementById("confirmPassword").value;
 
     if(!password){
-        alert("비밀번호를 입력해주세요.")
+        showAlertToast("비밀번호를 입력해주세요.")
         return;
     }
 
     if(password !== confirmPassword){
-        alert("비밀번호가 일치하지 않습니다.");
+        showAlertToast("비밀번호가 일치하지 않습니다.");
         return;
     }
 
@@ -24,13 +26,13 @@ resetBtn.addEventListener("click", async() => {
         const result = await  response.json();
 
         if(!response.ok){
-            alert("비밀번호가 변경되지 않았습니다")
+            showAlertToast("비밀번호가 변경되지 않았습니다")
             return;
         }
-        alert(result.data);
+        showAlertToast(result.data);
 
         window.location.href = "/users/login"
     } catch (error){
-        alert("비밀번호 재설정 중 오류가 발생했습니다.")
+        showAlertToast("비밀번호 재설정 중 오류가 발생했습니다.")
     }
 })

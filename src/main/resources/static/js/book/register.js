@@ -1,4 +1,4 @@
-import { showAlertToast } from "../utils/utils.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const searchButton = document.getElementById('searchButton');
