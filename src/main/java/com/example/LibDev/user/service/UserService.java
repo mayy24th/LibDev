@@ -2,8 +2,13 @@ package com.example.LibDev.user.service;
 
 import com.example.LibDev.auth.jwt.JwtProvider;
 import com.example.LibDev.auth.service.AuthService;
+import com.example.LibDev.borrow.entity.type.Status;
+import com.example.LibDev.borrow.repository.BorrowRepository;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
+import com.example.LibDev.reservation.entity.Reservation;
+import com.example.LibDev.reservation.repository.ReservationRepository;
+import com.example.LibDev.reservation.service.ReservationService;
 import com.example.LibDev.user.dto.JoinReqDto;
 import com.example.LibDev.user.dto.UserResDto;
 import com.example.LibDev.user.dto.UserUpdateReqDto;
@@ -11,6 +16,8 @@ import com.example.LibDev.user.entity.User;
 import com.example.LibDev.user.entity.type.Role;
 import com.example.LibDev.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,9 +30,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BorrowRepository borrowRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final AuthService authService;
+    private final ReservationService reservationService;
+    private final ReservationRepository reservationRepository;
 
     public UserResDto join(JoinReqDto joinReqDto) {
 
@@ -105,9 +115,22 @@ public class UserService {
     /*회원 탈퇴*/
     @Transactional
     public void deleteUser(HttpServletRequest request) {
+
         String accessToken = jwtProvider.resolveTokenInCookie(request);
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findLoginUserByEmail(email);
+
+        if(borrowRepository.countByUserAndStatusNot(user, Status.RETURNED)>0){
+            throw new CustomException(CustomErrorCode.USER_HAS_ACTIVE_BORROWS);
+        }
+
+        List<Reservation> reservations = reservationRepository.findByUser(user);
+
+        if(!reservations.isEmpty()){
+            for(Reservation reservation : reservations){
+                reservationService.cancelReservation(user.getId(), reservation.getId());
+            }
+        }
 
         authService.deleteToken(accessToken);
         user.deleteUser();
