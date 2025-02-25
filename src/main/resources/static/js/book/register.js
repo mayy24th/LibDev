@@ -6,6 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelBtn = document.getElementById("cancelBtn");
 
     searchButton.addEventListener('click', searchBooks);
+    searchQuery.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            searchBooks();
+        }
+    });
     registerBtn.addEventListener('click', registerBook);
 
     if (cancelBtn) {
