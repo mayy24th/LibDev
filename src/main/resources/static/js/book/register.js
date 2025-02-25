@@ -6,6 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelBtn = document.getElementById("cancelBtn");
 
     searchButton.addEventListener('click', searchBooks);
+    searchQuery.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            searchBooks();
+        }
+    });
     registerBtn.addEventListener('click', registerBook);
 
     if (cancelBtn) {
@@ -13,6 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
             location.href = "/books/book-admin";
         });
     }
+
+    searchModal.addEventListener("shown.bs.modal", () => {
+        searchQuery.focus();
+    });
 });
 
 // 검색 함수 (도서 검색 후 결과를 표시)
@@ -124,6 +133,11 @@ function registerBook() {
     const topicId = document.getElementById('bookTopicId').textContent;
     const contents = document.getElementById('bookContents').textContent;
     const thumbnail = document.getElementById('bookThumbnail').src;
+
+    if (!title) {
+        showAlertToast("등록할 도서를 선택해주세요");
+        return;
+    }
 
     fetch('/api/v1/books/register', {
         method: 'POST',
