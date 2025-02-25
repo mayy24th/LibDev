@@ -18,7 +18,7 @@
 
     <div class="table-container mt-2">
 
-        <div class="status-filter-container text-end mb-4">
+        <div class="status-action-container d-flex align-items-center justify-content-end mb-4">
             <select id="status-filter" class="form-select w-auto d-inline-block">
                 <option value="ALL">전체 보기</option>
                 <option value="BORROWED">대출 중</option>
@@ -26,6 +26,7 @@
                 <option value="RETURN_REQUESTED">반납 신청</option>
                 <option value="RETURNED">반납 완료</option>
             </select>
+            <button id="return-approve-btn" class="btn">반납 승인</button>
         </div>
 
         <table class="table text-center align-middle">
@@ -41,7 +42,7 @@
                     <th>연장</th>
                     <th>연체</th>
                     <th>상태</th>
-                    <th>반납 관리</th>
+                    <th>반납</th>
                 </tr>
             </thead>
             <tbody class="borrow-list"></tbody>
