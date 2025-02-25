@@ -1,5 +1,6 @@
 package com.example.LibDev.admin.controller;
 
+import com.example.LibDev.admin.dto.UpdateRoleDto;
 import com.example.LibDev.admin.service.AdminService;
 import com.example.LibDev.global.dto.GlobalResponseDto;
 import com.example.LibDev.user.service.UserService;
@@ -8,9 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,9 +24,16 @@ public class AdminApiController {
                 .body(GlobalResponseDto.success(HttpStatus.OK, userService.info()));
     }
 
-    @GetMapping("/api/admin/v1/admins/allUsers")
+    @GetMapping("/api/admin/v1/admins/user-list")
     public ResponseEntity<GlobalResponseDto> getAllUsers(@RequestParam(value = "page", defaultValue = "0") int page) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(GlobalResponseDto.success(HttpStatus.OK, adminService.findAllUsers(page)));
+    }
+
+    @PatchMapping("/api/admin/v1/admins/change-role")
+    public ResponseEntity<GlobalResponseDto> changeRole(@RequestBody UpdateRoleDto updateRoleDto) {
+        adminService.changeRole(updateRoleDto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(GlobalResponseDto.success(HttpStatus.OK,"권한 변경 성공"));
     }
 }
