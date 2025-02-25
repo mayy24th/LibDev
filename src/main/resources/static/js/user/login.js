@@ -17,11 +17,14 @@ form.addEventListener("submit", async (event) => {
         });
 
         const result = await response.json();
+        if(result.code === 401){
+            showAlertToast(result.data)
+            return;
+        }
         showAlertToast(result.data)
 
         window.location.href = "/home";
     } catch (error){
-        //추후 세부 에러 알림 표시
         showAlertToast("로그인 중 오류가 발생했습니다.");
         console.error(error);
     }

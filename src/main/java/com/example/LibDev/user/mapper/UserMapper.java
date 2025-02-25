@@ -1,6 +1,7 @@
 package com.example.LibDev.user.mapper;
 
 import com.example.LibDev.user.dto.UserResDto;
+import com.example.LibDev.user.dto.UserServiceCountResDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,4 +16,7 @@ public interface UserMapper {
                                                  @Param("email") String email);
 
     int countAllUsers();
+
+    UserServiceCountResDto getUserServiceCount(@Param("email") String email);
+
 }
