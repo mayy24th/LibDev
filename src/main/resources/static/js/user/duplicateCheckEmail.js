@@ -1,9 +1,11 @@
+import {showAlertToast} from "../utils/showAlertToast.js";
+
 export async function duplicateCheckEmail() {
     const email = document.getElementById("email").value;
     const domain = document.getElementById("emailDomain").value;
 
     if (!email || !domain) {
-        alert("이메일을 입력하세요.");
+        showAlertToast("이메일을 입력하세요.");
         return false;
     }
 

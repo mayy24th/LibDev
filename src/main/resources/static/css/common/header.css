@@ -3,8 +3,7 @@
     text-align: right;
     padding: 10px 30px;
     font-size: 14px;
-    width: 100%;
-    margin-right: 50px;
+    width: 100vw;
 }
 
 .header {
@@ -47,7 +46,7 @@
     display: block;
 }
 
-.dropdown {
+.header-dropdown {
     display: none;
     position: absolute;
     background-color: #654321;
@@ -57,22 +56,22 @@
     z-index: 1000;
 }
 
-.dropdown li {
+.header-dropdown li {
     list-style: none;
 }
 
-.dropdown a {
+.header-dropdown a {
     color: white;
     padding: 10px;
     text-decoration: none;
     display: block;
 }
 
-.dropdown a:hover {
+.header-dropdown a:hover {
     background-color: #4F2F1D;
 }
 
-.nav > li:hover .dropdown {
+.nav > li:hover .header-dropdown {
     display: block;
 }
 
