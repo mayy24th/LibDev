@@ -72,5 +72,11 @@ public class UserApiController {
                 .body(GlobalResponseDto.success(HttpStatus.OK,"회원탈퇴 완료"));
     }
 
+    @GetMapping("/api/v1/users/count")
+    public ResponseEntity<GlobalResponseDto> countService() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(GlobalResponseDto.success(HttpStatus.OK, userService.getUserServiceCount()));
+    }
+
 
 }

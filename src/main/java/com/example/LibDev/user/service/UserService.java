@@ -7,13 +7,17 @@ import com.example.LibDev.borrow.repository.BorrowRepository;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.reservation.entity.Reservation;
+import com.example.LibDev.reservation.entity.type.ReservationStatus;
 import com.example.LibDev.reservation.repository.ReservationRepository;
 import com.example.LibDev.reservation.service.ReservationService;
+import com.example.LibDev.review.repository.ReviewRepository;
 import com.example.LibDev.user.dto.JoinReqDto;
 import com.example.LibDev.user.dto.UserResDto;
+import com.example.LibDev.user.dto.UserServiceCountResDto;
 import com.example.LibDev.user.dto.UserUpdateReqDto;
 import com.example.LibDev.user.entity.User;
 import com.example.LibDev.user.entity.type.Role;
+import com.example.LibDev.user.mapper.UserMapper;
 import com.example.LibDev.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -36,6 +40,8 @@ public class UserService {
     private final AuthService authService;
     private final ReservationService reservationService;
     private final ReservationRepository reservationRepository;
+    private final ReviewRepository reviewRepository;
+    private final UserMapper userMapper;
 
     public UserResDto join(JoinReqDto joinReqDto) {
 
@@ -134,6 +140,12 @@ public class UserService {
 
         authService.deleteToken(accessToken);
         user.deleteUser();
+    }
+
+    /*회원 서비스 이력 현황 카운트*/
+    public UserServiceCountResDto getUserServiceCount() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userMapper.getUserServiceCount(email);
     }
 
     /*이메일 반환*/
