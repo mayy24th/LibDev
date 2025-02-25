@@ -45,6 +45,7 @@ public class BorrowService {
     public List<BorrowResDto> getCurrentBorrowsByUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findLoginUserByEmail(email);
+        log.debug("대출 현황 조회 회원:{}", email);
 
         if (user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
@@ -92,7 +93,8 @@ public class BorrowService {
     public void borrow(Long bookId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("해당 책이 존재하지 않습니다."));
+
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
         log.debug("대출 신청 - User Name: {}, Book Title: {}", user.getName(), book.getTitle());
 
         checkMemberBorrowingStatus(user);
@@ -215,6 +217,7 @@ public class BorrowService {
         return BorrowResDto.builder()
                 .id(borrow.getId())
                 .bookTitle(borrow.getBook().getTitle())
+                .callNumber(borrow.getBook().getCallNumber())
                 .userEmail(borrow.getUser().getEmail())
                 .status(borrow.getStatus().getDescription())
                 .borrowDate(borrow.getCreatedAt())

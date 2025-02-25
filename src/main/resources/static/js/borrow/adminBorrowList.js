@@ -54,6 +54,9 @@ function displayBorrowList(borrowList) {
         const bookTitle = document.createElement("td");
         bookTitle.textContent = borrow.bookTitle;
 
+        const callNumber = document.createElement("td");
+        callNumber.textContent = borrow.callNumber;
+
         const userEmail = document.createElement("td");
         userEmail.textContent = borrow.userEmail;
 
@@ -64,7 +67,7 @@ function displayBorrowList(borrowList) {
         dueDate.textContent = formatDate(borrow.dueDate);
 
         const returnDate = document.createElement("td");
-        returnDate.textContent = borrow.status == "반납 완료" ? formatDate(borrow.returnDate) : "-";
+        returnDate.textContent = borrow.status === "반납 완료" ? formatDate(borrow.returnDate) : "-";
         returnDate.classList.add("return-date");
 
         const extended = document.createElement("td");
@@ -79,7 +82,7 @@ function displayBorrowList(borrowList) {
         borrowStatus.classList.add("borrow-status");
 
         const returnbtn = document.createElement("td");
-        if (borrow.status == "반납 신청") {
+        if (borrow.status === "반납 신청") {
             const btn = document.createElement("button");
             btn.textContent = "반납 확인";
             btn.classList.add("btn", "return-approve-btn");
@@ -89,6 +92,7 @@ function displayBorrowList(borrowList) {
 
         borrowItem.appendChild(borrowId);
         borrowItem.appendChild(bookTitle);
+        borrowItem.appendChild(callNumber);
         borrowItem.appendChild(userEmail);
         borrowItem.appendChild(borrowDate);
         borrowItem.appendChild(dueDate);

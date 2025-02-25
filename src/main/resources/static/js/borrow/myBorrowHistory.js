@@ -2,9 +2,7 @@ import { formatDate } from "./utils.js";
 import { renderPagination } from "./renderPagination.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
 
-document.addEventListener("DOMContentLoaded", function () {
-    loadBorrowHistory(0);
-});
+loadBorrowHistory(0);
 
 async function loadBorrowHistory(page) {
     try {

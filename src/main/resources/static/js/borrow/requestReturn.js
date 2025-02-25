@@ -23,12 +23,13 @@ export async function requestReturn(borrowId) {
 function updateBorrowStatus(borrow) {
     const requestReturnBtn = document.querySelector(`#request-return-btn-${borrow.id}`);
     if (requestReturnBtn) {
+        requestReturnBtn.textContent = "신청완료";
         requestReturnBtn.disabled = true;
     }
 
     const extendBtn = document.querySelector(`#extend-btn-${borrow.id}`);
     if (extendBtn) {
-        extendBtn.disabled = true;
+        extendBtn.remove();
     }
 
     const borrowStatus = document.querySelector(`#borrow-status-${borrow.id}`);

@@ -3,9 +3,7 @@ import { extendBorrow } from "./extendBorrow.js";
 import { requestReturn } from "./requestReturn.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
 
-document.addEventListener("DOMContentLoaded", function () {
-    fetchCurrentBorrows();
-});
+fetchCurrentBorrows();
 
 async function fetchCurrentBorrows() {
     try {
@@ -94,16 +92,12 @@ function renderCurrentBorrows(borrowList) {
         const btnContainer = document.createElement("div");
         btnContainer.classList.add("btn-container");
 
-        if(!borrow.extended && borrow.borrowAvailable) {
+        if(!borrow.extended && borrow.borrowAvailable && borrow.status !== "반납 신청") {
             const extendBtn = document.createElement("button");
             extendBtn.classList.add("btn", "extend-btn");
             extendBtn.id = `extend-btn-${borrow.id}`;
             extendBtn.textContent = "연장하기";
-            if (borrow.status === "반납 신청") {
-                extendBtn.disabled = true;
-            } else {
-                extendBtn.addEventListener("click", () => extendBorrow(borrow.id));
-            }
+            extendBtn.addEventListener("click", () => extendBorrow(borrow.id));
             btnContainer.appendChild(extendBtn);
         }
 
@@ -113,6 +107,7 @@ function renderCurrentBorrows(borrowList) {
         requestReturnBtn.textContent = "반납신청";
         if (borrow.status === "반납 신청") {
             requestReturnBtn.disabled = true;
+            requestReturnBtn.textContent = "신청완료";
         } else {
             requestReturnBtn.addEventListener("click", () => requestReturn(borrow.id));
         }
