@@ -13,28 +13,33 @@
 </head>
 <body>
 <main layout:fragment="content">
-<!-- 검색창 -->
-<div class="container mt-4">
-    <div class="input-group mb-4">
-        <select id="search-type" name="searchType" class="form-select" style="max-width: 150px; background-color: #623F3F; color: white;">
-            <option value="전체">전체</option>
-            <option value="제목">제목</option>
-            <option value="저자">저자</option>
-            <option value="출판사">출판사</option>
-        </select>
-        <input type="text" id="search-input" name="query" class="form-control" placeholder="검색어를 입력해주세요">
-        <button id="search-button" class="btn text-white search-button" style="background-color: #623F3F;">검색</button>
-    </div>
-</div>
+    <div class="background-container">
+        <div class="slogan">
+            라이프스타일을 담는 그릇<br>엘리스 도서관
+        </div>
 
-<div class="recommendation-container mt-5">
-    <h2 class="title">추천 도서</h2>
-
-    <!-- 추천 도서 리스트 출력 영역 -->
-    <div class="row book-list">
-        <!-- JS로 추천 도서 카드 삽입 -->
+        <div class="search-container">
+            <div class="input-group mb-4">
+                <select id="search-type" name="searchType" class="form-select" style="max-width: 150px; background-color: #623F3F; color: white;">
+                    <option value="전체">전체</option>
+                    <option value="제목">제목</option>
+                    <option value="저자">저자</option>
+                    <option value="출판사">출판사</option>
+                </select>
+                <input type="text" id="search-input" name="query" class="form-control" placeholder="검색어를 입력해주세요">
+                <button id="search-button" class="btn text-white search-button" style="background-color: #623F3F;">검색</button>
+            </div>
+        </div>
     </div>
-</div>
+
+    <div class="recommendation-container mt-5">
+        <h2 class="title">추천 도서</h2>
+
+        <!-- 추천 도서 리스트 출력 영역 -->
+        <div class="row book-list">
+            <!-- JS로 추천 도서 카드 삽입 -->
+        </div>
+    </div>
 </main>
 </body>
 </html>
