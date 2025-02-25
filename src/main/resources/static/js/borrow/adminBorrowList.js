@@ -1,6 +1,5 @@
 import { formatDate, statusColor } from "./utils.js";
 import { renderPagination } from "./renderPagination.js";
-import { approveReturn } from "./approveReturn.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
 
 const statusFilter = document.querySelector("#status-filter");
@@ -81,13 +80,13 @@ function displayBorrowList(borrowList) {
         borrowStatus.style.color = statusColor(borrow.status);
         borrowStatus.classList.add("borrow-status");
 
-        const returnbtn = document.createElement("td");
+        const checkboxTd = document.createElement("td");
         if (borrow.status === "반납 신청") {
-            const btn = document.createElement("button");
-            btn.textContent = "반납 확인";
-            btn.classList.add("btn", "return-approve-btn");
-            btn.addEventListener("click", () => approveReturn(borrow.id));
-            returnbtn.appendChild(btn);
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.classList.add("return-checkbox");
+            checkbox.dataset.borrowId = borrow.id;
+            checkboxTd.appendChild(checkbox);
         }
 
         borrowItem.appendChild(borrowId);
@@ -100,7 +99,7 @@ function displayBorrowList(borrowList) {
         borrowItem.appendChild(extended);
         borrowItem.appendChild(overdueDays);
         borrowItem.appendChild(borrowStatus);
-        borrowItem.appendChild(returnbtn);
+        borrowItem.appendChild(checkboxTd);
 
         borrowListContainer.appendChild(borrowItem);
     });
