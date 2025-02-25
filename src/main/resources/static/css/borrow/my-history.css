@@ -1,3 +1,8 @@
+.order-select-container {
+    width: 70%;
+    margin: 0 auto;
+}
+
 .borrow-list {
     display: flex;
     align-items: center;
