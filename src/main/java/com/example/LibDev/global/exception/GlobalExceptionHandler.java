@@ -19,8 +19,13 @@ public class GlobalExceptionHandler {
         // UNIQUE 제약 조건 위반인지 확인
         if (message.contains("unique_user_book_reservation")) {
             return CustomErrorResponseDto.toResponseEntity(CustomErrorCode.BOOK_ALREADY_RESERVED);
-        } else {
-            return CustomErrorResponseDto.toResponseEntity(CustomErrorCode.DATA_INTEGRITY_VIOLATION);
         }
+
+        // REVIEW 최대 길이 제한 확인
+        if (message.contains("Data too long for column 'content'")){
+            return CustomErrorResponseDto.toResponseEntity(CustomErrorCode.REVIEW_CONTENT_TOO_LONG);
+        }
+
+        return CustomErrorResponseDto.toResponseEntity(CustomErrorCode.DATA_INTEGRITY_VIOLATION);
     }
 }
