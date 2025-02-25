@@ -54,7 +54,10 @@ public class SecurityConfig {
                                 "/reservations/**",
                                 "/api/v1/reservations/**",
                                 "/api/v1/auths/password-find/**",
-                                "/api/recommendation/**").permitAll()
+                                "/api/recommendation/**",
+                                "/api/review",
+                                "/api/review/book/**",
+                                "/api/v1/books/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()

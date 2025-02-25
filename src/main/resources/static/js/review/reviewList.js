@@ -142,12 +142,15 @@ function setupPagination(reviews, currentPage) {
     const paginationContainer = document.getElementById("paginationContainer");
     paginationContainer.innerHTML = "";
 
-    const reviewsPerPage = 5;
+    const reviewsPerPage = 5; // 한 페이지에 표시할 리뷰 수
+    const maxPagesToShow = 5; // 한번에 보여질 최대 페이지 수
     const totalPages = Math.ceil(reviews.length / reviewsPerPage);
-    const maxPagesToShow = 5; // 한 번에 표시할 최대 페이지 수
 
     const startPage = Math.floor((currentPage - 1) / maxPagesToShow) * maxPagesToShow + 1;
     const endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
+
+    const hasPrevGroup = startPage > 1;
+    const hasNextGroup = endPage < totalPages;
 
     const createPageItem = (text, page, disabled = false) => {
         const pageItem = document.createElement("li");
@@ -171,16 +174,19 @@ function setupPagination(reviews, currentPage) {
         return pageItem;
     };
 
-    paginationContainer.appendChild(createPageItem("<<", 1, currentPage === 1));
+    paginationContainer.appendChild(
+        createPageItem("<<", startPage - 1, !hasPrevGroup)
+    );
 
-    // 페이지 번호 표시 (최대 5개씩)
     for (let i = startPage; i <= endPage; i++) {
         const pageItem = createPageItem(i, i);
         if (i === currentPage) pageItem.classList.add("active");
         paginationContainer.appendChild(pageItem);
     }
 
-    paginationContainer.appendChild(createPageItem(">>", totalPages, currentPage === totalPages));
+    paginationContainer.appendChild(
+        createPageItem(">>", endPage + 1, !hasNextGroup)
+    );
 
     updatePageInfo(reviews, currentPage, reviewsPerPage);
     displayReviews(reviews, currentPage, reviewsPerPage);
