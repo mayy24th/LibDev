@@ -90,7 +90,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(
-                GlobalResponseDto.fail(HttpStatus.UNAUTHORIZED, exception.getMessage())
+                GlobalResponseDto.fail(HttpStatus.UNAUTHORIZED, "아이디 혹은 비밀번호가 올바르지 않습니다.")
         ));
     }
 }

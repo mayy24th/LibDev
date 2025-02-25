@@ -1,4 +1,5 @@
 import {reissue} from "./reissue.js";
+import {showAlertToast} from "./showAlertToast.js";
 
 export async function apiRequestRetry(url, options = {}){
     try {
@@ -17,8 +18,12 @@ export async function apiRequestRetry(url, options = {}){
         const result = response.json();
 
         if(response.status === 403){
-            alert("권한이 없습니다.")
+            showAlertToast("권한이 없습니다.")
             window.location.href="/"
+        }
+
+        if (response.status === 400) {
+            return result;
         }
 
         if (!response.ok) {
@@ -28,7 +33,6 @@ export async function apiRequestRetry(url, options = {}){
         return result
     } catch (error) {
         console.error(error);
-        alert(result.data());
-        return null;
+        return { status: 500, message: "서버 오류가 발생했습니다." };
     }
 }

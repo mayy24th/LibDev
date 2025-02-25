@@ -16,6 +16,7 @@ public enum CustomErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT,"이미 사용 중인 이메일입니다"),
     AUTHENTICATION_REQUIRED(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
+    USER_HAS_ACTIVE_BORROWS(HttpStatus.BAD_REQUEST,"대출 중인 도서가 있어 회원 탈퇴가 불가능합니다."),
 
     // borrow 관련 에러
     BORROW_NOT_FOUND(HttpStatus.NOT_FOUND, "대출 내역을 찾을 수 없습니다"),

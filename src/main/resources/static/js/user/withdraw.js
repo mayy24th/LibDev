@@ -12,10 +12,22 @@ document.getElementById("confirm-delete").addEventListener("click", async () =>{
             method: "DELETE"
         })
 
+        if (!result) {
+            showAlertToast("회원탈퇴에 실패하였습니다.");
+            return;
+        }
+
+        if(result.statusCode === 400){
+            showAlertToast(result.message);
+            return;
+        }
+
+
         showAlertToast(result.data)
         window.location.href = "/users/login";
     } catch (error){
+
         showAlertToast("회원탈퇴에 실패하였습니다.")
-        console.log(error)
+        console.log(error.message)
     }
 })
