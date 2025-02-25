@@ -3,6 +3,7 @@ package com.example.LibDev.borrow.service;
 import com.example.LibDev.book.repository.BookRepository;
 import com.example.LibDev.borrow.dto.BorrowResDto;
 import com.example.LibDev.borrow.dto.ExtendResDto;
+import com.example.LibDev.borrow.dto.ReturnApproveReqDto;
 import com.example.LibDev.borrow.dto.ReturnResDto;
 import com.example.LibDev.borrow.entity.Borrow;
 import com.example.LibDev.borrow.entity.type.Status;
@@ -157,25 +158,30 @@ public class BorrowService {
 
     /* 도서 반납 승인 */
     @Transactional
-    public ReturnResDto approveReturn(Long borrowId) {
-        Borrow borrow = borrowRepository.findById(borrowId).orElseThrow(() -> new CustomException(CustomErrorCode.BORROW_NOT_FOUND));
+    public List<ReturnResDto> approveReturn(ReturnApproveReqDto returnApproveReqDto) {
+        List<Borrow> borrowList = borrowRepository.findAllById(returnApproveReqDto.getBorrowIds());
 
+        if (borrowList.isEmpty()) {
+            throw new CustomException(CustomErrorCode.BORROW_NOT_FOUND);
+        }
+
+        return borrowList.stream()
+                .peek(this::processApproveReturn)
+                .map(this::toReturnResDto)
+                .collect(Collectors.toList());
+    }
+
+    /* 반납 승인 처리 로직 */
+    private void processApproveReturn(Borrow borrow) {
         borrow.updateReturnDate(LocalDateTime.now());
 
-        if(borrow.getStatus() == Status.OVERDUE) {
+        if (borrow.getStatus() == Status.OVERDUE) {
             borrow.updateOverdueDays(ChronoUnit.DAYS.between(borrow.getDueDate(), borrow.getReturnDate()));
             updateUserPenaltyExpiration(borrow.getUser(), borrow.getOverdueDays(), borrow.getReturnDate());
         }
 
         borrow.updateStatus(Status.RETURNED);
-
         updateBookIsAvailable(borrow.getBook());
-
-        return ReturnResDto.builder()
-                .id(borrow.getId())
-                .status(borrow.getStatus().getDescription())
-                .returnDate(borrow.getReturnDate())
-                .build();
     }
 
     /* 회원 패널티 만료일 업데이트 */
@@ -204,7 +210,7 @@ public class BorrowService {
 
     /* 최대 대출 가능 권 수 초과 검사 */
     public void checkMaxBorrowLimit(User user) {
-        int borrowedCount = borrowRepository.countByUserAndStatus(user, Status.BORROWED);
+        int borrowedCount = borrowRepository.countByUserAndStatusNot(user, Status.RETURNED);
 
         if (borrowedCount >= MAX_BORROW_LIMIT) {
             log.debug("대출 불가 - 대출 가능 권 수 초과");
@@ -213,7 +219,7 @@ public class BorrowService {
     }
 
     /* entity -> borrowResDto 변환 */
-    public BorrowResDto toBorrowResDto(Borrow borrow) {
+    private BorrowResDto toBorrowResDto(Borrow borrow) {
         return BorrowResDto.builder()
                 .id(borrow.getId())
                 .bookTitle(borrow.getBook().getTitle())
@@ -227,6 +233,15 @@ public class BorrowService {
                 .overdue(borrow.isOverdue())
                 .overdueDays(borrow.getOverdueDays())
                 .borrowAvailable(borrow.getUser().isBorrowAvailable())
+                .build();
+    }
+
+    /* entity -> returnResDto 변환 */
+    private ReturnResDto toReturnResDto(Borrow borrow) {
+        return ReturnResDto.builder()
+                .id(borrow.getId())
+                .status(borrow.getStatus().getDescription())
+                .returnDate(borrow.getReturnDate())
                 .build();
     }
 }

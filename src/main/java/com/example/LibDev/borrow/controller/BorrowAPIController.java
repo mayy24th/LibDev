@@ -2,6 +2,7 @@ package com.example.LibDev.borrow.controller;
 
 import com.example.LibDev.borrow.dto.BorrowResDto;
 import com.example.LibDev.borrow.dto.ExtendResDto;
+import com.example.LibDev.borrow.dto.ReturnApproveReqDto;
 import com.example.LibDev.borrow.dto.ReturnResDto;
 import com.example.LibDev.borrow.service.BorrowService;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,7 @@ public class BorrowAPIController {
 
     /* 회원별 대출 이력 조회 */
     @GetMapping("/api/v1/my/borrow-history")
-    public ResponseEntity<Page<BorrowResDto>> getBorrowHistory(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                               @RequestParam(value = "status", defaultValue = "ALL") String status) {
+    public ResponseEntity<Page<BorrowResDto>> getBorrowHistory(@RequestParam(value = "page", defaultValue = "0") int page) {
         return ResponseEntity.ok(borrowService.getBorrowsByUser(page));
     }
 
@@ -61,9 +61,9 @@ public class BorrowAPIController {
     }
 
     /* 도서 반납 승인 */
-    @PatchMapping("/api/v1/approve-return/{borrowId}")
-    public ResponseEntity<ReturnResDto> approveReturn(@PathVariable Long borrowId) {
-        log.debug("반납 승인 - borrowId:{}", borrowId);
-        return ResponseEntity.ok(borrowService.approveReturn(borrowId));
+    @PatchMapping("/api/v1/approve-return")
+    public ResponseEntity<List<ReturnResDto>> approveReturn(@RequestBody ReturnApproveReqDto returnApproveReqDto) {
+        log.debug("반납 승인 - borrowIds:{}", returnApproveReqDto.getBorrowIds());
+        return ResponseEntity.ok(borrowService.approveReturn(returnApproveReqDto));
     }
 }

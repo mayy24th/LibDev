@@ -1,6 +1,5 @@
 import { formatDate, statusColor } from "./utils.js";
 import { renderPagination } from "./renderPagination.js";
-import { approveReturn } from "./approveReturn.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
 
 const statusFilter = document.querySelector("#status-filter");
@@ -23,13 +22,25 @@ async function loadBorrowList(page, status) {
         }
 
         displayBorrowList(data.content);
-        renderPagination(data.totalPages, data.number, (newPage) => loadBorrowList(newPage, statusFilter.value));
+
+        if (data.content.length === 0) {
+            document.querySelector("#pagination").style.display = "none";
+        } else {
+            document.querySelector("#pagination").style.removeProperty("display");
+            renderPagination(data.totalPages, data.number, (newPage) => loadBorrowList(newPage, statusFilter.value));
+        }
     } catch (error) {
         console.error(error.message);
     }
 }
 
 function displayBorrowList(borrowList) {
+    const tableContainer = document.querySelector(".table-container");
+    const existingBlankMessage = document.querySelector(".blank-message");
+    if(existingBlankMessage) {
+        existingBlankMessage.remove();
+    }
+
     const borrowListContainer = document.querySelector(".borrow-list");
     borrowListContainer.innerHTML = ""; // 기존 내용 초기화
 
@@ -37,10 +48,9 @@ function displayBorrowList(borrowList) {
     if (!borrowList || borrowList.length === 0) {
         const blankMessage = document.createElement("p");
         blankMessage.textContent = "대출 정보가 없습니다.";
-        blankMessage.style.fontSize = "1.2rem";
-        blankMessage.style.marginTop = "1rem";
+        blankMessage.classList.add("blank-message");
 
-        borrowListContainer.appendChild(blankMessage);
+        tableContainer.appendChild(blankMessage);
         return;
     }
 
@@ -81,13 +91,13 @@ function displayBorrowList(borrowList) {
         borrowStatus.style.color = statusColor(borrow.status);
         borrowStatus.classList.add("borrow-status");
 
-        const returnbtn = document.createElement("td");
+        const checkboxTd = document.createElement("td");
         if (borrow.status === "반납 신청") {
-            const btn = document.createElement("button");
-            btn.textContent = "반납 확인";
-            btn.classList.add("btn", "return-approve-btn");
-            btn.addEventListener("click", () => approveReturn(borrow.id));
-            returnbtn.appendChild(btn);
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.classList.add("return-checkbox");
+            checkbox.dataset.borrowId = borrow.id;
+            checkboxTd.appendChild(checkbox);
         }
 
         borrowItem.appendChild(borrowId);
@@ -100,7 +110,7 @@ function displayBorrowList(borrowList) {
         borrowItem.appendChild(extended);
         borrowItem.appendChild(overdueDays);
         borrowItem.appendChild(borrowStatus);
-        borrowItem.appendChild(returnbtn);
+        borrowItem.appendChild(checkboxTd);
 
         borrowListContainer.appendChild(borrowItem);
     });

@@ -30,6 +30,7 @@ function renderCurrentBorrows(borrowList) {
     if (!borrowList || borrowList.length === 0) {
         const blankMessage = document.createElement("p");
         blankMessage.textContent = "현재 대출 중인 도서가 없습니다.";
+        blankMessage.classList.add("blank-message");
         borrowListContainer.appendChild(blankMessage);
         return;
     }
