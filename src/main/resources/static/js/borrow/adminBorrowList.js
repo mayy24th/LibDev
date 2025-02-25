@@ -1,29 +1,58 @@
-import {formatDate, statusColor} from "./utils.js";
-import {renderPagination} from "./renderPagination.js";
-import {approveReturn} from "./approveReturn.js";
+import { formatDate, statusColor } from "./utils.js";
+import { renderPagination } from "./renderPagination.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-    loadBorrowList(0); // 첫 페이지 로드
+const statusFilter = document.querySelector("#status-filter");
+
+statusFilter.addEventListener("change", () => {
+    loadBorrowList(0, statusFilter.value);
 });
 
-async function loadBorrowList(page) {
+loadBorrowList(0, statusFilter.value); // 첫 페이지 로드
+
+async function loadBorrowList(page, status) {
     try {
-        const response = await fetch(`/api/v1/borrow-list?page=${page}`);
-        if (!response.ok) {
-            throw new Error("대출 내역을 불러오는데 실패했습니다.");
-        }
+        const response = await fetch(`/api/v1/borrow-list?page=${page}&status=${status}`);
+
         const data = await response.json();
 
+        if (!response.ok) {
+            showAlertToast(data.message);
+            return;
+        }
+
         displayBorrowList(data.content);
-        renderPagination(data.totalPages, data.number, loadBorrowList);
+
+        if (data.content.length === 0) {
+            document.querySelector("#pagination").style.display = "none";
+        } else {
+            document.querySelector("#pagination").style.removeProperty("display");
+            renderPagination(data.totalPages, data.number, (newPage) => loadBorrowList(newPage, statusFilter.value));
+        }
     } catch (error) {
         console.error(error.message);
     }
 }
 
 function displayBorrowList(borrowList) {
+    const tableContainer = document.querySelector(".table-container");
+    const existingBlankMessage = document.querySelector(".blank-message");
+    if(existingBlankMessage) {
+        existingBlankMessage.remove();
+    }
+
     const borrowListContainer = document.querySelector(".borrow-list");
     borrowListContainer.innerHTML = ""; // 기존 내용 초기화
+
+    // 데이터가 없을 경우
+    if (!borrowList || borrowList.length === 0) {
+        const blankMessage = document.createElement("p");
+        blankMessage.textContent = "대출 정보가 없습니다.";
+        blankMessage.classList.add("blank-message");
+
+        tableContainer.appendChild(blankMessage);
+        return;
+    }
 
     borrowList.forEach((borrow) => {
         const borrowItem = document.createElement("tr");
@@ -35,6 +64,9 @@ function displayBorrowList(borrowList) {
         const bookTitle = document.createElement("td");
         bookTitle.textContent = borrow.bookTitle;
 
+        const callNumber = document.createElement("td");
+        callNumber.textContent = borrow.callNumber;
+
         const userEmail = document.createElement("td");
         userEmail.textContent = borrow.userEmail;
 
@@ -45,7 +77,7 @@ function displayBorrowList(borrowList) {
         dueDate.textContent = formatDate(borrow.dueDate);
 
         const returnDate = document.createElement("td");
-        returnDate.textContent = borrow.status == "반납 완료" ? formatDate(borrow.returnDate) : "-";
+        returnDate.textContent = borrow.status === "반납 완료" ? formatDate(borrow.returnDate) : "-";
         returnDate.classList.add("return-date");
 
         const extended = document.createElement("td");
@@ -59,17 +91,18 @@ function displayBorrowList(borrowList) {
         borrowStatus.style.color = statusColor(borrow.status);
         borrowStatus.classList.add("borrow-status");
 
-        const returnbtn = document.createElement("td");
-        if (borrow.status == "반납 신청") {
-            const btn = document.createElement("button");
-            btn.textContent = "반납 확인";
-            btn.classList.add("btn", "return-approve-btn");
-            btn.addEventListener("click", () => approveReturn(borrow.id));
-            returnbtn.appendChild(btn);
+        const checkboxTd = document.createElement("td");
+        if (borrow.status === "반납 신청") {
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.classList.add("return-checkbox");
+            checkbox.dataset.borrowId = borrow.id;
+            checkboxTd.appendChild(checkbox);
         }
 
         borrowItem.appendChild(borrowId);
         borrowItem.appendChild(bookTitle);
+        borrowItem.appendChild(callNumber);
         borrowItem.appendChild(userEmail);
         borrowItem.appendChild(borrowDate);
         borrowItem.appendChild(dueDate);
@@ -77,7 +110,7 @@ function displayBorrowList(borrowList) {
         borrowItem.appendChild(extended);
         borrowItem.appendChild(overdueDays);
         borrowItem.appendChild(borrowStatus);
-        borrowItem.appendChild(returnbtn);
+        borrowItem.appendChild(checkboxTd);
 
         borrowListContainer.appendChild(borrowItem);
     });

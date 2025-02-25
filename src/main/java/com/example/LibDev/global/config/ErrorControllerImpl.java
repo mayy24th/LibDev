@@ -23,6 +23,8 @@ public class ErrorControllerImpl implements ErrorController {
 
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "global/error-404";
+            } else if (statusCode == HttpStatus.FORBIDDEN.value()) {
+                return "global/error-403";
             }
         } else {
             log.error("An unknown error occurred");

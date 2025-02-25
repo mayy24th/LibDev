@@ -1,6 +1,13 @@
 .table-container {
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
+}
+
+.status-action-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
 }
 
 .btn {

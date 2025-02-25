@@ -13,7 +13,7 @@ public class AdminViewController {
 
     @GetMapping("/admin/user-management")
     public String usermanagement() {
-        return "admin/admin-user-management";
+        return "admin/admin-user-manage";
     }
 
 }

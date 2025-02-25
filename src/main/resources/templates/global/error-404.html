@@ -4,20 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>페이지를 찾을 수 없습니다.</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        h1 { color: #d9534f; }
-        p { font-size: 18px; }
-        .container { max-width: 600px; margin: auto; }
-    </style>
+    <link rel="stylesheet" href="/css/common/errorpage.css">
 </head>
 <body>
 <div class="container">
-    <h1>404 - 페이지를 찾을 수 없습니다.</h1>
-    <p>요청하신 페이지가 존재하지 않거나 이동되었습니다.</p>
-    <p><a href="/">홈으로 돌아가기</a></p>
+    <h1 class="error-title">404 ERROR</h1>
+    <p>죄송합니다. 페이지를 찾을 수 없습니다.</p>
+    <p>존재하지 않는 주소를 입력하셨거나,</p>
+    <p>요청하신 페이지의 주소가 변경, 삭제되어 찾을 수 없습니다.</p>
+    <img src="/images/errorpage.png" alt="404" class="error-image">
+    <div class="button-container">
+        <a href="http://localhost:8080/home" class="home-button">홈으로</a>
+    </div>
 </div>
 </body>
 </html>
+
+
+
+
 
 

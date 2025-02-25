@@ -7,7 +7,8 @@ export async function loadReviews(apiEndpoint) {
         const response = await fetch(apiEndpoint, { method: "GET" });
 
         if (!response.ok) {
-            throw new Error(`서버 응답 오류: ${response.status} ${response.statusText}`);
+            const errorData = await response.json(); // ✅ 서버 응답 파싱
+            throw new Error(errorData.message);
         }
 
         const reviews = await response.json();
@@ -17,7 +18,7 @@ export async function loadReviews(apiEndpoint) {
         setupPagination(reviews, 1); // 첫 페이지 초기화
     } catch (error) {
         console.error("한줄평 목록 불러오기 실패:", error);
-        showAlertToast("한줄평 목록을 불러오는 중 오류가 발생했습니다.");
+        showAlertToast(error.message);
     }
 }
 

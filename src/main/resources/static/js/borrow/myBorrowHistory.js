@@ -1,24 +1,34 @@
 import { formatDate } from "./utils.js";
-import {renderPagination} from "./renderPagination.js";
+import { renderPagination } from "./renderPagination.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
-document.addEventListener("DOMContentLoaded", function () {
-    loadBorrowHistory(0);
+const orderSelect = document.querySelector("#order-select");
+
+orderSelect.addEventListener("change", () => {
+    loadBorrowHistory(0, orderSelect.value);
 });
 
-async function loadBorrowHistory(page) {
+loadBorrowHistory(0, orderSelect.value);
+
+async function loadBorrowHistory(page, order) {
     try {
-        const response = await fetch(`/api/v1/my/borrow-history?page=${page}`, {
+        const response = await fetch(`/api/v1/my/borrow-history?page=${page}&order=${order}`, {
             method: "GET",
-            credentials:"include"
         });
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error('대출 이력 조회 실패');
+            showAlertToast(data.message);
+            return;
         }
 
-        const data = await response.json();
         renderBorrowHistory(data.content, page);
-        renderPagination(data.totalPages, data.number, loadBorrowHistory);
+
+        if (data.content.length === 0) {
+            document.querySelector("#pagination").style.display = "none";
+        } else {
+            renderPagination(data.totalPages, data.number, loadBorrowHistory);
+        }
     } catch (error) {
         console.error('Error:', error);
     }
@@ -32,6 +42,7 @@ function renderBorrowHistory(borrowList, currentPage) {
     if (!borrowList || borrowList.length === 0) {
         const blankMessage = document.createElement("p");
         blankMessage.textContent = "대출 이력이 없습니다.";
+        blankMessage.classList.add("blank-message");
         borrowListContainer.appendChild(blankMessage);
         return;
     }

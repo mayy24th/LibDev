@@ -1,7 +1,18 @@
-.blank-message {
-    text-align: center;
-    font-size: 1.2rem;
-    margin-top: 1.2rem;
+.table-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.btn {
+    border: none;
+    color: white;
+    background-color: #5B3A1E;
+}
+
+.btn:hover {
+    border: none;
+    color: white;
+    background-color: #4F2D2D;
 }
 
 .pagination .page-item.active .page-link {

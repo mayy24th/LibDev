@@ -3,6 +3,7 @@ package com.example.LibDev.borrow.service;
 import com.example.LibDev.book.repository.BookRepository;
 import com.example.LibDev.borrow.dto.BorrowResDto;
 import com.example.LibDev.borrow.dto.ExtendResDto;
+import com.example.LibDev.borrow.dto.ReturnApproveReqDto;
 import com.example.LibDev.borrow.dto.ReturnResDto;
 import com.example.LibDev.borrow.entity.Borrow;
 import com.example.LibDev.borrow.entity.type.Status;
@@ -45,6 +46,7 @@ public class BorrowService {
     public List<BorrowResDto> getCurrentBorrowsByUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findLoginUserByEmail(email);
+        log.debug("대출 현황 조회 회원:{}", email);
 
         if (user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
@@ -58,7 +60,7 @@ public class BorrowService {
     }
 
     /* 회원별 대출 이력 조회 */
-    public Page<BorrowResDto> getBorrowsByUser(int page) {
+    public Page<BorrowResDto> getBorrowsByUser(int page, String order) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findLoginUserByEmail(email);
         log.debug("대출 이력 조회 회원:{}", email);
@@ -67,7 +69,8 @@ public class BorrowService {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
 
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        Sort sort = "asc".equals(order) ? Sort.by("id").ascending() : Sort.by("id").descending();
+        Pageable pageable = PageRequest.of(page, 10, sort);
         Page<Borrow> borrowList = borrowRepository.findByUserAndStatus(user, Status.RETURNED, pageable);
 
         return borrowList
@@ -75,11 +78,16 @@ public class BorrowService {
     }
 
     /* 전체 대출 내역 조회 */
-    public Page<BorrowResDto> getAllBorrows(int page) {
+    public Page<BorrowResDto> getAllBorrows(int page, String status) {
         Pageable pageable = PageRequest.of(page, 20, Sort.by("id").descending());
-        Page<Borrow> borrowList = borrowRepository.findAll(pageable);
 
-        return borrowList.map(this::toBorrowResDto);
+        if("ALL".equals(status)) {
+            Page<Borrow> borrowList = borrowRepository.findAll(pageable);
+            return borrowList.map(this::toBorrowResDto);
+        } else {
+            Page<Borrow> borrowList = borrowRepository.findByStatus(Status.valueOf(status), pageable);
+            return borrowList.map(this::toBorrowResDto);
+        }
     }
 
     /* 대출 생성 */
@@ -87,7 +95,8 @@ public class BorrowService {
     public void borrow(Long bookId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("해당 책이 존재하지 않습니다."));
+
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
         log.debug("대출 신청 - User Name: {}, Book Title: {}", user.getName(), book.getTitle());
 
         checkMemberBorrowingStatus(user);
@@ -150,25 +159,30 @@ public class BorrowService {
 
     /* 도서 반납 승인 */
     @Transactional
-    public ReturnResDto approveReturn(Long borrowId) {
-        Borrow borrow = borrowRepository.findById(borrowId).orElseThrow(() -> new CustomException(CustomErrorCode.BORROW_NOT_FOUND));
+    public List<ReturnResDto> approveReturn(ReturnApproveReqDto returnApproveReqDto) {
+        List<Borrow> borrowList = borrowRepository.findAllById(returnApproveReqDto.getBorrowIds());
 
+        if (borrowList.isEmpty()) {
+            throw new CustomException(CustomErrorCode.BORROW_NOT_FOUND);
+        }
+
+        return borrowList.stream()
+                .peek(this::processApproveReturn)
+                .map(this::toReturnResDto)
+                .collect(Collectors.toList());
+    }
+
+    /* 반납 승인 처리 로직 */
+    private void processApproveReturn(Borrow borrow) {
         borrow.updateReturnDate(LocalDateTime.now());
 
-        if(borrow.getStatus() == Status.OVERDUE) {
+        if (borrow.getStatus() == Status.OVERDUE) {
             borrow.updateOverdueDays(ChronoUnit.DAYS.between(borrow.getDueDate(), borrow.getReturnDate()));
             updateUserPenaltyExpiration(borrow.getUser(), borrow.getOverdueDays(), borrow.getReturnDate());
         }
 
         borrow.updateStatus(Status.RETURNED);
-
         updateBookIsAvailable(borrow.getBook());
-
-        return ReturnResDto.builder()
-                .id(borrow.getId())
-                .status(borrow.getStatus().getDescription())
-                .returnDate(borrow.getReturnDate())
-                .build();
     }
 
     /* 회원 패널티 만료일 업데이트 */
@@ -197,7 +211,7 @@ public class BorrowService {
 
     /* 최대 대출 가능 권 수 초과 검사 */
     public void checkMaxBorrowLimit(User user) {
-        int borrowedCount = borrowRepository.countByUserAndStatus(user, Status.BORROWED);
+        int borrowedCount = borrowRepository.countByUserAndStatusNot(user, Status.RETURNED);
 
         if (borrowedCount >= MAX_BORROW_LIMIT) {
             log.debug("대출 불가 - 대출 가능 권 수 초과");
@@ -206,10 +220,11 @@ public class BorrowService {
     }
 
     /* entity -> borrowResDto 변환 */
-    public BorrowResDto toBorrowResDto(Borrow borrow) {
+    private BorrowResDto toBorrowResDto(Borrow borrow) {
         return BorrowResDto.builder()
                 .id(borrow.getId())
                 .bookTitle(borrow.getBook().getTitle())
+                .callNumber(borrow.getBook().getCallNumber())
                 .userEmail(borrow.getUser().getEmail())
                 .status(borrow.getStatus().getDescription())
                 .borrowDate(borrow.getCreatedAt())
@@ -219,6 +234,15 @@ public class BorrowService {
                 .overdue(borrow.isOverdue())
                 .overdueDays(borrow.getOverdueDays())
                 .borrowAvailable(borrow.getUser().isBorrowAvailable())
+                .build();
+    }
+
+    /* entity -> returnResDto 변환 */
+    private ReturnResDto toReturnResDto(Borrow borrow) {
+        return ReturnResDto.builder()
+                .id(borrow.getId())
+                .status(borrow.getStatus().getDescription())
+                .returnDate(borrow.getReturnDate())
                 .build();
     }
 }

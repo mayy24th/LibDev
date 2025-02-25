@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BorrowRepository extends JpaRepository<Borrow, Long> {
-    int countByUserAndStatus(User user, Status status);
+    int countByUserAndStatusNot(User user, Status status);
     Page<Borrow> findByUserAndStatus(User user, Status status, Pageable pageable);
+    Page<Borrow> findByStatus(Status status, Pageable pageable);
     List<Borrow> findByUserAndStatusNotOrderByIdDesc(User user, Status status);
     List<Borrow> findByStatusAndDueDateBefore(Status status, LocalDateTime dueDate);
 

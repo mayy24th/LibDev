@@ -25,14 +25,16 @@ export async function confirmDelete() {
             method: "DELETE"
         });
 
-        if (!response.ok) throw new Error("한줄평 삭제 실패");
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
 
         showAlertToast("한줄평이 삭제되었습니다.")
-        // alert("한줄평이 삭제되었습니다.");
         loadReviews(getReviewApiEndpoint());
         closeDeleteModal();
     } catch (error) {
         console.error(error);
-        alert("한줄평 삭제에 실패했습니다.");
+        showAlertToast(error.message);
     }
 }
