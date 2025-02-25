@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentPage = 1;
     const booksPerPage = 10;
 
+    searchInput.focus();
+
     fetchBooks();
 
     searchButton.addEventListener("click", searchBooks);

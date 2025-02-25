@@ -18,6 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
             location.href = "/books/book-admin";
         });
     }
+
+    searchModal.addEventListener("shown.bs.modal", () => {
+        searchQuery.focus();
+    });
 });
 
 // 검색 함수 (도서 검색 후 결과를 표시)
