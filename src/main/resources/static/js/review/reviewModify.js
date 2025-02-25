@@ -48,14 +48,17 @@ async function createReview(bookId, content) {
             })
         });
 
-        if (!response.ok) throw new Error("한줄평 등록 실패");
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
 
         showAlertToast("한줄평을 등록했습니다.");
         loadReviews(getReviewApiEndpoint());
         closeModifyModal();
     } catch (error) {
         console.error(error);
-        showAlertToast("한줄평을 등록에 실패했습니다.");
+        showAlertToast(error.message);
     }
 }
 
@@ -67,13 +70,16 @@ async function updateReview(reviewId, content) {
             body: JSON.stringify({ content })
         });
 
-        if (!response.ok) throw new Error("한줄평 수정 실패");
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
 
         showAlertToast("한줄평을 수정하였습니다.");
         loadReviews(getReviewApiEndpoint());
         closeModifyModal();
     } catch (error) {
         console.error(error);
-        showAlertToast("한줄평 수정에 실패했습니다.");
+        showAlertToast(error.message);
     }
 }
