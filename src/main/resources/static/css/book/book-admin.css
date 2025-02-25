@@ -124,3 +124,16 @@ body {
 .toast-btn:hover {
     opacity: 0.8;
 }
+
+.custom-btn {
+    background-color: #623F3F;
+    color: white;
+    border: none;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.custom-btn:hover {
+    background-color: #4F2D2D !important;
+    color: white;
+}
