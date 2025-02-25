@@ -6,6 +6,7 @@ import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.review.dto.ReviewDto;
 import com.example.LibDev.review.entity.Review;
+import com.example.LibDev.review.filter.ProfanityFilter;
 import com.example.LibDev.review.mapper.ReviewMapper;
 import com.example.LibDev.review.repository.ReviewRepository;
 import com.example.LibDev.user.dto.UserResDto;
@@ -14,7 +15,6 @@ import com.example.LibDev.user.repository.UserRepository;
 import com.example.LibDev.user.service.UserService;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +27,7 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final UserService userService;
+    private final ProfanityFilter profanityFilter;
 
     /** 한줄평 저장 **/
     @Transactional
@@ -35,6 +36,8 @@ public class ReviewService {
         if(userResDto == null){
             throw new IllegalStateException("로그인이 필요합니다.");
         }
+
+        profanityFilter.checkProfanity(dto.getContent());
 
         User user = userRepository.findByEmail(userResDto.getEmail())
                 .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
@@ -76,6 +79,8 @@ public class ReviewService {
         if(userResDto == null){
             throw new CustomException(CustomErrorCode.AUTHENTICATION_REQUIRED);
         }
+
+        profanityFilter.checkProfanity(dto.getContent());
 
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(()-> new CustomException(CustomErrorCode.REVIEW_NOT_FOUND));
