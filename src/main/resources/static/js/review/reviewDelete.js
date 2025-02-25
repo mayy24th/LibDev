@@ -1,6 +1,6 @@
 import { loadReviews } from "./reviewList.js";
 import { getReviewApiEndpoint } from "../utils/pathUtils.js";
-import { showAlertToast } from "../utils/utils.js"
+import { showAlertToast } from "../utils/showAlertToast.js"
 
 export function openDeleteModal(reviewId) {
     const modal = document.getElementById("deleteModal");

@@ -1,4 +1,4 @@
-import { showAlertToast } from "/js/utils/utils.js";
+import { showAlertToast } from "/js/utils/showAlertToast.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchReservations();

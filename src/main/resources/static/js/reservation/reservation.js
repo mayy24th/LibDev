@@ -1,4 +1,4 @@
-import { showAlertToast } from "/js/utils/utils.js";
+import { showAlertToast } from "/js/utils/showAlertToast.js";
 
 export function attachReservationEvent() {
     const reserveButtons = document.querySelectorAll(".btn.btn-custom-1.reserve-btn");
