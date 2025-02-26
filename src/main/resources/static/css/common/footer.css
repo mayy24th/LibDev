@@ -15,15 +15,20 @@
 }
 
 .privacy-policy {
-    color: brown;
+    color: #790000;
     font-weight: bold;
     text-decoration: none;
 }
 
 .library-name {
     font-weight: bold;
+    color: #333;
+    text-decoration: none;
 }
 
-.library-address {
+
+.footer-copyright {
+    display: block;
+    margin-top: 5px;
     color: #555;
 }
