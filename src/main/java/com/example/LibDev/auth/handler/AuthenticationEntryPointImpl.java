@@ -24,7 +24,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(mapper.writeValueAsString(
-                GlobalResponseDto.fail(HttpStatus.UNAUTHORIZED, "잘못된 접근입니다.")
+                GlobalResponseDto.fail(HttpStatus.UNAUTHORIZED, "로그인 이후에 사용 가능한 기능입니다.")
         ));
     }
 }
