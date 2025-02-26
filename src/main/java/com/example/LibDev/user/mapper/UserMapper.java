@@ -17,6 +17,8 @@ public interface UserMapper {
 
     int countAllUsers();
 
+    int countAllUsersWithFilter(@Param("role") String role, @Param("email") String email);
+
     UserServiceCountResDto getUserServiceCount(@Param("email") String email);
 
 }

@@ -7,5 +7,5 @@ naverBtn.addEventListener("click", () =>{
 const googleBtn = document.getElementById("social-btn-google")
 
 googleBtn.addEventListener("click",() => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google"
+    window.location.href = "/oauth2/authorization/google"
 })

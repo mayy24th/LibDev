@@ -1,6 +1,7 @@
 import { fetchBookDetails } from "/js/book/detail.js";
 import { attachReservationEvent } from "/js/reservation/reservation.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
+import { formatDate } from "./utils.js";
 
 const borrowButton = document.querySelector(".borrow-btn");
 
@@ -16,14 +17,14 @@ async function borrowBook(bookId) {
         const response = await fetch(`/api/v1/borrow?bookId=${bookId}`, {
             method: "POST"
         });
+        const data = await response.json();
 
         if (!response.ok) {
-            const data = await response.json();
             showAlertToast(data.message);
             return;
         }
 
-        updateBorrowBtn(bookId);
+        updateBorrowElement(data);
         showAlertToast("해당 도서가 대출되었습니다.");
 
         await fetchBookDetails(bookId);
@@ -32,22 +33,19 @@ async function borrowBook(bookId) {
     }
 }
 
-function updateBorrowBtn(bookId) {
+function updateBorrowElement(data) {
     const borrowButton = document.querySelector(".borrow-btn");
 
     if (borrowButton) {
-        const parentDiv = borrowButton.parentNode;
+        borrowButton.classList.remove("borrow-btn");
 
-        borrowButton.remove();
-
-        const reserveButton = document.createElement("button");
-        reserveButton.classList.add("btn", "btn-custom-1", "reserve-btn");
-        reserveButton.textContent = "예약하기";
-        reserveButton.dataset.bookId = bookId;
-
-        parentDiv.insertBefore(reserveButton, parentDiv.children[0]);
+        borrowButton.classList.add("reserve-btn");
+        borrowButton.textContent = "예약하기";
 
         // 동적으로 추가된 버튼에 이벤트 부착
         attachReservationEvent();
     }
+
+    const dueDate = document.querySelector("#bookReturnDueDate");
+    dueDate.textContent = formatDate(data.dueDate);
 }

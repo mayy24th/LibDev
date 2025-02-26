@@ -33,7 +33,7 @@ public class AdminService {
 
         List<UserResDto> users = userMapper.findAllUsersWithOverdueDays(defaultSize, offset, role, email);
 
-        int totalCount = userMapper.countAllUsers();
+        int totalCount = userMapper.countAllUsersWithFilter(role, email);
 
         return new PageImpl<>(users, PageRequest.of(page, defaultSize), totalCount);
     }

@@ -60,7 +60,6 @@ export async function fetchBookDetails(bookId) {
         document.getElementById("bookStatus").innerHTML = book.isAvailable
             ? "대출가능<br>[비치중]"
             : `대출불가<br>[대출중]<br>(예약: <span class="reservation-count">${book.reservationCount || 0}명</span>)`;
-        document.getElementById("bookReturnDueDate").textContent = book.returnDueDate || "-";
         document.getElementById("reservationStatusButton").textContent = book.isAvailable ? "예약불가" : "예약가능";
         document.getElementById("reservationStatusButton").disabled = book.isAvailable;
     } catch (error) {
