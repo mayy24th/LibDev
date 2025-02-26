@@ -17,7 +17,7 @@ async function approveReturn() {
 
     showConfirmToast(`선택한 ${borrowIds.length}건을 반납 처리하시겠습니까?`, async () => {
         try {
-            const response = await fetch("/api/v1/approve-return", {
+            const response = await fetch("/api/admin/v1/approve-return", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ borrowIds })
