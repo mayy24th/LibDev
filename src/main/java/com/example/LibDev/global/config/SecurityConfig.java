@@ -54,6 +54,8 @@ public class SecurityConfig {
                                 "/reservations/**",
                                 "/api/v1/reservations/**",
                                 "/api/v1/auths/password-find/**",
+                                "/api/v1/auths/me/**",
+                                "/api/v1/notifications/**",
                                 "/api/recommendation/**",
                                 "/api/review",
                                 "/api/review/book/**",

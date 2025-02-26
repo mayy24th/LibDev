@@ -20,6 +20,9 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
 
     Boolean existsByUser(User user);
 
-    // 반납완료가 아닌 대출 여부를 확인하는 메서드
+    // 특정사용자의 반납완료가 아닌 대출 여부를 확인하는 메서드
     boolean existsByUserAndBookAndStatusNot(User user, Book book, Status status);
+
+    boolean existsByBookAndStatusNot(Book book, Status status);
+
 }
