@@ -33,7 +33,7 @@ public class BorrowAPIController {
     }
 
     /* 전체 대출 조회 */
-    @GetMapping("/api/v1/borrow-list")
+    @GetMapping("/api/admin/v1/borrow-list")
     public ResponseEntity<Page<BorrowResDto>> getBorrowList(@RequestParam(value = "page", defaultValue = "0") int page,
                                                             @RequestParam(value = "status", defaultValue = "ALL") String status) {
         log.debug("대출 상태 필터:{}", status);
@@ -62,7 +62,7 @@ public class BorrowAPIController {
     }
 
     /* 도서 반납 승인 */
-    @PatchMapping("/api/v1/approve-return")
+    @PatchMapping("/api/admin/v1/approve-return")
     public ResponseEntity<List<ReturnResDto>> approveReturn(@RequestBody ReturnApproveReqDto returnApproveReqDto) {
         log.debug("반납 승인 - borrowIds:{}", returnApproveReqDto.getBorrowIds());
         return ResponseEntity.ok(borrowService.approveReturn(returnApproveReqDto));
