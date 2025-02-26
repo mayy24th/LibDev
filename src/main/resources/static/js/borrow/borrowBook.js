@@ -2,6 +2,7 @@ import { fetchBookDetails } from "/js/book/detail.js";
 import { attachReservationEvent } from "/js/reservation/reservation.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
 import { formatDate } from "./utils.js";
+import { fetchUserId } from "../notification/fetchUser.js";
 
 const borrowButton = document.querySelector(".borrow-btn");
 
@@ -13,6 +14,12 @@ if (borrowButton) {
 }
 
 async function borrowBook(bookId) {
+    const userId = await fetchUserId();
+    if (!userId) {
+        showAlertToast("로그인이 필요합니다.");
+        return;
+    }
+
     try {
         const response = await fetch(`/api/v1/borrow?bookId=${bookId}`, {
             method: "POST"
