@@ -122,3 +122,7 @@
 .search-button:active {
     background-color: #4F2D2D !important;
 }
+
+.g-4  {
+    margin-bottom: 30px;
+}
