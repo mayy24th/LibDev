@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         clearTopBar();
         const loginName = document.createElement("a");
         loginName.classList.add("header-text");
-        loginName.textContent = userName;
+        loginName.textContent = userName + "님";
         const separator = document.createElement("span");
         separator.classList.add("header-text");
         separator.textContent = " | ";
