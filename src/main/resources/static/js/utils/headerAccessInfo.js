@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (response.ok) {
             const userInfo = await response.json();
             updateRoleMenu(userInfo.data.role);
-            showLogoutButton();
+            showLogoutButton(userInfo.data.name);
         } else {
             showLoginButton();
         }
@@ -46,10 +46,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         topBar.appendChild(joinLink);
     }
 
-    function showLogoutButton() {
+    function showLogoutButton(userName) {
         clearTopBar();
+        const loginName = document.createElement("a");
+        loginName.classList.add("header-text");
+        loginName.textContent = userName;
+        const separator = document.createElement("span");
+        separator.classList.add("header-text");
+        separator.textContent = " | ";
         const logoutLink = createNavLink("/users/logout", "로그아웃");
         logoutLink.addEventListener("click", handleLogout);
+        topBar.appendChild(loginName);
+        topBar.appendChild(separator);
         topBar.appendChild(logoutLink);
     }
 
