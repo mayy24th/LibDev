@@ -8,7 +8,7 @@ fetchBorrowDueDate();
 
 async function fetchBorrowDueDate() {
     try {
-        const response = await fetch(`/api/v1/book/due-date?bookId=${bookId}`, {
+        const response = await fetch(`/book/due-date?bookId=${bookId}`, {
             method: "GET",
         });
         const data = await response.json();

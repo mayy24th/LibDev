@@ -38,7 +38,7 @@ public class BorrowAPIController {
     }
 
     /* 도서 반납 예정일 조회 */
-    @GetMapping("/api/v1/book/due-date")
+    @GetMapping("/book/due-date")
     public ResponseEntity<BorrowDueDateResDto> getBorrowStatus(@RequestParam Long bookId) {
         return ResponseEntity.ok(borrowService.getBorrowDueDateByBook(bookId));
     }
