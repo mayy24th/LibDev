@@ -20,6 +20,7 @@ public class Reservation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
@@ -28,9 +29,10 @@ public class Reservation extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ReservationStatus status;
+    public ReservationStatus status;
 
     @Column(nullable = false)
     private LocalDateTime reservedDate;
@@ -46,10 +48,6 @@ public class Reservation extends BaseEntity {
     }
 
     @Column(nullable = false)
-    private int queueOrder; // 대기 순번
+    private int queueOrder;
 
-    // Getter 추가
-    public Book getBook() {
-        return book;
-    }
 }

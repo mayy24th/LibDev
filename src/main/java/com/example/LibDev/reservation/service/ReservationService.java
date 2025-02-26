@@ -4,8 +4,10 @@ import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.repository.BookRepository;
 import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.borrow.repository.BorrowRepository;
+import com.example.LibDev.borrow.service.BorrowService;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
+import com.example.LibDev.notification.service.NotificationService;
 import com.example.LibDev.reservation.dto.ReservationRequestDto;
 import com.example.LibDev.reservation.dto.ReservationResponseDto;
 import com.example.LibDev.reservation.entity.Reservation;
@@ -16,9 +18,13 @@ import com.example.LibDev.user.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,6 +42,7 @@ public class ReservationService {
     private final BorrowRepository borrowRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final NotificationService notificationService;
     private final MailService mailService;
     private final SimpMessagingTemplate messagingTemplate;
 
@@ -109,17 +116,12 @@ public class ReservationService {
         return reservationRepository.findByBookOrderByQueueOrderAsc(book).size() + 1;
     }
 
-    // WebSocket을 통해 특정 유저에게 알림 전송
-    private void sendReservationNotification(Long userId, Reservation reservation, String message) {
-        String destination = "/topic/reservations/" + userId;
+    //
+    private void notifyReservationUser(Long userId, Reservation reservation, String message) {
         String finalMessage = message + " (도서 ID: " + reservation.getBook().getBookId() + ")";
-        messagingTemplate.convertAndSend(destination, new ReservationNotification(finalMessage));
-        log.info("예약 알림 전송: {} -> {}", finalMessage, destination);
+        notificationService.sendReservationNotification(userId, finalMessage);
     }
 
-
-    /* 예약 알림 DTO */
-    public record ReservationNotification(String message) {}
 
     // 예약 생성
     @Transactional
@@ -172,6 +174,13 @@ public class ReservationService {
         return reservation;
     }
 
+    public String getBorrowingUrl() {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/reservations/list")
+                .toUriString();
+    }
+
+
     // 예약 알림 이메일 발송
     private void sendReservationMail(User user, Book book, int queueOrder) {
         String to = user.getEmail();
@@ -179,18 +188,18 @@ public class ReservationService {
         String content;
 
         if (queueOrder == 1) {
+
             //문구 관리자페이지에서 관리할 수 있는 기능 추가
             subject = "📖 [도서 예약 안내] '" + book.getTitle() + "' 대출 가능합니다!";
 
             // 예약 취소 버튼 API URL 설정
-            String cancelUrl = "http://localhost:8080/api/v1/reservations/" + book.getBookId();
+            String borrowingUrl = getBorrowingUrl();
 
             content = "<h3>안녕하세요, " + user.getName() + "님!</h3>"
                     + "<p>회원님이 예약한 도서 '<b>" + book.getTitle() + "</b>'이(가) 대출 가능합니다.</p>"
                     + "<p>📅 예약 기한: <b>" + LocalDate.now().plusDays(3) + "</b></p>"
                     + "<p>3일 이내로 대출을 완료해주세요.</p>"
-                    + "<br/><a href='" + cancelUrl + "' style='display:inline-block;padding:10px 20px;margin:10px;color:white;background-color:#f44336;text-decoration:none;border-radius:5px;'>예약 취소</a>";
-//                    + "<br/><a href='http://localhost:8080/book/" + book.getBookId() + "' style='color:blue;'>도서 상세 정보 보기</a>";
+                    + "<br/><a href='" + borrowingUrl + "' style='display:inline-block;padding:10px 20px;margin:10px;color:white;background-color:#f44336;text-decoration:none;border-radius:5px;'>대출 및 예약 취소</a>";
             try {
                 mailService.sendMail(to, subject, content);
             } catch (MessagingException e) {
@@ -201,6 +210,16 @@ public class ReservationService {
 
     @Transactional
     public void updateFirstReservationExpiration(Book book) {
+        // 해당 책의 대출 상태 조회
+        boolean hasActiveBorrow = borrowRepository.existsByBookAndStatusNot(book, Status.RETURNED);
+        log.info("특정 도서의 hasActiveBorrow 값: {} (도서 ID: {})", hasActiveBorrow, book.getBookId());
+
+        if (hasActiveBorrow) {
+            log.info("현재 대출 중인 책. 예약자 업데이트 중단 (도서 ID: {})", book.getBookId());
+            return;
+        }
+
+
         List<Reservation> reservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
 
         if (reservations.isEmpty()) {
@@ -225,8 +244,21 @@ public class ReservationService {
         // 조건 체크 후 이메일 발송 + 알림 발송
         if (isNewFirstReservation || firstReservation.getQueueOrder() == 1) {
             log.info("이메일 발송 시작: {}", firstReservation.getUser().getEmail());
+
+            // status Ready로 변경
+            firstReservation.setStatus(ReservationStatus.READY);
+            reservationRepository.save(firstReservation); // 변경 사항 저장
+            log.info("예약 상태 변경: WAITING -> READY (User ID: {})", firstReservation.getUser().getId());
+
+            // 이메일 발송
             sendReservationMail(firstReservation.getUser(), book, firstReservation.getQueueOrder());
-//            notifyNextUser(book);
+
+            // 알림 발송
+            notifyReservationUser(
+                    firstReservation.getUser().getId(),
+                    firstReservation,
+                    "예약하신 도서 '" + book.getTitle() + "'이 대출 가능 상태가 되었습니다!"
+            );
         } else {
             log.info("이메일 발송 조건 미충족: queueOrder={}, Expiration={}",
                     firstReservation.getQueueOrder(), firstReservation.getExpirationDate());
@@ -234,17 +266,44 @@ public class ReservationService {
     }
 
     // 예약 내역 조회
-    public List<ReservationResponseDto> getUserReservations(Long userId) {
+    public List<ReservationResponseDto> getUserReservationsWithCanBorrow(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         List<Reservation> reservations = reservationRepository.findByUser(user);
 
         return reservations.stream().map(reservation -> {
-            int totalQueueSize = reservationRepository.countByBookAndStatus(reservation.getBook(), ReservationStatus.WAITING); // ✅ 해당 책의 예약 총 인원
-            return ReservationResponseDto.fromEntity(reservation, totalQueueSize);
+            int totalQueueSize = reservationRepository.countByBook(reservation.getBook()); // 총 예약 수 계산
+
+            // 현재 책이 'returned' 상태가 아닌 다른 상태가 있는지 체크
+            boolean hasActiveBorrow = borrowRepository.existsByBookAndStatusNot(reservation.getBook(), Status.RETURNED);
+
+            boolean isFirstQueue = reservation.getQueueOrder() == 1; // 예약 1순위 여부 확인
+            boolean canBorrow = !hasActiveBorrow && isFirstQueue; // 대출 가능 여부 판단
+
+            return ReservationResponseDto.fromEntity(reservation, totalQueueSize, canBorrow);
         }).collect(Collectors.toList());
     }
+
+
+    // 전체 예약 내역 조회
+    public Page<ReservationResponseDto> getAllReservations(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Reservation> reservations = reservationRepository.findAll(pageable);
+
+        return reservations.map(reservation -> {
+            int totalQueueSize = reservationRepository.countByBook(reservation.getBook()); // 총 예약자 수 계산
+
+            boolean hasActiveBorrow = borrowRepository.existsByUserAndBookAndStatusNot(reservation.getUser(), reservation.getBook(), Status.RETURNED);
+
+            boolean isFirstQueue = reservation.getQueueOrder() == 1; // 예약 1순위 확인
+            boolean canBorrow = !hasActiveBorrow && isFirstQueue; // 대출 가능 여부 판단
+
+            return ReservationResponseDto.fromEntity(reservation, totalQueueSize, canBorrow);
+        });
+    }
+
+
 
     // 예약 취소
     @Transactional
@@ -279,29 +338,32 @@ public class ReservationService {
         }
     }
 
-    // 도서 반납시 예약 처리
-    @Transactional
-    public void updateBookAvailability(Book book, boolean isAvailable) {
-        book.updateIsAvailable(isAvailable);
-        bookRepository.save(book);
-
-        // 도서가 반납(isAvailable = true)되었을 때, 첫 번째 예약자 확인 후 만료일 및 이메일 발송
-        if (isAvailable) {
-            log.info("도서 '{}'가 반납됨. 예약자 확인 후 이메일 발송", book.getTitle());
-
-            List<Reservation> reservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
-            if (!reservations.isEmpty()) {
-                Reservation firstReservation = reservations.getFirst(); // 현재 1순위 예약자
-
-                log.info("반납 후 첫 번째 예약자: {} (User ID: {})",
-                        firstReservation.getUser().getEmail(), firstReservation.getUser().getId());
-
-                updateFirstReservationExpiration(book); // 첫 번째 예약자에게 만료일 설정 및 이메일 발송
-            } else {
-                log.info("반납 후 예약자가 없음. 이메일 발송 생략.");
-            }
+    /* 도서 대출 가능 여부 업데이트 */
+    public void updateBookIsAvailable(Book book) {
+        if (!reservationRepository.existsByBook(book)) {
+            book.updateIsAvailable(true);
         }
     }
+
+    // 도서 반납시 예약 처리
+    @Transactional
+    public void processBookReturn(Book book) {
+        log.info("도서 '{}' 반납 처리 시작", book.getTitle());
+
+        // 첫 번째 예약자 확인
+        List<Reservation> reservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
+        if (!reservations.isEmpty()) {
+            Reservation firstReservation = reservations.getFirst(); // 현재 1순위 예약자
+            log.info("반납 후 첫 번째 예약자 확인: {} (User ID: {})", firstReservation.getUser().getEmail(), firstReservation.getUser().getId());
+
+            // 첫 번째 예약자에 대한 만료일 업데이트 및 이메일 발송
+            updateFirstReservationExpiration(book);
+        } else {
+            log.info("반납 후 예약자가 없음. 업데이트 생략.");
+            updateBookIsAvailable(book);
+        }
+    }
+
 
     /*// READY 상태로 변경될 때 알림 전송 추가
     private void notifyNextUser(Book book) {

@@ -8,10 +8,12 @@ import com.example.LibDev.reservation.dto.ReservationResponseDto;
 import com.example.LibDev.reservation.entity.Reservation;
 import com.example.LibDev.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -31,19 +33,26 @@ public class ReservationAPIController {
 
     // 예약 내역 조회
     @GetMapping
-    /*public ResponseEntity<List<ReservationResponseDto>> getUserReservations(@AuthenticationPrincipal Long userId) {*/
     public ResponseEntity<List<ReservationResponseDto>> getUserReservations() {
-        /*Long userId = 1L;  // 임시로 userId를 1로 설정*/
         Long userId = getCurrentUserId();
 
         if (userId == null) {
             return ResponseEntity.badRequest().body(Collections.emptyList());
         }
 
-        List<ReservationResponseDto> reservations = reservationService.getUserReservations(userId);
+        List<ReservationResponseDto> reservations = reservationService.getUserReservationsWithCanBorrow(userId);
         return ResponseEntity.ok(reservations);
     }
 
+    // 전체 예약 조회
+    @GetMapping("/api/v1/reservations")
+    public ResponseEntity<Page< ReservationResponseDto>> getReservationList(
+            @RequestParam(value = "page", defaultValue = "0") int page) {
+        return ResponseEntity.ok(reservationService.getAllReservations(page));
+    }
+
+
+    // 예약 삭제
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<?> cancelReservation(@PathVariable Long reservationId) {
         Long userId = getCurrentUserId();
@@ -55,6 +64,8 @@ public class ReservationAPIController {
         reservationService.cancelReservation(userId, reservationId);
         return ResponseEntity.ok("예약이 취소되었습니다.");
     }
+
+
 
     @GetMapping("/count/{bookId}")
     public ResponseEntity<Integer> getReservationCount(@PathVariable Long bookId) {
