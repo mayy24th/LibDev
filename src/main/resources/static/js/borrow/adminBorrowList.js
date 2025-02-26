@@ -12,7 +12,7 @@ loadBorrowList(0, statusFilter.value); // 첫 페이지 로드
 
 async function loadBorrowList(page, status) {
     try {
-        const response = await fetch(`/api/v1/borrow-list?page=${page}&status=${status}`);
+        const response = await fetch(`/api/admin/v1/borrow-list?page=${page}&status=${status}`);
 
         const data = await response.json();
 

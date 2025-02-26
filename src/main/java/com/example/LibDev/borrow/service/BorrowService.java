@@ -10,6 +10,7 @@ import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
+import com.example.LibDev.reservation.entity.Reservation;
 import com.example.LibDev.reservation.entity.type.ReservationStatus;
 import com.example.LibDev.reservation.repository.ReservationRepository;
 import com.example.LibDev.user.entity.User;
@@ -94,13 +95,24 @@ public class BorrowService {
     @Transactional
     public void borrow(Long bookId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findLoginUserByEmail(email);
+        if (user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
+        }
 
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
         log.debug("대출 신청 - User Name: {}, Book Title: {}", user.getName(), book.getTitle());
 
-        checkMemberBorrowingStatus(user);
-        checkMaxBorrowLimit(user);
+        if (!book.getIsAvailable()) { // 대출 불가 상태
+            if(!isFirstPriorityReservation(user, book)) {
+                log.debug("대출 불가 - 이미 대출 중인 도서");
+                throw new CustomException(CustomErrorCode.BOOK_BORROW_FORBIDDEN);
+            }
+            log.debug("대출 가능 - 1순위 예약자");
+        }
+
+        checkMemberBorrowingStatus(user); // 회원 대출 가능 여부 확인
+        checkMaxBorrowLimit(user); // 최대 대출 가능 권 수 확인
 
         Borrow borrow = Borrow.builder()
                 .dueDate(LocalDateTime.now().plusDays(14))
@@ -201,11 +213,25 @@ public class BorrowService {
         }
     }
 
+    /* 1순위 예약자인지 검사 */
+    public boolean isFirstPriorityReservation(User user, Book book) {
+        List<Reservation> reservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
+        if (!reservations.isEmpty()) {
+            Reservation firstReservation = reservations.getFirst(); // 현재 1순위 예약
+            User firstReservationUser = firstReservation.getUser(); // 현재 1순위 예약자
+
+            if(user.getEmail().equals(firstReservationUser.getEmail())) { // 대출하려는 회원이 1순위 예약자인 경우
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* 회원 대출 가능 여부 검사 */
     public void checkMemberBorrowingStatus(User user) {
         if(!user.isBorrowAvailable()) {
             log.debug("대출(연장) 불가 - 연체 중 / 연체 피널티 존재");
-            throw new CustomException(CustomErrorCode.BORROW_FORBIDDEN);
+            throw new CustomException(CustomErrorCode.BORROW_OVERDUE);
         }
     }
 
@@ -215,7 +241,7 @@ public class BorrowService {
 
         if (borrowedCount >= MAX_BORROW_LIMIT) {
             log.debug("대출 불가 - 대출 가능 권 수 초과");
-            throw new CustomException(CustomErrorCode.BORROW_FORBIDDEN);
+            throw new CustomException(CustomErrorCode.BORROW_LIMIT_EXCEEDED);
         }
     }
 
