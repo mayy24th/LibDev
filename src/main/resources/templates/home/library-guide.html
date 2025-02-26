@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이용안내</title>
+  <th:block layout:fragment="extraHead">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/home/library-guide.css">
+  </th:block>
+</head>
+
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h2 class="text-center">이용안내</h2>
+
+    <div class="section">
+      <h4>이용시간/휴관일</h4>
+      <table class="table table-bordered">
+        <tbody>
+        <tr>
+          <td><strong>평일</strong></td>
+          <td>오전 9시 ~ 오후 10시</td>
+        </tr>
+        <tr>
+          <td><strong>주말 및 공휴일</strong></td>
+          <td>오전 9시 ~ 오후 6시</td>
+        </tr>
+        <tr>
+          <td><strong>정기 휴관일</strong></td>
+          <td>매월 둘째, 넷째 월요일</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h4>도서 대출 및 반납</h4>
+      <table class="table table-bordered">
+        <tbody>
+        <tr>
+          <td><strong>대출 가능 권수</strong></td>
+          <td>1인당 최대 7권</td>
+        </tr>
+        <tr>
+          <td><strong>대출 기간</strong></td>
+          <td>14일 (연장 가능)</td>
+        </tr>
+        <tr>
+          <td><strong>대출 연장</strong></td>
+          <td>1회 가능 (추가 7일, 예약 도서는 연장 불가)</td>
+        </tr>
+        <tr>
+          <td><strong>반납 방법</strong></td>
+          <td>엘리스도서관 홈페이지에서 반납 신청 후 도서관 방문 또는 무인 반납함 이용</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h4>예약</h4>
+      <p>현재 대출 중인 도서는 <strong>1인당 2권까지 예약 가능</strong>하며, 반납 후 3일간 보관됩니다.</p>
+    </div>
+
+    <div class="section">
+      <h4>편의 서비스</h4>
+      <table class="table table-bordered">
+        <tbody>
+        <tr>
+          <td><strong>한줄평 기능</strong></td>
+          <td>다른 이용자들과 도서 리뷰를 공유할 수 있습니다.</td>
+        </tr>
+        <tr>
+          <td><strong>도서 추천 서비스</strong></td>
+          <td>개인 맞춤형 추천 및 인기 도서 제공</td>
+        </tr>
+        <tr>
+          <td><strong>알림 서비스</strong></td>
+          <td>대출 기한, 예약 도서 알림 제공</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+</body>
+</html>
