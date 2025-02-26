@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         clearTopBar();
         const loginName = document.createElement("a");
         loginName.classList.add("header-text");
-        loginName.textContent = userName;
+        loginName.textContent = userName + "님";
         const separator = document.createElement("span");
         separator.classList.add("header-text");
         separator.textContent = " | ";
@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             showAlertToast("로그아웃 되었습니다.")
             showLoginButton();
+            location.reload();
         } catch (error) {
             console.error("로그아웃 실패:", error);
             showAlertToast("로그아웃 실패");
