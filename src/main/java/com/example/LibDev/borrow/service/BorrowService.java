@@ -10,6 +10,7 @@ import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.reservation.entity.Reservation;
 import com.example.LibDev.reservation.entity.type.ReservationStatus;
 import com.example.LibDev.reservation.repository.ReservationRepository;
+import com.example.LibDev.reservation.service.ReservationService;
 import com.example.LibDev.user.entity.User;
 import com.example.LibDev.borrow.repository.BorrowRepository;
 import com.example.LibDev.user.repository.UserRepository;
@@ -38,8 +39,9 @@ public class BorrowService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final ReservationRepository reservationRepository;
+    private final ReservationService reservationService;
 
-    private static final int MAX_BORROW_LIMIT = 7; // 최대 대출 가능 권 수
+    private static final int MAX_BORROW_LIMIT = 7;
 
     /* 회원별 대출 현황 조회 */
     public List<BorrowResDto> getCurrentBorrowsByUser() {
@@ -199,6 +201,7 @@ public class BorrowService {
         borrow.updateStatus(Status.RETURNED);
         updateBookIsAvailable(borrow.getBook());
     }
+
 
     /* 회원 패널티 만료일 업데이트 */
     public void updateUserPenaltyExpiration(User user, long overdueDays,  LocalDateTime returnDate) {

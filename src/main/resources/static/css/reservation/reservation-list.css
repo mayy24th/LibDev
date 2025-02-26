@@ -10,17 +10,17 @@
     width: 70%;
 }
 
-.info > p {
+.info-content {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
+
 
 /* 예약 리스트 전체 컨테이너 */
 .reservation-list {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
 }
 
 /* 예약 개별 박스 */
@@ -28,54 +28,68 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 70%;
-    border-bottom: 1px solid #ddd;
-    padding: 15px;
+    width: 80%;
+    border-bottom: 1px solid black;
+    padding: 10px;
 }
 
-/* 제목 + 예약 정보 함께 정렬 */
-.reservation-content-box {
+/* 제목 + 예약 정보를 감싸는 컨테이너 (세로 정렬) */
+.reservation-content-wrapper {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    align-items: flex-start;
+    width: 75%;
 }
 
-/* 도서 제목 */
+/* 제목 스타일 */
 .book-title {
     font-size: 1.2rem;
     font-weight: bold;
+    text-align: left;
     margin-bottom: 5px;
 }
 
-/* 예약 정보 스타일 */
-.reservation-info {
+/* 예약 정보 전체 컨테이너 */
+.reservation-info-container {
     display: flex;
-    flex-direction: row; /* 가로 정렬 */
-    gap: 15px;
-    font-size: 14px;
-    color: #555;
+    justify-content: flex-start;
+    gap: 3px; /* 컨테이너 간격 유지 */
+    width: 100%;
 }
 
+/* 예약 정보 개별 컨테이너 */
+.reservation-item {
+    text-align: left;
+    width: 30%; /* 고정 너비 */
+}
+
+/* 버튼 컨테이너 (우측 정렬) */
 .buttons {
     display: flex;
-    flex-direction: row; /* 가로 정렬 */
+    gap: 5px;
     justify-content: flex-end;
-    align-items: center;
-    flex-shrink: 0; /* 버튼 크기가 줄어들지 않도록 설정 */
+    width: 20%;
 }
 
-
-/* 버튼 스타일*/
-.cancel-btn {
-    background-color: #5B3A1E;
-    color: white;
+/* 버튼 스타일 */
+.btn {
     border: none;
-    padding: 5px 15px;
+    color: white;
+    background-color: #5B3A1E;
+    padding: 5px 10px;
     cursor: pointer;
     border-radius: 5px;
-    font-size: 14px;
+}
+
+.btn:hover {
+    background-color: #7A4E29;
+}
+
+.cancel-btn {
+    background-color: #5B3A1E;
 }
 
 .cancel-btn:hover {
     background-color: #7A4E29;
 }
+
