@@ -1,10 +1,15 @@
 import {showAlertToast} from "../utils/showAlertToast.js";
 
+const form = document.getElementById("resetPasswordForm");
+
 const resetBtn = document.getElementById("resetSubmit");
 
-resetBtn.addEventListener("click", async() => {
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+resetBtn.addEventListener("click", async(event) => {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirmPassword");
 
     if(!password){
         showAlertToast("비밀번호를 입력해주세요.")
