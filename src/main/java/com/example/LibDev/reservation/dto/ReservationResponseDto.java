@@ -11,29 +11,34 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReservationResponseDto {
     private Long reservationId;
+    private Long bookId;  // ✅ bookId 추가
     private String bookTitle;
     private String author;
+    private String userEmail;
     private ReservationStatus status;
     private LocalDateTime reservedDate;
     private LocalDateTime expirationDate;
     private int queueOrder;
     private int totalQueueSize;
+    private boolean canBorrow;
 
-    public static ReservationResponseDto fromEntity(Reservation reservation,int totalQueueSize) {
+    public static ReservationResponseDto fromEntity(Reservation reservation, int totalQueueSize, boolean canBorrow) {
         if (reservation == null || reservation.getBook() == null) {
             throw new IllegalArgumentException("Reservation or Book cannot be null");
         }
 
         return new ReservationResponseDto(
                 reservation.getId(),
+                reservation.getBook().getBookId(), // ✅ bookId 추가
                 reservation.getBook().getTitle(),
                 reservation.getBook().getAuthor(),
+                reservation.getUser().getEmail(),
                 reservation.getStatus(),
                 reservation.getReservedDate(),
                 reservation.getExpirationDate(),
                 reservation.getQueueOrder(),
-                totalQueueSize
+                totalQueueSize,
+                canBorrow
         );
     }
 }
-
