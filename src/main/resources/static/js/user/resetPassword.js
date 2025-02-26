@@ -30,10 +30,8 @@ resetBtn.addEventListener("click", async(event) => {
 
         const result = await  response.json();
 
-        if(!response.ok){
-            showAlertToast("비밀번호가 변경되지 않았습니다")
-            return;
-        }
+        localStorage.removeItem("requestEmail");
+
         showAlertToast(result.data);
 
         window.location.href = "/users/login"

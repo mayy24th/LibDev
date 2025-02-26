@@ -26,6 +26,8 @@ codeBtn.addEventListener("click", async () => {
             return;
         }
 
+        localStorage.removeItem("timeLeft");
+
         showAlertToast(result.data);
 
         window.location.href = "/auths/password-find/reset"
