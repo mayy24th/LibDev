@@ -37,6 +37,9 @@ public class User extends BaseEntity {
     /*탈퇴여부*/
     private boolean withdraw;
 
+    /*소셜 로그인 제공자*/
+    private String provider;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
