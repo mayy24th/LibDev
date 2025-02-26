@@ -2,10 +2,17 @@ import { formatDate, statusColor } from "./utils.js";
 import { extendBorrow } from "./extendBorrow.js";
 import { requestReturn } from "./requestReturn.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
+import { fetchUserId } from "../notification/fetchUser.js";
 
 fetchCurrentBorrows();
 
 async function fetchCurrentBorrows() {
+    const userId = await fetchUserId();
+    if (!userId) {
+        showAlertToast("로그인이 필요합니다.");
+        return;
+    }
+
     try {
         const response = await fetch("/api/v1/my/borrow-status", {
             method: "GET",
