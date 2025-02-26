@@ -5,7 +5,7 @@
     background-size: cover;
     background-position: center;
     pointer-events: none;
-    transition: background-image 0.5s ease-in-out;
+    transition: background-image 0.8s ease-in-out;
 }
 
 .slogan {
@@ -26,7 +26,7 @@
     top: 60%;
     left: 50%;
     transform: translateX(-50%);
-    width: 70%;
+    width: 60%;
     z-index: 999;
     pointer-events: auto;
 }
@@ -34,10 +34,11 @@
 .input-group {
     padding-top: 20px;
     padding-bottom: 20px;
+    height: 85px;
 }
 
 .form-select {
-    max-width: 150px;
+    max-width: 120px;
     background-color: #623F3F;
     color: white;
     border: none;
