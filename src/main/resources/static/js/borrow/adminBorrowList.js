@@ -1,7 +1,7 @@
 import { formatDate, statusColor } from "./utils.js";
 import { renderPagination } from "./renderPagination.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
-import {checkLoginStatus} from "../utils/auth";
+import {checkLoginStatus} from "../utils/auth.js";
 
 const statusFilter = document.querySelector("#status-filter");
 
