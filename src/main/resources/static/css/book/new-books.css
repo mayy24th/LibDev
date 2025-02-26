@@ -1,3 +1,7 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
 .text-center.fw-bold {
     margin-top: 10px;
     text-align: left !important;
@@ -5,9 +9,10 @@
 
 .books-container {
     width: 70%;
-    margin: 40px auto;
+    margin: 25px auto;
     text-align: center;
-    padding: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
 }
 
 .new-books-title {
@@ -99,9 +104,9 @@
 }
 
 .book-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease;
+    transition: transform 0.2s ease-in-out;
     cursor: pointer;
+    transform: scale(1.02);
 }
 
 

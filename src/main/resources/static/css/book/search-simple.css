@@ -6,6 +6,18 @@ body {
     width: 70%;
 }
 
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #623F3F;
+    color: white;
+    padding: 10px 70px;
+    border-radius: 30px;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}
+
 .input-group {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -21,7 +33,7 @@ body {
     background-color: #4e2f2f;
 }
 
-.text-center.fw-bold {
+.fw-bold {
     margin-top: 10px;
     text-align: left !important;
 }
@@ -40,6 +52,7 @@ body {
     border-radius: 10px;
     transition: transform 0.2s ease-in-out;
 }
+
 .list-group-item:hover {
     transform: scale(1.02);
 }
