@@ -1,5 +1,6 @@
 import { reissue } from "./reissue.js";
 import {apiRequestRetry} from "./apiRequsetRetry.js";
+import {showAlertToast} from "./showAlertToast.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const topBar = document.querySelector(".top-bar");
@@ -82,12 +83,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 method: "POST",
             });
 
-            alert("로그아웃 되었습니다.")
+            showAlertToast("로그아웃 되었습니다.")
             showLoginButton();
-            location.reload();
         } catch (error) {
             console.error("로그아웃 실패:", error);
-            alert("로그아웃 실패")
+            showAlertToast("로그아웃 실패");
         }
     }
 
