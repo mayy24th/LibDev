@@ -2,6 +2,7 @@ package com.example.LibDev.auth.service;
 
 import com.example.LibDev.auth.dto.CustomOAuth2User;
 import com.example.LibDev.auth.dto.OAuth2UserDto;
+import com.example.LibDev.auth.dto.oauth2.GoogleUserInfo;
 import com.example.LibDev.auth.dto.oauth2.NaverUserInfo;
 import com.example.LibDev.auth.dto.oauth2.OAuth2UserInfo;
 import com.example.LibDev.user.entity.User;
@@ -32,10 +33,12 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo;
 
         if(registrationId.equals("naver")) {
-            log.info("OAuth2User attributes: {}", oAuth2User.getAttributes());
             oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
-        } else {
-            //추후 nullPointException 처리 해야함
+        } else if(registrationId.equals("google")){
+            log.info(oAuth2User.getAttributes().toString());
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        }  else {
+            //NullPointException 처리할 것!
             return null;
         }
 
