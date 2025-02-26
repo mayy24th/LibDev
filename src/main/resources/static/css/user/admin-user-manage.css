@@ -1,6 +1,10 @@
 .table-container {
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
+}
+
+.search-layer{
+    margin-right: 90px;
 }
 
 .btn {
@@ -28,3 +32,4 @@
 .pagination .page-link:hover {
     background-color: #f1e3e3;
 }
+

@@ -28,11 +28,21 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
-
     <!-- 전체 유저 수 조회 -->
     <select id="countAllUsers" resultType="int">
         SELECT COUNT(*) FROM user WHERE withdraw = FALSE
     </select>
+
+    <!-- 검색 적용 후 유저 수 조회-->
+    <select id="countAllUsersWithFilter" resultType="int">
+        SELECT COUNT(*)
+        FROM user
+        WHERE
+            (#{role} IS NULL OR role = #{role})
+          AND (#{email} IS NULL OR email LIKE CONCAT('%', #{email}, '%'))
+          AND withdraw = FALSE
+    </select>
+
 
     <!--서비스 현황 조회-->
     <select id="getUserServiceCount" resultType="com.example.LibDev.user.dto.UserServiceCountResDto">
