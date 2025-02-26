@@ -3,6 +3,7 @@ package com.example.LibDev.admin.service;
 import com.example.LibDev.admin.dto.UpdateRoleDto;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
+import com.example.LibDev.user.dto.BindingUserResDto;
 import com.example.LibDev.user.dto.UserResDto;
 import com.example.LibDev.user.entity.User;
 import com.example.LibDev.user.entity.type.Role;
@@ -28,10 +29,11 @@ public class AdminService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
 
-    public Page<UserResDto> findAllUsers(int page, String role, String email) {
+    public Page<BindingUserResDto> findAllUsers(int page, String role, String email) {
+
         int offset = page * defaultSize;
 
-        List<UserResDto> users = userMapper.findAllUsersWithOverdueDays(defaultSize, offset, role, email);
+        List<BindingUserResDto> users = userMapper.findAllUsersWithOverdueDays(defaultSize, offset, role, email);
 
         int totalCount = userMapper.countAllUsersWithFilter(role, email);
 

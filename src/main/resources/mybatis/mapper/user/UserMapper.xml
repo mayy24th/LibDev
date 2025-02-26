@@ -3,7 +3,7 @@
 <mapper namespace="com.example.LibDev.user.mapper.UserMapper">
 
     <!-- 유저 목록 조회 (총 연체일수 포함) -->
-    <select id="findAllUsersWithOverdueDays" resultType="com.example.LibDev.user.dto.UserResDto">
+    <select id="findAllUsersWithOverdueDays" resultType="com.example.LibDev.user.dto.BindingUserResDto">
         SELECT
         u.name,
         u.email,
@@ -47,10 +47,10 @@
     <!--서비스 현황 조회-->
     <select id="getUserServiceCount" resultType="com.example.LibDev.user.dto.UserServiceCountResDto">
         SELECT
-            COALESCE(COUNT(DISTINCT CASE WHEN b.status != 'RETURNED' THEN b.book_id ELSE NULL END), 0) AS borrowCount,
-            COALESCE(COUNT(DISTINCT CASE WHEN b.status = 'RETURNED' THEN b.book_id ELSE NULL END), 0) AS returnCount,
-            COALESCE(COUNT(DISTINCT CASE WHEN r.status != 'CANCELLED' THEN r.book_id ELSE NULL END), 0) AS reservationCount,
-            COALESCE(COUNT(DISTINCT rv.review_id), 0) AS reviewCount
+            COALESCE(COUNT(CASE WHEN b.status != 'RETURNED' THEN b.book_id ELSE NULL END), 0) AS borrowCount,
+            COALESCE(COUNT(CASE WHEN b.status = 'RETURNED' THEN b.book_id ELSE NULL END), 0) AS returnCount,
+            COALESCE(COUNT(CASE WHEN r.status != 'CANCELLED' THEN r.book_id ELSE NULL END), 0) AS reservationCount,
+            COALESCE(COUNT(rv.review_id), 0) AS reviewCount
         FROM user u
                  LEFT JOIN borrow b ON b.user_id = u.id
                  LEFT JOIN reservation r ON r.user_id = u.id
