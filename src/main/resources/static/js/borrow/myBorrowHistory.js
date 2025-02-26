@@ -1,7 +1,7 @@
 import { formatDate } from "./utils.js";
 import { renderPagination } from "./renderPagination.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
-import { fetchUserId } from "../notification/fetchUser.js";
+import { checkLoginStatus } from "../utils/auth.js";
 
 const orderSelect = document.querySelector("#order-select");
 
@@ -12,11 +12,8 @@ orderSelect.addEventListener("change", () => {
 loadBorrowHistory(0, orderSelect.value);
 
 async function loadBorrowHistory(page, order) {
-    const userId = await fetchUserId();
-    if (!userId) {
-        showAlertToast("로그인이 필요합니다.");
-        return;
-    }
+    const isLoggedIn = await checkLoginStatus();
+    if (!isLoggedIn) return;
 
     try {
         const response = await fetch(`/api/v1/my/borrow-history?page=${page}&order=${order}`, {
