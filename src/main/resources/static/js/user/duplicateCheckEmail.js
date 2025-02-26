@@ -19,14 +19,14 @@ export async function duplicateCheckEmail() {
 
         const result = await response.json();
         if (response.ok) {
-            alert(result.data);
+            showAlertToast(result.data);
             return true;
         } else {
-            alert(result.message);
+            showAlertToast(result.message);
             return false;
         }
     } catch (error) {
-        alert("오류가 발생했습니다.");
+        showAlertToast("오류가 발생했습니다.");
         console.error(error);
         return false;
     }
