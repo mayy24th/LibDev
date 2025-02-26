@@ -7,10 +7,6 @@ import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
             method: "GET"
         });
 
-        if (!response.success || !response.data) {
-            showAlertToast("정보를 가져오는 중 오류가 발생하였습니다.");
-            return;
-        }
 
         const { borrowCount, returnCount, reservationCount, reviewCount } = response.data;
 
@@ -20,6 +16,7 @@ import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
         counts[2].textContent = reservationCount;
         counts[3].textContent = reviewCount;
     } catch (error) {
+        showAlertToast("정보를 가져오는 중 오류가 발생하였습니다.");
         console.error("Error fetching data:", error);
     }
 })();

@@ -5,13 +5,13 @@ export async function apiRequestRetry(url, options = {}){
     try {
         let response = await fetch(url, options);
 
-        if (response.status === 401 || response.status === 500) {
+        if (response.status === 401) {
             const reissued = await reissue();
 
             if (reissued) {
                 response = await fetch(url, options);
             } else {
-                return null;
+                return response.json()
             }
         }
 
@@ -19,7 +19,7 @@ export async function apiRequestRetry(url, options = {}){
 
         if(response.status === 403){
             showAlertToast("권한이 없습니다.")
-            window.location.href="/"
+            window.location.href="/home"
         }
 
         if (response.status === 400) {

@@ -1,12 +1,21 @@
 import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
+import {showAlertToast} from "../utils/showAlertToast.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+
     const result = await apiRequestRetry("/api/v1/users",{method: "GET"});
-    if(result){
-        populateUserInfo(result.data);
-    } else {
-        window.location.href = "/users/login"
+
+    if(result.statusCode === 401){
+        showAlertToast(result.message);
+
+        setTimeout(() => {
+            window.location.href = "/users/login";
+        }, 500);
+
+
     }
+    populateUserInfo(result.data);
+
 })
 
 const editBtn = document.getElementById("edit");

@@ -66,7 +66,8 @@ public class UserService {
 
     public UserResDto info() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findLoginUserByEmail(email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.AUTHENTICATION_REQUIRED));
         return UserResDto.builder()
                 .name(user.getName())
                 .email(user.getEmail())
