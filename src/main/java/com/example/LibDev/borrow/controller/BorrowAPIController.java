@@ -1,9 +1,6 @@
 package com.example.LibDev.borrow.controller;
 
-import com.example.LibDev.borrow.dto.BorrowResDto;
-import com.example.LibDev.borrow.dto.ExtendResDto;
-import com.example.LibDev.borrow.dto.ReturnApproveReqDto;
-import com.example.LibDev.borrow.dto.ReturnResDto;
+import com.example.LibDev.borrow.dto.*;
 import com.example.LibDev.borrow.service.BorrowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,11 +37,16 @@ public class BorrowAPIController {
         return ResponseEntity.ok(borrowService.getAllBorrows(page, status));
     }
 
+    /* 도서 반납 예정일 조회 */
+    @GetMapping("/api/v1/book/due-date")
+    public ResponseEntity<BorrowDueDateResDto> getBorrowStatus(@RequestParam Long bookId) {
+        return ResponseEntity.ok(borrowService.getBorrowDueDateByBook(bookId));
+    }
+
     /* 대출 생성 */
     @PostMapping("/api/v1/borrow")
-    public ResponseEntity<?> borrow(@RequestParam Long bookId) {
-        borrowService.borrow(bookId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<BorrowDueDateResDto> borrow(@RequestParam Long bookId) {
+        return ResponseEntity.ok(borrowService.borrow(bookId));
     }
 
     /* 대출 연장 */
