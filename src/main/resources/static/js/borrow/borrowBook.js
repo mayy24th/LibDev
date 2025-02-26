@@ -8,6 +8,8 @@ const borrowButton = document.querySelector(".borrow-btn");
 
 if (borrowButton) {
     borrowButton.addEventListener("click", function () {
+        if (this.classList.contains("reserve-btn")) { return; }
+
         const bookId = this.dataset.bookId;
         borrowBook(bookId);
     });
