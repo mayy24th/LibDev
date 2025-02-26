@@ -19,5 +19,5 @@ document.addEventListener("DOMContentLoaded", function() {
         backgroundContainer.style.backgroundImage = `url('${images[currentImageIndex]}')`; // 배경 이미지 변경
     }
 
-    setInterval(showNextImage, 3000);
+    setInterval(showNextImage, 5000);
 });

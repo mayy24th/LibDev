@@ -90,3 +90,10 @@
 .pagination .page-link:hover {
     background-color: #f1e3e3;
 }
+
+.form-select {
+    max-width: 130px;
+    background-color: #623F3F;
+    color: white;
+    border: none;
+}
