@@ -1,10 +1,7 @@
 package com.example.LibDev.borrow.service;
 
 import com.example.LibDev.book.repository.BookRepository;
-import com.example.LibDev.borrow.dto.BorrowResDto;
-import com.example.LibDev.borrow.dto.ExtendResDto;
-import com.example.LibDev.borrow.dto.ReturnApproveReqDto;
-import com.example.LibDev.borrow.dto.ReturnResDto;
+import com.example.LibDev.borrow.dto.*;
 import com.example.LibDev.borrow.entity.Borrow;
 import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.book.entity.Book;
@@ -30,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -95,7 +93,7 @@ public class BorrowService {
 
     /* 대출 생성 */
     @Transactional
-    public void borrow(Long bookId) {
+    public BorrowDueDateResDto borrow(Long bookId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findLoginUserByEmail(email);
         if (user == null) {
@@ -130,6 +128,11 @@ public class BorrowService {
         borrowRepository.save(borrow);
 
         book.updateIsAvailable(false);
+
+        return BorrowDueDateResDto.builder()
+                .bookId(book.getBookId())
+                .dueDate(borrow.getDueDate())
+                .build();
     }
 
     /* 대출 기간 연장 */
@@ -246,6 +249,18 @@ public class BorrowService {
             log.debug("대출 불가 - 대출 가능 권 수 초과");
             throw new CustomException(CustomErrorCode.BORROW_LIMIT_EXCEEDED);
         }
+    }
+
+    /* 도서 반납 예정일 조회 */
+    public BorrowDueDateResDto getBorrowDueDateByBook(Long bookId) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
+
+        Optional<Borrow> borrowOptional = borrowRepository.findByBookAndStatusNot(book, Status.RETURNED);
+
+        return BorrowDueDateResDto.builder()
+                .bookId(book.getBookId())
+                .dueDate(borrowOptional.map(Borrow::getDueDate).orElse(null))
+                .build();
     }
 
     /* entity -> borrowResDto 변환 */

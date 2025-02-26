@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface BorrowRepository extends JpaRepository<Borrow, Long> {
     int countByUserAndStatusNot(User user, Status status);
@@ -17,6 +18,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
     Page<Borrow> findByStatus(Status status, Pageable pageable);
     List<Borrow> findByUserAndStatusNotOrderByIdDesc(User user, Status status);
     List<Borrow> findByStatusAndDueDateBefore(Status status, LocalDateTime dueDate);
+
+    Optional<Borrow> findByBookAndStatusNot(Book book, Status status);
 
     Boolean existsByUser(User user);
 

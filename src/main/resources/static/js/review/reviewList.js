@@ -76,7 +76,7 @@ export function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
 
         const label = document.createElement("span");
         label.classList.add("review-label");
-        label.appendChild(document.createTextNode("한줄서평"));
+        label.appendChild(document.createTextNode("한줄평"));
 
         const text = document.createElement("span");
         text.classList.add("review-text");

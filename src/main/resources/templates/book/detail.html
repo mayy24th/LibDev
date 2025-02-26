@@ -11,12 +11,13 @@
         <script type="module" src="/js/recommendation/recommendationBooksCard.js" ></script>
         <script type="module" src="/js/notification/websocket.js" ></script>
         <script type="module" src="/js/borrow/borrowBook.js"></script>
+        <script type="module" src="/js/borrow/fetchBorrowDueDate.js"></script>
     </th:block>
 </head>
 <body>
 <main layout:fragment="content">
 <div class="container mt-4">
-    <h2 class="text-center">도서 정보</h2>
+    <h2 class="page-title">도서 정보</h2>
     <div class="book-detail-box">
         <h3 class="book-detail-title" th:text="${book.title}">도서명</h3>
         <div class="book-detail-container">
@@ -102,8 +103,7 @@
                     <span th:if="${book.isAvailable}">대출가능<br>[비치중]</span>
                     <span th:unless="${book.isAvailable}">대출불가<br>[대출중](예약: <span class="reservation-count">0명</span>)</span>
                 </td>
-                <td id="bookReturnDueDate" th:text="'-'"></td>
-                <!--<td th:text="${book.returnDueDate != null ? book.returnDueDate : '-'}"></td>-->
+                <td id="bookReturnDueDate" th:data-book-id="${book.bookId}"></td>
                 <td>
                     <button id="reservationStatusButton"
                             th:classappend="${book.isAvailable ? 'btn-secondary' : 'brown-btn'}"

@@ -1,5 +1,6 @@
 .container{
-    margin-top: 200px;
+    margin-top: 70px;
+    margin-bottom: 70px;
 }
 
 .text-welcome {
@@ -32,6 +33,7 @@
 }
 
 .btn-login:hover {
+    color: white;
     background-color: #4a2e15;
 }
 
@@ -52,4 +54,30 @@
 
 .secondary-button:hover {
     background-color: #f0f0f0;
+}
+
+/* 버튼 컨테이너 (한 줄 정렬) */
+.social-btn-container {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    gap: 10px; /* 버튼 간격 */
+}
+
+/* 소셜 로그인 버튼 (네이버/구글) */
+.social-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+}
+
+/* 버튼 내 이미지 스타일 */
+.social-btn img {
+    height: 40px; /* 로고 크기 조정 */
+    width: auto;
 }
