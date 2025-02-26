@@ -19,7 +19,10 @@ public enum CustomErrorCode {
 
     // borrow 관련 에러
     BORROW_NOT_FOUND(HttpStatus.NOT_FOUND, "대출 내역을 찾을 수 없습니다"),
+    BOOK_BORROW_FORBIDDEN(HttpStatus.FORBIDDEN, "이 책은 현재 대출 중입니다. 페이지를 새로 고침 후 예약을 진행해주세요."),
     BORROW_FORBIDDEN(HttpStatus.FORBIDDEN, "해당 회원은 대출이 불가합니다."),
+    BORROW_OVERDUE(HttpStatus.FORBIDDEN, "연체로 인해 대출이 제한되었습니다."),
+    BORROW_LIMIT_EXCEEDED(HttpStatus.FORBIDDEN, "최대 대출 가능 권수를 초과했습니다."),
     EXTEND_FORBIDDEN(HttpStatus.FORBIDDEN, "해당 도서는 예약자가 있어 연장이 불가능합니다."),
     ALREADY_BORROWED_BOOK(HttpStatus.FORBIDDEN,"현재 대출중이신 도서는 예약할 수 없습니다."),
 
