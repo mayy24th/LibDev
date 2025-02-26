@@ -61,14 +61,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         topBar.appendChild(logoutLink);
     }
 
-    function updateRoleMenu(role) {
-        const firstMenuItem = roleMenu.querySelector("li:first-child a");
+    function updateRoleMenu(role) {// roleMenu 요소 가져오기
         if (role === "ADMIN") {
-            firstMenuItem.href = "/admin/management";
-            firstMenuItem.textContent = "관리";
-        } else {
-            firstMenuItem.href = "/users/mypage";
-            firstMenuItem.textContent = "기본정보";
+            if (!roleMenu.querySelector("a[href='/admin/management']")) {
+                const adminItem = document.createElement("li");
+                const adminLink = document.createElement("a");
+                adminLink.href = "/admin/management";
+                adminLink.textContent = "관리";
+                adminItem.appendChild(adminLink);
+
+                roleMenu.prepend(adminItem);
+            }
         }
     }
 

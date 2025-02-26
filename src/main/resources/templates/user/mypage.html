@@ -9,11 +9,11 @@
         <link rel="stylesheet" href="/css/user/mypage.css">
         <script type="module" src="/js/user/info.js"></script>
         <script type="module" src="/js/user/countService.js"></script>
+        <script type="module" src="/js/user/linkMypage.js"></script>
     </th:block>
 
-
 </head>
-<body class="wrapper body-mypage">
+<body>
 <main layout:fragment="content">
 <div class="container py-5">
     <div class="card p-4 shadow-sm">
@@ -41,16 +41,16 @@
             <h3 class="mb-3">서비스 이용현황</h3>
             <div class="row g-2">
                 <div class="col-6 col-md-4">
-                    <div class="border p-3 text-center rounded bg-white">대출중인 도서 <span class="count d-block fw-bold">1</span></div>
+                    <div class="border p-3 text-center rounded bg-white" id="myBorrow">대출중인 도서 <span class="count d-block fw-bold">1</span></div>
                 </div>
                 <div class="col-6 col-md-4">
-                    <div class="border p-3 text-center rounded bg-white">반납완료 도서 <span class="count d-block fw-bold">1</span></div>
+                    <div class="border p-3 text-center rounded bg-white" id="myReturn">반납완료 도서 <span class="count d-block fw-bold">1</span></div>
                 </div>
                 <div class="col-6 col-md-4">
-                    <div class="border p-3 text-center rounded bg-white">예약중인 도서 <span class="count d-block fw-bold">1</span></div>
+                    <div class="border p-3 text-center rounded bg-white" id="myReservation">예약중인 도서 <span class="count d-block fw-bold">1</span></div>
                 </div>
                 <div class="col-6 col-md-4">
-                    <div class="border p-3 text-center rounded bg-white">내가 쓴 한줄평 <span class="count d-block fw-bold">2</span></div>
+                    <div class="border p-3 text-center rounded bg-white" id="myReview">내가 쓴 한줄평 <span class="count d-block fw-bold">2</span></div>
                 </div>
             </div>
         </div>
