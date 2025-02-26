@@ -2,10 +2,14 @@ import { formatDate, statusColor } from "./utils.js";
 import { extendBorrow } from "./extendBorrow.js";
 import { requestReturn } from "./requestReturn.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
+import { checkLoginStatus } from "../utils/auth.js";
 
 fetchCurrentBorrows();
 
 async function fetchCurrentBorrows() {
+    const isLoggedIn = await checkLoginStatus();
+    if (!isLoggedIn) return;
+
     try {
         const response = await fetch("/api/v1/my/borrow-status", {
             method: "GET",

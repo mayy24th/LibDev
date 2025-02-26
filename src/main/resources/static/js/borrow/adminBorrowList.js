@@ -1,6 +1,7 @@
 import { formatDate, statusColor } from "./utils.js";
 import { renderPagination } from "./renderPagination.js";
 import { showAlertToast } from "../utils/showAlertToast.js";
+import {checkLoginStatus} from "../utils/auth";
 
 const statusFilter = document.querySelector("#status-filter");
 
@@ -11,6 +12,9 @@ statusFilter.addEventListener("change", () => {
 loadBorrowList(0, statusFilter.value); // 첫 페이지 로드
 
 async function loadBorrowList(page, status) {
+    const isLoggedIn = await checkLoginStatus();
+    if (!isLoggedIn) return;
+
     try {
         const response = await fetch(`/api/admin/v1/borrow-list?page=${page}&status=${status}`);
 

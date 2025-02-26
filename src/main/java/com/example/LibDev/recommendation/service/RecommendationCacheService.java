@@ -24,7 +24,7 @@ public class RecommendationCacheService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("${spring.cache.redis.time-to-live:600000}")
+    @Value("${spring.cache.redis.time-to-live}")
     private Long cacheTtl;
 
     // 데이터 조회
