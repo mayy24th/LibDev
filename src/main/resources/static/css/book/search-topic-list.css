@@ -6,6 +6,18 @@ body {
     width: 70%;
 }
 
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #623F3F;
+    color: white;
+    padding: 10px 70px;
+    border-radius: 30px;
+    display: block; /* block 요소로 만들어야 margin: auto 적용 가능 */
+    width: fit-content; /* 내용 크기에 맞게 너비 조정 */
+    margin: 0 auto; /* 가로 가운데 정렬 */
+}
+
 .text-center.fw-bold {
     margin-top: 10px;
     text-align: left !important;
