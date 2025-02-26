@@ -2,12 +2,61 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>비밀번호 재설정 인증번호</title>
+    <style>
+        .email-container {
+            background-color: #ffffff;
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            font-size: 30px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .verification-code {
+            display: inline-block;
+            padding: 20px 30px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+        .info-text {
+            font-size: 16px;
+            color: #555;
+            margin-top: 20px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #888;
+        }
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <div align="center" style="font-size: 15px">
-        <h1>Libdev</h1>
-        <span style="border: 1px solid; padding: 8px;font-size: 20px;" th:text="${verificationCode}"></span>
+<div class="email-container">
+    <h1>LibDev 비밀번호 재설정 인증번호</h1>
+    <p class="info-text">안녕하세요! 비밀번호 재설정을 위한 인증번호를 아래에 입력해 주세요:</p>
+    <div class="verification-code" th:text="${verificationCode}"></div>
+    <div class="footer">
+        <p>이 이메일은 비밀번호 재설정을 위한 인증번호를 보내기 위해 자동으로 생성된 이메일입니다. 회신하지 마세요.</p>
     </div>
+</div>
 </body>
 </html>
