@@ -1,5 +1,18 @@
 import { showAlertToast } from "../utils/showAlertToast.js";
 
+const topicMapping = {
+    0: "총류",
+    1: "철학",
+    2: "종교",
+    3: "사회과학",
+    4: "자연과학",
+    5: "기술과학",
+    6: "예술",
+    7: "언어",
+    8: "문학",
+    9: "역사"
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     const searchButton = document.getElementById('searchButton');
     const registerBtn = document.getElementById('registerBtn');
@@ -60,6 +73,8 @@ function searchBooks() {
                 .then(mergedBooks => {
                     mergedBooks.forEach(book => {
                         if (book.callNumber !== 'N/A') {
+                            const topicText = topicMapping[book.topicId] || "정보 없음";
+
                             const card = document.createElement('div');
                             card.className = 'col';
                             const safeContents = book.contents
@@ -79,7 +94,7 @@ function searchBooks() {
                                     <div class="card-body">
                                         <h5 class="card-title">${book.title}</h5>
                                         <p class="card-text">${book.author} | ${book.publisher}</p>
-                                        <p class="card-text">${book.callNumber} | ${book.topicId}</p>
+                                        <p class="card-text">${book.callNumber} | ${topicText}</p>
                                         <button class="btn custom-btn-outline select-btn" data-title="${book.title}" data-author="${book.author}" data-publisher="${book.publisher}" data-publishedDate="${book.publishedDate}" data-isbn="${book.isbn}" data-callNumber="${book.callNumber}" data-contents="${safeContents}" data-thumbnail="${book.thumbnail}" data-topicId="${book.topicId}" data-bs-dismiss="modal">선택</button>
                                     </div>
                                 </div>
@@ -111,6 +126,8 @@ function searchBooks() {
 
 // 도서 선택 함수 (선택한 도서 정보를 상세 정보에 표시)
 function selectBook(title, author, publisher, publishedDate, isbn, callNumber, contents, thumbnail, topicId) {
+    const topicText = topicMapping[topicId] || "정보 없음";
+
     document.getElementById('bookTitle').textContent = title;
     document.getElementById('bookAuthor').textContent = author;
     document.getElementById('bookPublisher').textContent = publisher;
@@ -119,7 +136,7 @@ function selectBook(title, author, publisher, publishedDate, isbn, callNumber, c
     document.getElementById('bookCallNumber').textContent = callNumber;
     document.getElementById('bookContents').innerHTML = contents;
     document.getElementById('bookThumbnail').src = thumbnail || '/images/bookImage.jpg';
-    document.getElementById('bookTopicId').textContent = topicId;
+    document.getElementById('bookTopicId').textContent = topicText;
 }
 
 // 도서 등록 함수
