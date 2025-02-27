@@ -8,6 +8,11 @@
     <th:block layout:fragment="extraHead">
         <link rel="stylesheet" href="/css/user/user-form.css">
         <script type="module" src="/js/user/join.js"></script>
+        <style>
+            .phone-group{
+                border-radius: 8px;
+            }
+        </style>
     </th:block>
 </head>
 <body class="wrapper body-form">
@@ -45,7 +50,7 @@
                 </div>
                 <div class="col-12 form-group">
                     <label for="phone1" class="form-label">전화번호</label>
-                    <div class="input-group">
+                    <div class="input-group phone-group" id="phone">
                         <input type="text" id="phone1" name="phone1" maxlength="3" class="form-control" required>
                         <span class="input-group-text">-</span>
                         <input type="text" id="phone2" name="phone2" maxlength="4" class="form-control" required>
