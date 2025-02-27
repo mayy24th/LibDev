@@ -44,3 +44,15 @@
     color: white;
     background-color: #4F2D2D;
 }
+
+.borrow-manage {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #623F3F;
+    color: white;
+    padding: 10px 70px;
+    border-radius: 30px;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}

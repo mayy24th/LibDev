@@ -3,16 +3,14 @@ export function formatDate(isoString) {
 
     const date = new Date(isoString);
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
 
-    const period = hours >= 12 ? "오후" : "오전";
-    const formattedHours = hours % 12 || 12;
-
-    return `${year}년 ${month}월 ${day}일 ${period} ${formattedHours}시 ${minutes}분`;
+    return `${year}-${month}-${day} / ${hours}:${minutes}`;
 }
+
 
 export function statusText(status) {
     const statusMap = {
