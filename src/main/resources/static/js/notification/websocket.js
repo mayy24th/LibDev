@@ -1,5 +1,6 @@
 import { fetchUnreadNotifications } from "./fetchUnreadNotifications.js";
 import { fetchUserId } from "./fetchUser.js";
+import {showAlertToast} from "../utils/showAlertToast";
 
 async function initializeWebSocket() {
     const userId = await fetchUserId();
@@ -21,7 +22,6 @@ async function initializeWebSocket() {
             const notification = JSON.parse(message.body);
             showToast(notification);
         });
-    }, (error) => {
     });
 }
 
@@ -51,7 +51,8 @@ export async function deleteNotification(notificationId) {
         });
 
         if (!response.ok) {
-            throw new Error("알림 삭제 실패");
+            showAlertToast("알림 삭제 실패");
+            return;
         }
 
         console.log(`알림 삭제 완료 - ID: ${notificationId}`);

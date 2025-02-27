@@ -12,7 +12,8 @@ export async function cancelReservation(reservationId) {
                 });
 
                 if (!response.ok) {
-                    throw new Error(`예약 취소 실패: ${response.status}`);
+                    showAlertToast(`예약 취소 실패: ${response.status}`);
+                    return;
                 }
 
                 await fetchReservations(); // 최신 예약 목록을 다시 불러오기

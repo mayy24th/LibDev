@@ -31,8 +31,11 @@ async function deleteNotification(notificationId) {
         });
 
         if (!response.ok) {
-            throw new Error(`삭제 실패: ${response.status}`);
+            console.error(`알림 삭제 실패: ${response.status}`);
+            return;
         }
+
+
     } catch (error) {
         console.error("알림 삭제 중 오류 발생:", error);
     }

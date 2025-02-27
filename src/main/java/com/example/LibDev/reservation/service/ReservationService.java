@@ -43,7 +43,6 @@ public class ReservationService {
     private final BookRepository bookRepository;
     private final NotificationService notificationService;
     private final MailService mailService;
-    private final SimpMessagingTemplate messagingTemplate;
 
     private static final int MAX_BOOK_RESERVATION_LIMIT = 7;
     private static final int MAX_USER_RESERVATION_LIMIT = 7;
@@ -331,7 +330,7 @@ public class ReservationService {
 
     // 도서 대출 가능 여부 업데이트
     public void updateBookIsAvailable(Book book) {
-        if (!reservationRepository.existsByBook(book)) {
+        if (reservationRepository.notExistsByBook(book)) {
             book.updateIsAvailable(true);
         }
     }
