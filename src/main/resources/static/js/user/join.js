@@ -53,8 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const result = await response.json();
 
             if (!response.ok) {
-                console.error("회원가입 실패:", result);
-                showAlertToast(result.message || "회원가입에 실패했습니다.");
                 if (result.data) {
                     showValidationErrors(result.data);
                 }
