@@ -11,7 +11,8 @@ async function loadReservationList(page) {
         const response = await fetch(`/api/v1/reservations?page=${page}`);
 
         if (!response.ok) {
-            throw new Error("예약 내역을 불러오는데 실패했습니다.");
+            console.error(`예약 내역을 불러오는 데 실패했습니다. 상태 코드: ${response.status}`);
+            return [];
         }
         const data = await response.json();
 
@@ -66,7 +67,6 @@ function displayReservationList(reservationList, page) {
         btn.classList.add("btn", "cancel-reservation-btn");
         btn.addEventListener("click", () => cancelReservation(reservation.reservationId));
         cancelBtn.appendChild(btn);
-
 
         reservationItem.appendChild(reservationNumber);
         reservationItem.appendChild(bookTitle);

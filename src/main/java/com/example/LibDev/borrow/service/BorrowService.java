@@ -214,7 +214,7 @@ public class BorrowService {
 
     /* 도서 대출 가능 여부 업데이트 */
     public void updateBookIsAvailable(Book book) {
-        if (!reservationRepository.existsByBook(book)) {
+        if (reservationRepository.notExistsByBook(book)) {
             book.updateIsAvailable(true);
         } else {
                 reservationService.processBookReturn(book);
