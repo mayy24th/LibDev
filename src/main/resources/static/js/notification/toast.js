@@ -1,3 +1,4 @@
+/*
 export function showAlertToast(message, notificationId = null) {
     const toast = Toastify({
         text: message,
@@ -40,3 +41,4 @@ async function deleteNotification(notificationId) {
         console.error("알림 삭제 중 오류 발생:", error);
     }
 }
+*/
