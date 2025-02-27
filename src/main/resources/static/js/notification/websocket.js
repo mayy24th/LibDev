@@ -36,7 +36,6 @@ function showToast(notification) {
             background: "linear-gradient(to right, #623F3F, #4F2D2D)",
         },
         callback: async function() {
-            console.log("알림 삭제 요청:", notification.id);
             await deleteNotification(notification.id);
         }
     }).showToast();

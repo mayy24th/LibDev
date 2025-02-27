@@ -36,6 +36,7 @@ public class NotificationService {
         // 웹소켓을 통해 실시간 알림 전송
         String destination = "/topic/reservations/" + userId;
         Map<String, Object> notificationData = new HashMap<>();
+        notificationData.put("id", notification.getId());
         notificationData.put("userId", userId);
         notificationData.put("message", message);
 
