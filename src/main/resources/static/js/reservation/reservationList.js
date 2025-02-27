@@ -2,6 +2,7 @@ import { showAlertToast } from "../utils/showAlertToast.js";
 import { formatDate, statusText, statusColor } from "./utils.js";
 import { fetchBookDetails } from "../book/detail.js";
 import { checkLoginStatus } from "../utils/auth.js";
+import { cancelReservation } from "./cancelReservation.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchReservations();
@@ -166,6 +167,7 @@ async function borrowBook(bookId, reservationId, borrowButton) {
     } catch (error) {
         console.error("예약 취소 중 오류 발생:", error);
     }
+    fetchReservations();
 }
 
 // 대출버튼제거 함수

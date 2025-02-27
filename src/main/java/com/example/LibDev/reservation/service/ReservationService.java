@@ -4,6 +4,7 @@ import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.repository.BookRepository;
 import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.borrow.repository.BorrowRepository;
+import com.example.LibDev.borrow.service.BorrowService;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.notification.service.NotificationService;
@@ -113,8 +114,7 @@ public class ReservationService {
 
     // 예약자 알림
     private void notifyReservationUser(Long userId, Reservation reservation, String message) {
-        String finalMessage = message + " (도서 ID: " + reservation.getBook().getBookId() + ")";
-        notificationService.sendReservationNotification(userId, finalMessage);
+        notificationService.sendReservationNotification(userId, message);
     }
 
 
@@ -133,10 +133,7 @@ public class ReservationService {
         }
 
         // 사용자의 penalty_expiration 체크
-        if (user.getPenaltyExpiration() != null) {
-            log.info("사용자 '{}'의 패널티가 적용되어 있어 모든 예약을 삭제합니다.", user.getEmail());
-            deleteAllReservationsForUser(user);
-
+        if(!user.isBorrowAvailable()) {
             throw new CustomException(CustomErrorCode.USER_PENALIZED);
         }
 

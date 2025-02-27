@@ -12,3 +12,26 @@
 .btn:hover {
     background-color: #4F2D2D;
 }
+
+.toast-btn {
+    border: none;
+    padding: 6px 12px;
+    margin: 5px;
+    font-size: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.toast-btn.confirm {
+    background-color: #996247;
+    color: white;
+}
+
+.toast-btn.cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.toast-btn:hover {
+    opacity: 0.8;
+}
