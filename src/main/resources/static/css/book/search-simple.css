@@ -97,3 +97,9 @@
     color: white;
     border: none;
 }
+
+.form-control:focus {
+    border-color: #815656;
+    outline: 0;
+    box-shadow: inset 0 0 7px .1rem rgb(150 93 93 / 56%);
+}
