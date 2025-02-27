@@ -56,10 +56,16 @@ export function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
         const reviewCard = document.createElement("div");
         reviewCard.classList.add("review-card", "d-flex");
 
+        const bookLink = document.createElement("a");
+        bookLink.href = `/books/${review.bookId}`; // 도서 상세 페이지 링크
+        bookLink.classList.add("book-link");
+
         const bookImage = document.createElement("img");
         bookImage.classList.add("book-image");
         bookImage.src = review.thumbnail;
         bookImage.alt = "책 이미지";
+
+        bookLink.appendChild(bookImage); // 북 이미지에 링크 적용
 
         const contentBox = document.createElement("div");
         contentBox.classList.add("review-content-box");
@@ -126,7 +132,7 @@ export function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
         contentBox.appendChild(authorRow);
         contentBox.appendChild(footer);
 
-        reviewCard.appendChild(bookImage);
+        reviewCard.appendChild(bookLink);
         reviewCard.appendChild(contentBox);
 
         container.appendChild(reviewCard);
