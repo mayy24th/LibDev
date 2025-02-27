@@ -4,7 +4,6 @@ import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.repository.BookRepository;
 import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.borrow.repository.BorrowRepository;
-import com.example.LibDev.borrow.service.BorrowService;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.notification.service.NotificationService;
