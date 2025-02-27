@@ -15,7 +15,7 @@
         COALESCE(SUM(b.overdue_days), 0) AS totalOverdueDays
         FROM user u
         LEFT JOIN borrow b ON u.id = b.user_id
-        AND b.status = 'OVERDUE'  <!-- 연체 상태인 대출 기록만 포함 -->
+        AND b.status = 'RETURNED'  <!-- 연체 상태인 대출 기록만 포함 -->
         WHERE u.withdraw = FALSE
         <if test="role != null and role != 'ALL'">
             AND u.role = #{role}

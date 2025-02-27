@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         clearTopBar();
         const loginLink = createNavLink("/users/login", "로그인");
         const separator = document.createElement("span");
+        separator.classList.add("header-text");
         separator.textContent = " | ";
         const joinLink = createNavLink("/users/join", "회원가입");
 
