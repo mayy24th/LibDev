@@ -1,6 +1,6 @@
 import { formatDate, statusColor } from "./utils.js";
 import { renderPagination } from "./renderPagination.js";
-import { showAlertToast } from "../utils/showAlertToast.js";
+import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
 import {checkLoginStatus} from "../utils/auth.js";
 
 const statusFilter = document.querySelector("#status-filter");
@@ -16,14 +16,9 @@ async function loadBorrowList(page, status) {
     if (!isLoggedIn) return;
 
     try {
-        const response = await fetch(`/api/admin/v1/borrow-list?page=${page}&status=${status}`);
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            showAlertToast(data.message);
-            return;
-        }
+        const data = await apiRequestRetry(`/api/admin/v1/borrow-list?page=${page}&status=${status}`, {
+            method: "GET"
+        });
 
         displayBorrowList(data.content);
 
