@@ -68,6 +68,7 @@ public class UserService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.AUTHENTICATION_REQUIRED));
+        boolean isSocial = user.isSocial(user.getProvider());
         return UserResDto.builder()
                 .name(user.getName())
                 .email(user.getEmail())
@@ -75,6 +76,7 @@ public class UserService {
                 .role(user.getRole().toString())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
+                .isSocial(isSocial)
                 .build();
     }
 

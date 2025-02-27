@@ -66,4 +66,8 @@ public class User extends BaseEntity {
         this.withdraw = true;
     }
 
+    public boolean isSocial(String provider){
+        return !(provider == null);
+    }
+
 }
