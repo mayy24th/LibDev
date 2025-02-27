@@ -1,3 +1,4 @@
+import { formatDate } from "../borrow/utils.js";
 import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
 import {renderPagination} from "../borrow/renderPagination.js";
 import {showAlertToast} from "../utils/showAlertToast.js";
@@ -53,13 +54,10 @@ function displayUserList(userList) {
         userPhone.textContent = user.phone;
 
         const createdAt = document.createElement("td");
-        createdAt.textContent = new Date(user.createdAt).toLocaleString();
+        createdAt.textContent = formatDate(user.createdAt)
 
         const penaltyExpiration = document.createElement("td");
-        penaltyExpiration.textContent = user.penaltyExpiration ? new Date(user.penaltyExpiration).toLocaleDateString() : "-";
-
-        const totalOverdueDays = document.createElement("td");
-        totalOverdueDays.textContent = user.totalOverdueDays;
+        penaltyExpiration.textContent = user.penaltyExpiration ? formatDate(user.penaltyExpiration) : "-";
 
         const { userRoleTd, actionTd } = createRoleCell(user);
 
@@ -68,7 +66,6 @@ function displayUserList(userList) {
         userItem.appendChild(userPhone);
         userItem.appendChild(createdAt);
         userItem.appendChild(penaltyExpiration);
-        userItem.appendChild(totalOverdueDays);
         userItem.appendChild(userRoleTd);
         userItem.appendChild(actionTd);
 
