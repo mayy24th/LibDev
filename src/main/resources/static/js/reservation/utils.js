@@ -24,10 +24,10 @@ export function statusText(status) {
 
 export function statusColor(status) {
     switch (status) {
-        case "대기중":
-            return "#213bb1";  // 파란색
-        case "대출가능":
-            return "#00712c";  // 초록색
+        case "WAITING":
+            return "#213bb1";
+        case "READY":
+            return "#00712c";
         default:
             return "black";
     }

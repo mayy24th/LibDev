@@ -26,7 +26,7 @@ public class ReservationCleanupService {
 
     @Transactional
     public void checkAndDeleteExpiredReservations() {
-        List<User> users = userRepository.findAll(); // 모든 사용자 가져오기
+        List<User> users = userRepository.findAll();
 
         for (User user : users) {
             if (user.getPenaltyExpiration() != null) {
@@ -34,11 +34,8 @@ public class ReservationCleanupService {
                 reservationService.deleteAllReservationsForUser(user);
             }
         }
-
-        log.info("패널티 확인 및 예약 삭제 작업 완료.");
     }
 
-    // 매일 자정(00:00)에 실행
     @Scheduled(cron = "0 0 9-18 * * ?")
     @Transactional
     public void deleteExpiredReservations() {
@@ -49,8 +46,6 @@ public class ReservationCleanupService {
             List<Reservation> expiredReservations = reservationRepository.findByExpirationDateBefore(today);
 
             if (!expiredReservations.isEmpty()) {
-                log.info("삭제할 예약 {}건 발견", expiredReservations.size());
-
                 // 영향을 받은 book ID 수집
                 Set<Book> affectedBooks = expiredReservations.stream()
                         .map(Reservation::getBook)
@@ -73,10 +68,6 @@ public class ReservationCleanupService {
                 for (Book book : affectedBooks) {
                     reservationService.updateFirstReservationExpiration(book);
                 }
-
-                log.info("만료된 예약 삭제 완료 및 {}개의 책에 대해 다음 예약자 만료일 업데이트 완료", affectedBooks.size());
-            } else {
-                log.info("만료된 예약 없음");
             }
         } catch (Exception e) {
             log.error("만료된 예약 삭제 중 오류 발생: {}", e.getMessage(), e);

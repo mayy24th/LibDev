@@ -1,4 +1,4 @@
-import { fetchUserId } from "/js/notification/fetchUser.js";
+import { fetchUserId } from "./fetchUser.js";
 
 export async function fetchUnreadNotifications() {
     try {
@@ -13,11 +13,10 @@ export async function fetchUnreadNotifications() {
         });
 
         if (!response.ok) {
-            throw new Error(`읽지 않은 알림을 불러오는 데 실패했습니다. 상태 코드: ${response.status}`);
+            console.warn(`읽지 않은 알림을 불러오는 데 실패했습니다. 상태 코드: ${response.status}`);
+            return [];
         }
-
-        const notifications = await response.json();
-        return notifications;
+        return await response.json();
 
     } catch (error) {
         console.error("알림 가져오기 실패:", error);

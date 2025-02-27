@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -51,7 +50,6 @@ public class ReservationAPIController {
         return ResponseEntity.ok(reservationService.getAllReservations(page));
     }
 
-
     // 예약 삭제
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<?> cancelReservation(@PathVariable Long reservationId) {
@@ -64,8 +62,6 @@ public class ReservationAPIController {
         reservationService.cancelReservation(userId, reservationId);
         return ResponseEntity.ok("예약이 취소되었습니다.");
     }
-
-
 
     @GetMapping("/count/{bookId}")
     public ResponseEntity<Integer> getReservationCount(@PathVariable Long bookId) {

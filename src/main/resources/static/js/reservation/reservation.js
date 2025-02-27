@@ -1,5 +1,5 @@
-import { showAlertToast } from "/js/utils/showAlertToast.js";
-import {fetchUserId} from "/js/notification/fetchUser.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
+import { fetchUserId } from "../notification/fetchUser.js";
 
 export function attachReservationEvent() {
     const reserveButtons = document.querySelectorAll(".btn.btn-custom-1.reserve-btn");

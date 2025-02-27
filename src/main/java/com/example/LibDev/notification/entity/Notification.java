@@ -15,16 +15,15 @@ public class Notification extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 알림 ID (PK)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // 알림을 받을 사용자 (FK)
+    private User user;
 
     @Column(nullable = false, length = 500)
-    private String message; // 알림 내용
+    private String message;
 
-    // 알림 생성 메서드 (빌더 패턴 적용)
     public static Notification create(User user, String message) {
         return Notification.builder()
                 .user(user)
