@@ -37,6 +37,12 @@
     background-color: #4a2e15;
 }
 
+.container .card .btn-login:active {
+    color: white;
+    background-color: #4a2e15;
+}
+
+
 .btn-group {
     display: flex;
     justify-content: center;

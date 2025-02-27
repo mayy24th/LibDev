@@ -31,6 +31,12 @@
 
 .btn-submit:hover {
     background-color: #4F2D2D;
+    color: white;
+}
+
+.container .form-content form .btn-submit:active {
+    color: white;
+    background-color: #4F2D2D;
 }
 
 .error-message {
