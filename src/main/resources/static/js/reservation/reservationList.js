@@ -1,5 +1,5 @@
 import { showAlertToast } from "../utils/showAlertToast.js";
-import { formatDate } from "./utils.js";
+import { formatDate, statusText, statusColor } from "./utils.js";
 import { fetchBookDetails } from "../book/detail.js";
 import {checkLoginStatus} from "../utils/auth.js";
 
@@ -59,23 +59,35 @@ function renderReservations(reservations) {
 
         // 예약일 컨테이너
         const reservedDateContainer = document.createElement("div");
-        reservedDateContainer.classList.add("reservation-item");
+        reservedDateContainer.classList.add("reservation-item", "reserved-date");
         reservedDateContainer.textContent = `예약일: ${formatDate(reservation.reservedDate)}`;
 
-        // 만료일 컨테이너
+// 만료일 컨테이너
         const expirationDateContainer = document.createElement("div");
-        expirationDateContainer.classList.add("reservation-item");
+        expirationDateContainer.classList.add("reservation-item", "expiration-date");
         expirationDateContainer.textContent = `만료일: ${reservation.expirationDate ? formatDate(reservation.expirationDate) : "-"}`;
 
-        // 대기 순번 컨테이너
+// 대기 순번 컨테이너
         const queueOrderContainer = document.createElement("div");
-        queueOrderContainer.classList.add("reservation-item");
+        queueOrderContainer.classList.add("reservation-item", "queue-order");
         queueOrderContainer.textContent = `대기 순번: ${reservation.totalQueueSize}명 중 ${reservation.queueOrder}번째`;
 
-        // 상태 컨테이너 추가
-        const statusContainer = document.createElement("div");
+// 상태 컨테이너
+        /*const statusContainer = document.createElement("div");
         statusContainer.classList.add("reservation-item", "reservation-status");
         statusContainer.textContent = `상태: ${reservation.status}`;
+
+        const reservationStatus = document.createElement("td");
+        reservationStatus.textContent = statusText(reservation.status);
+        reservationStatus.style.color = statusColor(reservationStatus.textContent);*/
+
+        const statusContainer = document.createElement("div");
+        statusContainer.classList.add("reservation-item", "reservation-status");
+        statusContainer.textContent = `상태: ${statusText(reservation.status)}`;
+        statusContainer.style.color = statusColor(reservation.status);
+
+
+
 
         // 컨테이너 간격 유지
         reservationInfoContainer.appendChild(reservedDateContainer);

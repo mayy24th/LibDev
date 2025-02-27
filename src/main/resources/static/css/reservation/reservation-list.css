@@ -54,13 +54,34 @@
     display: flex;
     justify-content: flex-start;
     gap: 1px; /* 컨테이너 간격 유지 */
-    width: 100%;
 }
 
 /* 예약 정보 개별 컨테이너 */
 .reservation-item {
     text-align: left;
-    width: 31%; /* 고정 너비 */
+    flex: 1; /* 기본적으로 flex 배분 */
+}
+
+/* 예약일, 만료일을 더 길게 설정 */
+.reservation-item.reserved-date,
+.reservation-item.expiration-date {
+    flex: 2;  /* 더 큰 비율로 설정 */
+    min-width: 300px; /* 최소 너비 */
+    max-width: 500px; /* 최대 너비 */
+}
+
+/* 대기 순번을 중간 크기로 설정 */
+.reservation-item.queue-order {
+    flex: 1;  /* 중간 크기 */
+    min-width: 200px; /* 최소 너비 */
+    max-width: 300px; /* 최대 너비 */
+}
+
+/* 상태를 가장 작게 설정 */
+.reservation-item.reservation-status {
+    flex: 1;  /* 가장 작은 크기 */
+    min-width: 150px; /* 최소 너비 */
+    max-width: 200px; /* 최대 너비 */
 }
 
 /* 버튼 컨테이너 (우측 정렬) */
