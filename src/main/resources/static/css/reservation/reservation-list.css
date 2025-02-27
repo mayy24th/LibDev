@@ -58,6 +58,7 @@
 .reservation-item.reserved-date,
 .reservation-item.expiration-date {
     flex: 2;
+    min-width: 215px;
     max-width: 500px;
 }
 
@@ -129,5 +130,28 @@
     display: block;
     width: fit-content;
     margin: 0 auto;
+}
+
+.toast-btn {
+    border: none;
+    padding: 6px 12px;
+    margin: 5px;
+    font-size: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.toast-btn.confirm {
+    background-color: #996247;
+    color: white;
+}
+
+.toast-btn.cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.toast-btn:hover {
+    opacity: 0.8;
 }
 
