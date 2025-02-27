@@ -3,7 +3,7 @@ package com.example.LibDev.recommendation.service;
 import com.example.LibDev.recommendation.dto.RecommendationResponseDto;
 import com.example.LibDev.recommendation.strategy.PopularBookRecommendation;
 import com.example.LibDev.recommendation.strategy.SimilarBookRecommendation;
-import com.example.LibDev.recommendation.strategy.UserBaseRecommendation;
+import com.example.LibDev.recommendation.strategy.UserBaseBookRecommendation;
 import com.example.LibDev.user.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class RecommendationService {
 
     private final SimilarBookRecommendation similarBookRecommendation;
-    private final UserBaseRecommendation userBaseRecommendation;
+    private final UserBaseBookRecommendation userBaseBookRecommendation;
     private final PopularBookRecommendation popularBookRecommendation;
     private final UserService userService;
     private final RecommendationCacheService recommendationCacheService;
@@ -52,7 +52,7 @@ public class RecommendationService {
             return cachedRecommendations;
         }
 
-        List<RecommendationResponseDto> recommendations = userBaseRecommendation.recommend(null, email);
+        List<RecommendationResponseDto> recommendations = userBaseBookRecommendation.recommend(null, email);
         recommendationCacheService.cacheRecommendations(cacheKey, recommendations);
         return recommendations;
     }
