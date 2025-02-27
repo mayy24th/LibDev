@@ -35,5 +35,6 @@ public class ReviewDto {
         private String thumbnail;
         private LocalDateTime createdAt; // 생성 시간
         private boolean isOwner;    // 수정, 삭제 가능 여부
+        private Long bookId;
     }
 }
