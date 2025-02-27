@@ -2,8 +2,15 @@
     margin-right: 0px !important;
 }
 
-.text-center {
-    margin-top: 25px;
+.book-apply-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    background-color: #623F3F;
+    color: white;
+    display: inline-block;
+    padding: 10px 70px;
+    border-radius: 30px;
 }
 
 .custom-btn {
