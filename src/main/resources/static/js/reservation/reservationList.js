@@ -1,29 +1,30 @@
-import { showAlertToast } from "/js/utils/showAlertToast.js";
-import { formatDate } from "/js/reservation/utils.js";
-import { fetchBookDetails } from "/js/book/detail.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
+import { formatDate, statusText, statusColor } from "./utils.js";
+import { fetchBookDetails } from "../book/detail.js";
+import { checkLoginStatus } from "../utils/auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchReservations();
 });
 
 export async function fetchReservations() {
+    const isLoggedIn = await checkLoginStatus();
+    if (!isLoggedIn) return;
+
     try {
         const response = await fetch(`/api/v1/reservations`, {
             method: "GET",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
         });
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            showAlertToast(data.message);
+            return;
         }
 
-        const data = await response.json();
         renderReservations(data);
     } catch (error) {
-        console.error("예약 내역을 불러오는 중 오류 발생:", error);
+        console.error('Error:', error);
     }
 }
 
@@ -43,7 +44,7 @@ function renderReservations(reservations) {
         const reservationBox = document.createElement("div");
         reservationBox.classList.add("reservation-box");
 
-        // 제목과 예약 정보를 포함하는 컨테이너 (세로 정렬)
+        // 제목과 예약 정보를 포함하는 컨테이너
         const reservationContentWrapper = document.createElement("div");
         reservationContentWrapper.classList.add("reservation-content-wrapper");
 
@@ -58,23 +59,37 @@ function renderReservations(reservations) {
 
         // 예약일 컨테이너
         const reservedDateContainer = document.createElement("div");
-        reservedDateContainer.classList.add("reservation-item");
+        reservedDateContainer.classList.add("reservation-item", "reserved-date");
         reservedDateContainer.textContent = `예약일: ${formatDate(reservation.reservedDate)}`;
 
         // 만료일 컨테이너
         const expirationDateContainer = document.createElement("div");
-        expirationDateContainer.classList.add("reservation-item");
-        expirationDateContainer.textContent = `만료일: ${reservation.expirationDate ? formatDate(reservation.expirationDate) : "-"}`;
+        expirationDateContainer.classList.add("reservation-item", "expiration-date");
+        expirationDateContainer.textContent = `만료일: ${reservation.expirationDate ? formatDate(reservation.expirationDate) :""}`;
 
         // 대기 순번 컨테이너
         const queueOrderContainer = document.createElement("div");
-        queueOrderContainer.classList.add("reservation-item");
+        queueOrderContainer.classList.add("reservation-item", "queue-order");
         queueOrderContainer.textContent = `대기 순번: ${reservation.totalQueueSize}명 중 ${reservation.queueOrder}번째`;
+
+        // 상태 컨테이너
+        const statusContainer = document.createElement("div");
+        statusContainer.classList.add("reservation-item", "reservation-status");
+        const statusLabel = document.createElement("span");
+        statusLabel.textContent = "상태: ";
+        statusLabel.style.color = "black"; // 검은색 고정
+        const statusValue = document.createElement("span");
+        statusValue.textContent = statusText(reservation.status);
+        statusValue.style.color = statusColor(reservation.status); // 상태 값만 색상 변경
+
+        statusContainer.appendChild(statusLabel);
+        statusContainer.appendChild(statusValue);
 
         // 컨테이너 간격 유지
         reservationInfoContainer.appendChild(reservedDateContainer);
         reservationInfoContainer.appendChild(expirationDateContainer);
         reservationInfoContainer.appendChild(queueOrderContainer);
+        reservationInfoContainer.appendChild(statusContainer);
 
         // 버튼 컨테이너 (우측 정렬)
         const buttonContainer = document.createElement("div");
@@ -115,7 +130,7 @@ async function borrowBook(bookId, reservationId, borrowButton) {
     try {
         const response = await fetch(`/api/v1/borrow?bookId=${bookId}`, {
             method: "POST",
-            credentials: "include", // 인증 정보 포함
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -153,10 +168,7 @@ async function borrowBook(bookId, reservationId, borrowButton) {
     }
 }
 
-
-/**
- * "대출하기" 버튼 제거 함수
- */
+// 대출버튼제거 함수
 function removeBorrowBtn(borrowButton) {
     if (!borrowButton) return;
     borrowButton.remove();

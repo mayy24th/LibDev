@@ -10,7 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ReservationRequestDto {
-    //메세지.properties
     @NotNull(message = "userId null 불가")
     private Long userId;
 
@@ -21,5 +20,3 @@ public class ReservationRequestDto {
     @NotNull(message = "Email null 불가")
     private String email;
 }
-
-//커스텀 어노테이션 , public @interface

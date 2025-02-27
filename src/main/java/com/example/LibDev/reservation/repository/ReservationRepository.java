@@ -4,8 +4,6 @@ import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.reservation.entity.Reservation;
 import com.example.LibDev.reservation.entity.type.ReservationStatus;
 import com.example.LibDev.user.entity.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
@@ -13,7 +11,7 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     boolean existsByUserAndBook(User user, Book book);
-    boolean existsByBook(Book book);
+    boolean notExistsByBook(Book book);
     boolean existsByBookAndStatus(Book book, ReservationStatus status);
 
     // 특정 책의 예약 개수 조회
@@ -33,16 +31,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     // 특정 도서의 예약 개수 조회
     int countByBook(Book book);
-
-    // 사용자의 예약 개수 조회
-    int countByUser(User user);
-
-    // 전체 예약 목록 페이징 조회
-    Page<Reservation> findAll(Pageable pageable);
-
-    // 특정 사용자의 예약 목록 페이징 조회
-    Page<Reservation> findByUser(User user, Pageable pageable);
-
-    // 특정 도서의 예약 목록 페이징 조회
-    Page<Reservation> findByBook(Book book, Pageable pageable);
 }

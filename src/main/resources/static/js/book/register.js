@@ -136,7 +136,8 @@ function selectBook(title, author, publisher, publishedDate, isbn, callNumber, c
     document.getElementById('bookCallNumber').textContent = callNumber;
     document.getElementById('bookContents').innerHTML = contents;
     document.getElementById('bookThumbnail').src = thumbnail || '/images/bookImage.jpg';
-    document.getElementById('bookTopicId').textContent = topicText;
+    document.getElementById('bookTopicId').textContent = topicId;
+    document.getElementById('bookTopic').textContent = topicText;
 }
 
 // 도서 등록 함수
@@ -147,9 +148,13 @@ function registerBook() {
     const publishedDate = document.getElementById('bookPublishedDate').textContent;
     const isbn = document.getElementById('bookIsbn').textContent;
     const callNumber = document.getElementById('bookCallNumber').textContent;
-    const topicId = document.getElementById('bookTopicId').textContent;
+    let topicId = document.getElementById('bookTopicId').textContent.trim();
     const contents = document.getElementById('bookContents').textContent;
     const thumbnail = document.getElementById('bookThumbnail').src;
+
+    if (isNaN(topicId)) {
+        topicId = Object.keys(topicMapping).find(key => topicMapping[key] === topicId) || null;
+    }
 
     if (!title) {
         showAlertToast("등록할 도서를 선택해주세요");

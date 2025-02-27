@@ -29,7 +29,7 @@ public class ReservationResponseDto {
 
         return new ReservationResponseDto(
                 reservation.getId(),
-                reservation.getBook().getBookId(), // ✅ bookId 추가
+                reservation.getBook().getBookId(),
                 reservation.getBook().getTitle(),
                 reservation.getBook().getAuthor(),
                 reservation.getUser().getEmail(),

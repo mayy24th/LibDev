@@ -1,21 +1,20 @@
 import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
-import {showAlertToast} from "../utils/showAlertToast.js";
+import {checkLoginStatus} from "../utils/auth.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-
+    //수정코드
+    const isLoggedIn = await checkLoginStatus();
+    if (!isLoggedIn) return;
     const result = await apiRequestRetry("/api/v1/users",{method: "GET"});
-
-    if(result.statusCode === 401){
-        showAlertToast(result.message);
-
-        setTimeout(() => {
-            window.location.href = "/users/login";
-        }, 500);
-
-
-    }
     populateUserInfo(result.data);
 
+    //원래코드
+    /*const result = await apiRequestRetry("/api/v1/users",{method: "GET"});
+    if(result){
+        populateUserInfo(result.data);
+    } else {
+        window.location.href = "/users/login"
+    }*/
 })
 
 const editBtn = document.getElementById("edit");

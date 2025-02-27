@@ -1,5 +1,6 @@
-import { fetchUnreadNotifications } from "/js/notification/fetchUnreadNotifications.js";
-import {fetchUserId} from "/js/notification/fetchUser.js";
+import { fetchUnreadNotifications } from "./fetchUnreadNotifications.js";
+import { fetchUserId } from "./fetchUser.js";
+import {showAlertToast} from "../utils/showAlertToast";
 
 async function initializeWebSocket() {
     const userId = await fetchUserId();
@@ -12,8 +13,6 @@ async function initializeWebSocket() {
     const stompClient = Stomp.over(socket);
 
     stompClient.connect({}, async () => {
-        console.log("WebSocket 연결 성공!! User ID:", userId);
-
         // 서버에서 읽지 않은 알림 가져오기 & Toastify 실행
         const notifications = await fetchUnreadNotifications();
         notifications.forEach(notification => showToast(notification));
@@ -21,14 +20,10 @@ async function initializeWebSocket() {
         // WebSocket 구독 (새로운 알림 수신 시 Toastify 실행)
         stompClient.subscribe(`/topic/reservations/${userId}`, (message) => {
             const notification = JSON.parse(message.body);
-            console.log("새 알림 수신:", notification);
             showToast(notification);
         });
-    }, (error) => {
-        console.error("WebSocket 연결 실패:", error);
     });
 }
-
 
 function showToast(notification) {
     Toastify({
@@ -56,7 +51,8 @@ export async function deleteNotification(notificationId) {
         });
 
         if (!response.ok) {
-            throw new Error("알림 삭제 실패");
+            showAlertToast("알림 삭제 실패");
+            return;
         }
 
         console.log(`알림 삭제 완료 - ID: ${notificationId}`);

@@ -1,6 +1,6 @@
 export function renderPagination(totalPages, currentPage, loadPageCallback) {
     const paginationContainer = document.querySelector("#pagination");
-    paginationContainer.innerHTML = ""; // 이전 페이지네이션 삭제
+    paginationContainer.innerHTML = "";
 
     const pageGroupSize = 5;
     const currentGroup = Math.floor(currentPage / pageGroupSize);
@@ -16,7 +16,7 @@ export function renderPagination(totalPages, currentPage, loadPageCallback) {
     prevLink.href = "#";
     prevLink.textContent = "«";
     if (startPage > 0) {
-        prevLink.addEventListener("click", () => loadPageCallback(startPage - 1)); // 이전 그룹의 마지막 페이지로 이동
+        prevLink.addEventListener("click", () => loadPageCallback(startPage - 1));
     } else {
         prevLi.classList.add("disabled");
     }
@@ -47,7 +47,7 @@ export function renderPagination(totalPages, currentPage, loadPageCallback) {
     nextLink.href = "#";
     nextLink.textContent = "»";
     if (endPage < totalPages) {
-        nextLink.addEventListener("click", () => loadPageCallback(endPage)); // 다음 그룹의 첫 번째 페이지로 이동
+        nextLink.addEventListener("click", () => loadPageCallback(endPage));
     } else {
         nextLi.classList.add("disabled");
     }

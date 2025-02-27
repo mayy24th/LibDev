@@ -14,7 +14,7 @@ export async function loadReviews(apiEndpoint) {
         const reviews = await response.json();
         reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        updateReviewWriteButton();
+        updateReviewPage();
 
         if (reviews.length === 0) {
             displayReviews([]);
@@ -56,10 +56,16 @@ export function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
         const reviewCard = document.createElement("div");
         reviewCard.classList.add("review-card", "d-flex");
 
+        const bookLink = document.createElement("a");
+        bookLink.href = `/books/${review.bookId}`; // 도서 상세 페이지 링크
+        bookLink.classList.add("book-link");
+
         const bookImage = document.createElement("img");
         bookImage.classList.add("book-image");
         bookImage.src = review.thumbnail;
         bookImage.alt = "책 이미지";
+
+        bookLink.appendChild(bookImage); // 북 이미지에 링크 적용
 
         const contentBox = document.createElement("div");
         contentBox.classList.add("review-content-box");
@@ -126,7 +132,7 @@ export function displayReviews(reviews, page = 1, reviewsPerPage = 5) {
         contentBox.appendChild(authorRow);
         contentBox.appendChild(footer);
 
-        reviewCard.appendChild(bookImage);
+        reviewCard.appendChild(bookLink);
         reviewCard.appendChild(contentBox);
 
         container.appendChild(reviewCard);
@@ -162,7 +168,7 @@ export function updatePageInfo(reviews, currentPage, reviewsPerPage) {
     pageInfoElement.appendChild(totalPageText);
 }
 
-function setupPagination(reviews, currentPage) {
+export function setupPagination(reviews, currentPage) {
     const paginationContainer = document.getElementById("paginationContainer");
     paginationContainer.innerHTML = "";
 
@@ -228,14 +234,19 @@ function setupPagination(reviews, currentPage) {
     displayReviews(reviews, currentPage, reviewsPerPage);
 }
 
-
-function updateReviewWriteButton() {
+function updateReviewPage() {
     const writeButton = document.getElementById("openModifyModalBtn");
+    const pageTitle = document.getElementById("page-title");
     const currentPath = window.location.pathname;
 
-    if (currentPath.startsWith("/review/book/")) {
-        writeButton.style.display = "block";
-    } else {
-        writeButton.style.display = "none";
+    if (currentPath.startsWith("/review/book")) {
+        writeButton.style.display = "block"; // 도서별 한줄평에서는 작성 버튼 표시
+        pageTitle.textContent = "도서별 한줄평";
+    } else if (currentPath.startsWith("/review/user")) {
+        writeButton.style.display = "none"; // 나의 한줄평에서는 작성 버튼 숨김
+        pageTitle.textContent = "나의 한줄평";
+    } else if (currentPath.startsWith("/review/list")) {
+        writeButton.style.display = "none"; // 전체 한줄평 목록에서는 작성 버튼 숨김
+        pageTitle.textContent = "전체 한줄평";
     }
 }
