@@ -25,7 +25,7 @@ public class SimilarBookRecommendation implements RecommendationStrategy{
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
 
-        List<RecommendedBookVO> books = similarBookMapper.findSimilarBooks(bookId, book.getTopicId(), book.getAuthor(), RECOMMENDATION_LIMIT);
+        List<RecommendedBookVO> books = similarBookMapper.findSimilarBooks(book.getTitle(), book.getTopicId(), book.getAuthor(), RECOMMENDATION_LIMIT);
 
         return books.stream()
                 .map(RecommendedBookVO::toDto)
