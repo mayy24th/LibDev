@@ -14,7 +14,7 @@
     <p>서버에서 문제가 발생했을 수 있습니다.</p>
     <img src="/images/errorpage.png" alt="ERROR" class="error-image">
     <div class="button-container">
-        <a href="http://localhost:8080/home" class="home-button">홈으로</a>
+        <a th:href="${serverUrl} + '/home'" class="home-button">홈으로</a>
     </div>
 </div>
 </body>

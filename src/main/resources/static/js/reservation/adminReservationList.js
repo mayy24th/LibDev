@@ -31,7 +31,7 @@ async function loadReservationList(page) {
 }
 
 function displayReservationList(reservationList, page) {
-    const reservationListContainer = document.querySelector(".reservation-list");
+    const reservationListContainer = document.querySelector(".admin-reservation-list");
     reservationListContainer.innerHTML = ""; // 기존 내용 초기화
 
     reservationList.forEach((reservation, index) => {
