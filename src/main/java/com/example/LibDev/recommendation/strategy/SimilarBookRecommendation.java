@@ -7,7 +7,6 @@ import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.recommendation.dto.RecommendationResponseDto;
 import com.example.LibDev.recommendation.mapper.SimilarBookMapper;
 import com.example.LibDev.recommendation.vo.RecommendedBookVO;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
