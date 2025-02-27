@@ -216,7 +216,9 @@ public class BorrowService {
     public void updateBookIsAvailable(Book book) {
         if (!reservationRepository.existsByBook(book)) {
             book.updateIsAvailable(true);
-        }
+        } else {
+                reservationService.processBookReturn(book);
+            }
     }
 
     /* 1순위 예약자인지 검사 */

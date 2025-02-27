@@ -1,7 +1,7 @@
 export function showAlertToast(message) {
     Toastify({
         text: message,
-        duration: -1,
+        duration: 3500,
         close: true,
         gravity: "top",
         position: "center",

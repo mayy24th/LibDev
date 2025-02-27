@@ -1,29 +1,30 @@
-import { showAlertToast } from "/js/utils/showAlertToast.js";
-import { formatDate } from "/js/reservation/utils.js";
-import { fetchBookDetails } from "/js/book/detail.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
+import { formatDate } from "./utils.js";
+import { fetchBookDetails } from "../book/detail.js";
+import {checkLoginStatus} from "../utils/auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchReservations();
 });
 
 export async function fetchReservations() {
+    const isLoggedIn = await checkLoginStatus();
+    if (!isLoggedIn) return;
+
     try {
         const response = await fetch(`/api/v1/reservations`, {
             method: "GET",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
         });
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            showAlertToast(data.message);
+            return;
         }
 
-        const data = await response.json();
         renderReservations(data);
     } catch (error) {
-        console.error("예약 내역을 불러오는 중 오류 발생:", error);
+        console.error('Error:', error);
     }
 }
 
@@ -71,10 +72,16 @@ function renderReservations(reservations) {
         queueOrderContainer.classList.add("reservation-item");
         queueOrderContainer.textContent = `대기 순번: ${reservation.totalQueueSize}명 중 ${reservation.queueOrder}번째`;
 
+        // 상태 컨테이너 추가
+        const statusContainer = document.createElement("div");
+        statusContainer.classList.add("reservation-item", "reservation-status");
+        statusContainer.textContent = `상태: ${reservation.status}`;
+
         // 컨테이너 간격 유지
         reservationInfoContainer.appendChild(reservedDateContainer);
         reservationInfoContainer.appendChild(expirationDateContainer);
         reservationInfoContainer.appendChild(queueOrderContainer);
+        reservationInfoContainer.appendChild(statusContainer);
 
         // 버튼 컨테이너 (우측 정렬)
         const buttonContainer = document.createElement("div");

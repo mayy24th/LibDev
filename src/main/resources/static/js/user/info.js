@@ -1,12 +1,20 @@
 import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
+import {checkLoginStatus} from "../utils/auth.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+    //수정코드
+    const isLoggedIn = await checkLoginStatus();
+    if (!isLoggedIn) return;
     const result = await apiRequestRetry("/api/v1/users",{method: "GET"});
+    populateUserInfo(result.data);
+
+    //원래코드
+    /*const result = await apiRequestRetry("/api/v1/users",{method: "GET"});
     if(result){
         populateUserInfo(result.data);
     } else {
         window.location.href = "/users/login"
-    }
+    }*/
 })
 
 const editBtn = document.getElementById("edit");
