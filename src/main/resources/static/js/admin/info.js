@@ -1,3 +1,4 @@
+import { formatDate } from "../borrow/utils.js";
 import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
 import {showAlertToast} from "../utils/showAlertToast.js";
 
@@ -42,10 +43,7 @@ function populateUserInfo(userInfo) {
     const emailElement = document.querySelector(".email-address");
 
     if (nameElement) nameElement.textContent = userInfo.name;
-    if (joinDateElement) {
-        const date = new Date(userInfo.createdAt);
-        joinDateElement.textContent = date.toLocaleDateString('ko-KR');
-    }
+    if (joinDateElement) joinDateElement.textContent = formatDate(userInfo.createdAt);
     if (phoneElement) phoneElement.textContent = userInfo.phone;
     if (emailElement) emailElement.textContent = userInfo.email;
 
