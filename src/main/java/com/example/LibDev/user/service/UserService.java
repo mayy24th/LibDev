@@ -87,7 +87,6 @@ public class UserService {
         User user = userRepository.findLoginUserByEmail(email);
 
         user.update(
-                userUpdateReqDto.getEmail(),
                 userUpdateReqDto.getName(),
                 userUpdateReqDto.getPhone()
         );

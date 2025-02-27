@@ -43,8 +43,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public void update(String email, String name, String phone) {
-        this.email = email;
+    public void update( String name, String phone) {
         this.name = name;
         this.phone = phone;
     }

@@ -25,16 +25,17 @@
                 <label for="name" class="form-label">성명</label>
                 <input type="text" id="name" name="name" class="form-control" required>
             </div>
-            <input type="hidden" id="currentEmail" name="currentEmail">
             <div class="col-md-12 form-group">
-                <label for="email" class="form-label">이메일</label>
-                <div class="input-group">
-                    <input type="text" id="email" name="email" class="form-control" required>
-                    <span class="input-group-text">@</span>
-                    <input type="text" id="emailDomain" name="emailDomain" class="form-control" required>
-                    <button class="btn btn-submit" id= "btn-check" type="button">중복체크</button>
-                </div>
+            <label for="email" class="form-label">이메일</label>
+            <div class="input-group">
+                <input type="text" id="email" name="email" class="form-control" readonly
+                       style="background-color: #e9ecef; cursor: not-allowed; border: none;">
+                <span class="input-group-text">@</span>
+                <input type="text" id="emailDomain" name="emailDomain" class="form-control" readonly
+                       style="background-color: #e9ecef; cursor: not-allowed; border: none;">
             </div>
+            </div>
+
             <div class="col-md-12 form-group">
                 <label for="password" class="form-label">비밀번호</label>
                 <input type="password" id="password" name="password" class="form-control">
