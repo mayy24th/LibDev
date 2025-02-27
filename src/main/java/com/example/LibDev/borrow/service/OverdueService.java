@@ -36,5 +36,16 @@ public class OverdueService {
         });
 
         log.info("연체된 대출 {}건 업데이트", borrows.size());
+
+        increaseOverdueDays();
+    }
+
+    @Transactional
+    public void increaseOverdueDays() {
+        List<Borrow> overdueBorrows = borrowRepository.findByStatus(Status.OVERDUE);
+
+        overdueBorrows.forEach(Borrow::increaseOverdueDays); // 연체일 수 1일씩 증가
+
+        log.info("연체 일 수 증가된 대출 {}건 업데이트", overdueBorrows.size());
     }
 }

@@ -16,6 +16,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
     int countByUserAndStatusNot(User user, Status status);
     Page<Borrow> findByUserAndStatus(User user, Status status, Pageable pageable);
     Page<Borrow> findByStatus(Status status, Pageable pageable);
+
+    List<Borrow> findByStatus(Status status);
     List<Borrow> findByUserAndStatusNotOrderByIdDesc(User user, Status status);
     List<Borrow> findByStatusAndDueDateBefore(Status status, LocalDateTime dueDate);
 
