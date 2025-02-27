@@ -20,6 +20,7 @@ public class UserResDto {
     private final LocalDateTime updatedAt;
     private final LocalDateTime penaltyExpiration;
     private final Long totalOverdueDays;
+    private final boolean isSocial;
 
 
 }

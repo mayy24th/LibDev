@@ -2,6 +2,17 @@
     max-width: 1140px;
 }
 
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #623F3F;
+    color: white;
+    padding: 10px 70px;
+    border-radius: 30px;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}
 .profile-card {
     background: #ddd;
     padding: 15px;
@@ -33,11 +44,14 @@
 }
 
 .btn-edit {
-    background: white;
-    border: 1px solid #333;
-    padding: 5px 10px;
-    font-size: 12px;
+    background: #623F3F;
+    color: white;
     cursor: pointer;
+}
+
+.btn-edit:hover {
+    background-color: #4e2f2f;
+    color: white;
 }
 
 .service-section {

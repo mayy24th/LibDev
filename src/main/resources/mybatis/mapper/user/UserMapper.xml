@@ -47,14 +47,19 @@
     <!--서비스 현황 조회-->
     <select id="getUserServiceCount" resultType="com.example.LibDev.user.dto.UserServiceCountResDto">
         SELECT
-            COALESCE(COUNT(CASE WHEN b.status != 'RETURNED' THEN b.book_id ELSE NULL END), 0) AS borrowCount,
-            COALESCE(COUNT(CASE WHEN b.status = 'RETURNED' THEN b.book_id ELSE NULL END), 0) AS returnCount,
-            COALESCE(COUNT(CASE WHEN r.status != 'CANCELLED' THEN r.book_id ELSE NULL END), 0) AS reservationCount,
-            COALESCE(COUNT(rv.review_id), 0) AS reviewCount
+            (SELECT COUNT(*)
+             FROM borrow
+             WHERE user_id = u.id AND status != 'RETURNED') AS borrowCount,
+            (SELECT COUNT(*)
+        FROM borrow
+        WHERE user_id = u.id AND status = 'RETURNED') AS returnCount,
+            (SELECT COUNT(*)
+        FROM reservation
+        WHERE user_id = u.id AND status != 'CANCELLED') AS reservationCount,
+            (SELECT COUNT(*)
+        FROM review
+        WHERE user_id = u.id) AS reviewCount
         FROM user u
-                 LEFT JOIN borrow b ON b.user_id = u.id
-                 LEFT JOIN reservation r ON r.user_id = u.id
-                 LEFT JOIN review rv ON rv.user_id = u.id
         WHERE u.email = #{email}
     </select>
 

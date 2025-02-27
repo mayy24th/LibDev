@@ -35,3 +35,14 @@
 .toast-btn:hover {
     opacity: 0.8;
 }
+.reservation-manage {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #623F3F;
+    color: white;
+    padding: 10px 70px;
+    border-radius: 30px;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}

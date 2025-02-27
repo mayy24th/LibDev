@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,15 @@ public class RecommendationCacheService {
     // 특정 데이터 삭제
     public void clearCache(String key) {
         redisTemplate.delete(key);
+    }
+
+    // 전체 데이터 삭제
+    public void clearAllCaches(){
+        Set<String> keys = redisTemplate.keys("*");
+        assert keys != null;
+        for(String key : keys){
+            clearCache(key);
+        }
     }
 
     // List<RecommendationResponseDto> → JSON String 변환

@@ -31,7 +31,7 @@ form.addEventListener("submit", async (event) => {
             await fetchUnreadNotifications(userId);
         }*/
 
-        window.location.href = "/home";
+        window.history.back();
     } catch (error){
         showAlertToast("로그인 중 오류가 발생했습니다.");
         console.error(error);
