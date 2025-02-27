@@ -45,7 +45,7 @@ public class Borrow extends BaseEntity  {
     public void extendDuedate(LocalDateTime dueDate) {this.dueDate = dueDate;}
     public void updateExtended(boolean extended) {this.extended = extended;}
     public void updateOverdue(boolean overdue) {this.overdue = overdue;}
-    public void updateOverdueDays(Long overdueDays) {this.overdueDays = overdueDays;}
+    public void increaseOverdueDays() {this.overdueDays += 1;}
     public void updateStatus(Status status) {this.status = status;}
     public void updateReturnDate(LocalDateTime returnDate) {this.returnDate = returnDate;}
 }

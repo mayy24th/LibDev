@@ -193,8 +193,7 @@ public class BorrowService {
     private void processApproveReturn(Borrow borrow) {
         borrow.updateReturnDate(LocalDateTime.now());
 
-        if (borrow.getStatus() == Status.OVERDUE) {
-            borrow.updateOverdueDays(ChronoUnit.DAYS.between(borrow.getDueDate(), borrow.getReturnDate()));
+        if (borrow.isOverdue()) {
             updateUserPenaltyExpiration(borrow.getUser(), borrow.getOverdueDays(), borrow.getReturnDate());
         }
 
@@ -208,7 +207,7 @@ public class BorrowService {
         if(user.getPenaltyExpiration() != null) {
             user.updatePenaltyExpiration(user.getPenaltyExpiration().plusDays(overdueDays));
         } else {
-          user.setPenaltyExpiration(returnDate.plusDays(overdueDays));
+          user.updatePenaltyExpiration(returnDate.plusDays(overdueDays));
         }
     }
 
