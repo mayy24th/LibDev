@@ -168,7 +168,7 @@ export function updatePageInfo(reviews, currentPage, reviewsPerPage) {
     pageInfoElement.appendChild(totalPageText);
 }
 
-function setupPagination(reviews, currentPage) {
+export function setupPagination(reviews, currentPage) {
     const paginationContainer = document.getElementById("paginationContainer");
     paginationContainer.innerHTML = "";
 

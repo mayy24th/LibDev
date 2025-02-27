@@ -1,4 +1,4 @@
-import { loadReviews, displayReviews, updatePageInfo } from "./reviewList.js";
+import { setupPagination, displayReviews, updatePageInfo } from "./reviewList.js";
 import { getReviewApiEndpoint } from "../utils/pathUtils.js";
 import { showAlertToast } from "../utils/showAlertToast.js"
 
@@ -31,12 +31,14 @@ export async function confirmDelete() {
         }
 
         showAlertToast("한줄평이 삭제되었습니다.")
-        await loadReviews(getReviewApiEndpoint());
-
         const responseAfterDelete = await fetch(getReviewApiEndpoint());
-        const updatedReviews = await responseAfterDelete.json();
+        let updatedReviews = await responseAfterDelete.json();
+
+        updatedReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
         displayReviews(updatedReviews, 1);
         updatePageInfo(updatedReviews, 1, 5);
+        setupPagination(updatedReviews, 1);
 
         closeDeleteModal();
     } catch (error) {
