@@ -17,7 +17,7 @@ public class PopularBookRecommendation implements RecommendationStrategy {
 
     @Override
     public List<RecommendationResponseDto> recommend(Long bookId, String email){
-        List<RecommendedBookVO> books = popularBookMapper.findPopularBooks(null, RECOMMENDATION_LIMIT);
+        List<RecommendedBookVO> books = popularBookMapper.findPopularBooks(RECOMMENDATION_LIMIT);
 
         return books.stream()
                 .map(RecommendedBookVO::toDto)
