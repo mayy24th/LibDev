@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             showAlertToast("회원가입이 완료되었습니다.");
-            window.location.href = "/users/login"; // 성공 시 로그인 페이지로 이동
+            window.location.href = "/home"; // 성공 시 로그인 페이지로 이동
         } catch (error) {
             showAlertToast("회원가입 중 오류가 발생했습니다.");
             console.error("네트워크 또는 서버 오류:", error);
