@@ -29,12 +29,12 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        String provider = userRequest.getClientRegistration().getRegistrationId();
         OAuth2UserInfo oAuth2UserInfo;
 
-        if(registrationId.equals("naver")) {
+        if(provider.equals("naver")) {
             oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
-        } else if(registrationId.equals("google")){
+        } else if(provider.equals("google")){
             log.info(oAuth2User.getAttributes().toString());
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         }  else {
@@ -58,6 +58,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                     .borrowAvailable(true)
                     .penaltyExpiration(null)
                     .withdraw(false)
+                    .provider(provider)
                     .build();
 
             userRepository.save(newUser);

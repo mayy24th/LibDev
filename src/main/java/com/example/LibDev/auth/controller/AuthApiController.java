@@ -55,9 +55,9 @@ public class AuthApiController {
         }
 
         String email = jwtProvider.getClaimsFromToken(refreshToken).getSubject();
-        log.info(email);
+        log.info("email:{}",email);
         String role = jwtProvider.getClaimsFromToken(refreshToken).get("role").toString();
-        log.info(role);
+        log.info("role:{}",role);
         long accessTokenValidTime = jwtProvider.getAccessTokenValidTime();
 
         if(!jwtProvider.isValidRefreshTokenInRedis(email, refreshToken)){

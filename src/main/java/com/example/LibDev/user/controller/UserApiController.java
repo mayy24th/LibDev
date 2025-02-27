@@ -43,8 +43,9 @@ public class UserApiController {
 
     @PatchMapping("/api/v1/users")
     public ResponseEntity<GlobalResponseDto> updateUser(@RequestBody UserUpdateReqDto userUpdateReqDto) {
+        userService.update(userUpdateReqDto);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(GlobalResponseDto.success(HttpStatus.OK, userService.update(userUpdateReqDto)));
+                .body(GlobalResponseDto.success(HttpStatus.OK,"회원 정보 변경 완료되었습니다."));
     }
     //TODO: 하드 코딩으로 넣어진 문구는 message.properties 적용할 것
 
