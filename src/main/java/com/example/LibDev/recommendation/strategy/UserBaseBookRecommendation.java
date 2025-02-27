@@ -5,7 +5,6 @@ import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.recommendation.dto.RecommendationResponseDto;
 import com.example.LibDev.recommendation.mapper.PopularBookMapper;
-import com.example.LibDev.recommendation.mapper.SimilarBookMapper;
 import com.example.LibDev.recommendation.mapper.UserActivityMapper;
 import com.example.LibDev.recommendation.mapper.UserBaseBookMapper;
 import com.example.LibDev.recommendation.vo.RecommendedBookVO;
