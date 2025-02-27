@@ -14,7 +14,7 @@ export async function loadReviews(apiEndpoint) {
         const reviews = await response.json();
         reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        updateReviewWriteButton();
+        updateReviewPage();
 
         if (reviews.length === 0) {
             displayReviews([]);
@@ -228,14 +228,19 @@ function setupPagination(reviews, currentPage) {
     displayReviews(reviews, currentPage, reviewsPerPage);
 }
 
-
-function updateReviewWriteButton() {
+function updateReviewPage() {
     const writeButton = document.getElementById("openModifyModalBtn");
+    const pageTitle = document.getElementById("page-title");
     const currentPath = window.location.pathname;
 
-    if (currentPath.startsWith("/review/book/")) {
-        writeButton.style.display = "block";
-    } else {
-        writeButton.style.display = "none";
+    if (currentPath.startsWith("/review/book")) {
+        writeButton.style.display = "block"; // 도서별 한줄평에서는 작성 버튼 표시
+        pageTitle.textContent = "도서별 한줄평";
+    } else if (currentPath.startsWith("/review/user")) {
+        writeButton.style.display = "none"; // 나의 한줄평에서는 작성 버튼 숨김
+        pageTitle.textContent = "나의 한줄평";
+    } else if (currentPath.startsWith("/review/list")) {
+        writeButton.style.display = "none"; // 전체 한줄평 목록에서는 작성 버튼 숨김
+        pageTitle.textContent = "전체 한줄평";
     }
 }
