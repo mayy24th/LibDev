@@ -20,8 +20,7 @@ public class ReviewMapper {
                 .thumbnail(review.getBook().getThumbnail())
                 .content(review.getContent())
                 .createdAt(review.getCreatedAt())
-                .isOwner((user.getEmail() != null && user.getEmail().equals(review.getUser().getEmail()))
-                        || user.getRole() == Role.ADMIN)
+                .isOwner(user != null && (user.getEmail().equals(review.getUser().getEmail()) || user.getRole() == Role.ADMIN))
                 .bookId(review.getBook().getBookId())
                 .build();
     }
