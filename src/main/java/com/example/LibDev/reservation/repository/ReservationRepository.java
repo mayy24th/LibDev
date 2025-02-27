@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     boolean existsByUserAndBook(User user, Book book);
-    boolean notExistsByBook(Book book);
+    boolean existsByBook(Book book);
     boolean existsByBookAndStatus(Book book, ReservationStatus status);
 
     // 특정 책의 예약 개수 조회

@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -330,7 +329,7 @@ public class ReservationService {
 
     // 도서 대출 가능 여부 업데이트
     public void updateBookIsAvailable(Book book) {
-        if (reservationRepository.notExistsByBook(book)) {
+        if (!reservationRepository.existsByBook(book)) {
             book.updateIsAvailable(true);
         }
     }
@@ -338,7 +337,6 @@ public class ReservationService {
     // 도서 반납시 예약 처리
     @Transactional
     public void processBookReturn(Book book) {
-        log.info("도서 '{}' 반납 처리 시작", book.getTitle());
 
         // 첫 번째 예약자 확인
         List<Reservation> reservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
