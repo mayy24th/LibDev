@@ -93,14 +93,16 @@ public class ReviewService {
         review.updateContent(dto.getContent());
     }
 
-
     /** 전체 한줄평 조회 **/
     public List<ReviewDto.Response> getAllReviews() {
         String email = userService.getUserEmail();
+        List<Review> reviews = reviewRepository.findAll();
+
+        if(email == null) {
+            return reviewMapper.toDtoList(reviews, null);
+        }
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
-
-        List<Review> reviews = reviewRepository.findAll();
         return reviewMapper.toDtoList(reviews, user);
     }
 
@@ -110,10 +112,14 @@ public class ReviewService {
                 .orElseThrow(()-> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
 
         String email = userService.getUserEmail();
+        List<Review> reviews = reviewRepository.findByBook(book);
+
+        if(email == null) {
+            return reviewMapper.toDtoList(reviews, null);
+        }
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
-
-        List<Review> reviews = reviewRepository.findByBook(book);
         return reviewMapper.toDtoList(reviews, user);
     }
 
