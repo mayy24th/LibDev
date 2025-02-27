@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReservationResponseDto {
     private Long reservationId;
-    private Long bookId;  // ✅ bookId 추가
+    private Long bookId;
     private String bookTitle;
     private String author;
     private String userEmail;

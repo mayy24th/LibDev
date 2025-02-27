@@ -1,6 +1,6 @@
 import { fetchUnreadNotifications } from "./fetchUnreadNotifications.js";
 import { fetchUserId } from "./fetchUser.js";
-import {showAlertToast} from "../utils/showAlertToast";
+import { showAlertToast } from "../utils/showAlertToast.js";
 
 async function initializeWebSocket() {
     const userId = await fetchUserId();
@@ -27,7 +27,7 @@ async function initializeWebSocket() {
 
 function showToast(notification) {
     Toastify({
-        text: `알림 (${notification.id}): ${notification.message}`,
+        text: notification.message,
         duration: -1,
         close: true,
         gravity: "top",
