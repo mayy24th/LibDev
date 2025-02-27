@@ -18,8 +18,12 @@ export async function apiRequestRetry(url, options = {}){
         const result = response.json();
 
         if(response.status === 403){
-            showAlertToast("권한이 없습니다.")
+            showAlertToast("권한이 없습니다.");
+
+           setTimeout(() => {
             window.location.href="/home"
+           }, 500);
+           return;
         }
 
         if (response.status === 400) {

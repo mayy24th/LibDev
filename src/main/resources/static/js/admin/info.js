@@ -12,6 +12,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, 500);
         return;
     }
+
+    if(result.code == 401){
+        showAlertToast(result.data);
+        setTimeout(() => {
+            window.location.href = "/users/login";
+         }, 500);
+         return;
+    }
+
+
+
     populateUserInfo(result.data);
 })
 
