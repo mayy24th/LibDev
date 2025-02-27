@@ -2,26 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.LibDev.recommendation.mapper.UserActivityMapper">
-
-    <!-- 사용자가 가장 많이 대출한 주제 중 가장 최근에 대출한 도서의 topic_id -->
-    <select id="findMostBorrowedTopic" resultType="int">
-        SELECT b.topic_id
+    <!-- 유저가 가장 많이 대출한 주제 중 가장 최근에 대출한 도서의 토픽과 저자 -->
+    <select id="findMostBorrowedTopicAndAuthor" resultType="com.example.LibDev.recommendation.vo.UserBorrowActivityVO">
+        SELECT b.topic_id AS topicId, b.author AS author
         FROM borrow br
-            JOIN book b ON br.book_id = b.book_id
+                 JOIN book b ON br.book_id = b.book_id
         WHERE br.user_id = #{userId}
-        GROUP BY b.topic_id
-        HAVING COUNT(*) = (
-            SELECT MAX(borrow_count)
-            FROM (
-                SELECT COUNT(*) AS borrow_count
-                FROM borrow br2
-                    JOIN book b2 ON br2.book_id = b2.book_id
-                WHERE br2.user_id = #{userId}
-                GROUP BY b2.topic_id
-                ) AS subquery
-            )
-        ORDER BY MAX(br.created_at) DESC
-        LIMIT 1;
+        GROUP BY b.topic_id, b.author
+        ORDER BY COUNT(b.book_id) DESC, MAX(br.created_at) DESC
+            LIMIT 1;
+    </select>
+
+    <!-- 유저가 대출한 도서들의 도서번호 -->
+    <select id="findBorrowedBookIdsByUser" resultType="Long">
+        SELECT DISTINCT book_id
+        FROM borrow
+        WHERE user_id = #{userId}
     </select>
 
 </mapper>
