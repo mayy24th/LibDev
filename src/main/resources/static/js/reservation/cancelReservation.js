@@ -1,6 +1,6 @@
-import { showAlertToast } from "/js/utils/showAlertToast.js";
-import { showConfirmToast } from "/js/utils/showConfirmToast.js";
-import { fetchReservations } from "/js/reservation/reservationList.js";
+import { showAlertToast } from "../utils/showAlertToast.js";
+import { showConfirmToast } from "../utils/showConfirmToast.js";
+import { fetchReservations } from "./reservationList.js";
 
 export async function cancelReservation(reservationId) {
     showConfirmToast(

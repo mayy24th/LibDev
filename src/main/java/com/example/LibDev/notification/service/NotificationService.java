@@ -23,17 +23,17 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
 
-    // 🔹 **1. 알림 저장 + 실시간 전송 (웹소켓)**
+    //알림 저장 + 실시간 전송
     @Transactional
     public void sendReservationNotification(Long userId, String message) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        // **DB에 알림 저장**
+        // DB에 알림 저장
         Notification notification = Notification.create(user, message);
         notificationRepository.save(notification);
 
-        // **웹소켓을 통해 실시간 알림 전송**
+        // 웹소켓을 통해 실시간 알림 전송
         String destination = "/topic/reservations/" + userId;
         Map<String, Object> notificationData = new HashMap<>();
         notificationData.put("userId", userId);
@@ -42,7 +42,7 @@ public class NotificationService {
         messagingTemplate.convertAndSend(destination, notificationData);
     }
 
-    // 🔹 2. 읽지 않은 알림 가져오기**
+    // 읽지 않은 알림 가져오기
     @Transactional(readOnly = true)
     public List<NotificationResponseDto> getUnreadNotifications(Long userId) {
         User user = userRepository.findById(userId)

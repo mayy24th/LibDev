@@ -1,4 +1,4 @@
-import { fetchUserId } from "/js/notification/fetchUser.js";
+import { fetchUserId } from "./fetchUser.js";
 
 export async function fetchUnreadNotifications() {
     try {

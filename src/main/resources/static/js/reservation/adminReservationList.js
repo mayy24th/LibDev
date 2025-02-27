@@ -67,7 +67,6 @@ function displayReservationList(reservationList, page) {
         btn.addEventListener("click", () => cancelReservation(reservation.reservationId));
         cancelBtn.appendChild(btn);
 
-
         reservationItem.appendChild(reservationNumber);
         reservationItem.appendChild(bookTitle);
         reservationItem.appendChild(userEmail);
