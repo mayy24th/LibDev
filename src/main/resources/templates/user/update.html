@@ -38,9 +38,14 @@
 
             <div class="col-md-12 form-group">
                 <label for="password" class="form-label">비밀번호</label>
-                <input type="password" id="password" name="password" class="form-control">
+                <div class="input-group">
+                    <input type="password" id="password" name="password" class="form-control" readonly
+                           style="background-color: #e9ecef; cursor: not-allowed; border: none;"
+                           value="12345678">
+                    <button class="btn btn-secondary" id="passwordToggleBtn">비밀번호 변경</button>
+                </div>
             </div>
-            <div class="col-md-12 form-group">
+            <div class="col-md-12 form-group" id="confirmPasswordGroup" style="display: none;">
                 <label for="confirmPassword" class="form-label">비밀번호 확인</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
             </div>
@@ -62,7 +67,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            정말로 회원탈퇴 하시겠습니까?.
+                            정말로 회원탈퇴 하시겠습니까?
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
