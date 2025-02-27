@@ -214,11 +214,11 @@ public class BorrowService {
 
     /* 도서 대출 가능 여부 업데이트 */
     public void updateBookIsAvailable(Book book) {
-        if (reservationRepository.notExistsByBook(book)) {
+        if (!reservationRepository.existsByBook(book)) {
             book.updateIsAvailable(true);
         } else {
-                reservationService.processBookReturn(book);
-            }
+            reservationService.processBookReturn(book);
+        }
     }
 
     /* 1순위 예약자인지 검사 */
@@ -228,9 +228,8 @@ public class BorrowService {
             Reservation firstReservation = reservations.getFirst(); // 현재 1순위 예약
             User firstReservationUser = firstReservation.getUser(); // 현재 1순위 예약자
 
-            if(user.getEmail().equals(firstReservationUser.getEmail())) { // 대출하려는 회원이 1순위 예약자인 경우
-                return true;
-            }
+            // 대출하려는 회원이 1순위 예약자인 경우
+            return user.getEmail().equals(firstReservationUser.getEmail());
         }
         return false;
     }
