@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             showAlertToast("로그아웃 되었습니다.")
             showLoginButton();
-            location.reload();
+            window.location.href="/home";
         } catch (error) {
             console.error("로그아웃 실패:", error);
             showAlertToast("로그아웃 실패");
