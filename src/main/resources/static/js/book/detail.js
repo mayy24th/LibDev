@@ -1,9 +1,8 @@
-import { attachReservationEvent, updateReservationCount } from "/js/reservation/reservation.js";
+import { attachReservationEvent, updateReservationCount } from "../reservation/reservation.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
     const bookInfo = document.querySelector(".book-detail-info");
     if (!bookInfo) {
-        console.warn("도서 정보를 로드할 수 없습니다.");
         return;
     }
 
