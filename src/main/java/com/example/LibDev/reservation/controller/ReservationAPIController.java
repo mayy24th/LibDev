@@ -63,6 +63,13 @@ public class ReservationAPIController {
         return ResponseEntity.ok("예약이 취소되었습니다.");
     }
 
+    // 관리자가 예약 삭제
+    @DeleteMapping("/admin/{reservationId}")
+    public ResponseEntity<?> cancelReservationByAdmin(@PathVariable Long reservationId) {
+        reservationService.cancelReservationByAdmin(reservationId);
+        return ResponseEntity.ok("관리자가 예약을 취소하였습니다.");
+    }
+
     @GetMapping("/count/{bookId}")
     public ResponseEntity<Integer> getReservationCount(@PathVariable Long bookId) {
         int count = reservationService.getReservationCountByBook(bookId);
