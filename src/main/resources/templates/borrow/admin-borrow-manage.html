@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>대출 관리 페이지</title>
+    <th:block layout:fragment="extraHead">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="/css/borrow/admin-borrow-manage.css">
+        <link rel="stylesheet" href="/css/borrow/common.css">
+        <script type="module" src="/js/borrow/adminBorrowList.js"></script>
+        <script type="module" src="/js/borrow/approveReturn.js"></script>
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content">
+    <h2 class="borrow-manage mt-4">대출 관리</h2>
+
+    <div class="table-container mt-2">
+
+        <div class="status-action-container d-flex align-items-center justify-content-end mb-4">
+            <select id="status-filter" class="form-select w-auto d-inline-block">
+                <option value="ALL">전체 보기</option>
+                <option value="BORROWED">대출 중</option>
+                <option value="OVERDUE">연체 중</option>
+                <option value="RETURN_REQUESTED">반납 신청</option>
+                <option value="RETURNED">반납 완료</option>
+            </select>
+            <button id="return-approve-btn" class="btn">반납 승인</button>
+        </div>
+
+        <table class="table text-center align-middle mb-4">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>도서명</th>
+                    <th>청구기호</th>
+                    <th>대출자</th>
+                    <th>대출일</th>
+                    <th>반납 예정일</th>
+                    <th>반납일</th>
+                    <th>연장</th>
+                    <th>연체</th>
+                    <th>상태</th>
+                    <th>반납</th>
+                </tr>
+            </thead>
+            <tbody class="borrow-list"></tbody>
+        </table>
+
+    </div>
+
+    <nav>
+        <ul class="pagination justify-content-center mt-4 mb-5" id="pagination"></ul>
+    </nav>
+
+</main>
+</body>
+</html>

@@ -9,7 +9,6 @@ public class CookieUtil {
                 .path("/")
                 .sameSite("Strict")
                 .httpOnly(true)
-                .secure(true)
                 .build();
     }
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko"  data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+    <th:block layout:fragment="extraHead">
+        <link rel="stylesheet" href="/css/book/search-home.css">
+        <link rel="stylesheet" href="/css/recommendation/recommendation-card.css">
+        <script src="/js/book/search-simple.js"></script>
+        <script src="/js/book/search-home.js"></script>
+        <script type="module" src="/js/recommendation/recommendationBooksCard.js"></script>
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="background-container">
+        <div class="slogan">
+            라이프스타일을 담는 그릇<br>엘리스 도서관
+        </div>
+
+        <div class="search-container">
+            <div class="input-group mb-4">
+                <select id="search-type" name="searchType" class="form-select">
+                    <option value="전체">전체</option>
+                    <option value="제목">제목</option>
+                    <option value="저자">저자</option>
+                    <option value="출판사">출판사</option>
+                </select>
+                <input type="text" id="search-input" name="query" class="form-control" placeholder="검색어를 입력해주세요">
+                <button id="search-button" class="btn text-white search-button" style="background-color: #623F3F;">검색</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="recommendation-container mt-5">
+        <h2 class="title">추천 도서</h2>
+
+        <!-- 추천 도서 리스트 출력 영역 -->
+        <div class="row book-list">
+            <!-- JS로 추천 도서 카드 삽입 -->
+        </div>
+    </div>
+</main>
+</body>
+</html>

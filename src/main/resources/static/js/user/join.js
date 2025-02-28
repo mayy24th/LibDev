@@ -1,15 +1,26 @@
+import { duplicateCheckEmail } from "./duplicateCheckEmail.js"
+import {showAlertToast} from "../utils/showAlertToast.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("joinForm");
+    const checkEmailButton = document.getElementById("btn-check");
+    let isEmailChecked = false;
+
+    checkEmailButton.addEventListener("click", async (event) => {
+        event.preventDefault();
+
+        isEmailChecked = await duplicateCheckEmail();
+
+    });
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        if(!isEmailChecked){
-            alert("이메일 중복 체크를 진행해주세요.");
+        if (!isEmailChecked) {
+            showAlertToast("이메일 중복 체크를 진행해주세요.");
             return;
         }
 
-        // 기존 에러 메시지 초기화
         clearValidationErrors();
 
         const formData = new FormData(form);
@@ -20,19 +31,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const confirmPassword = formData.get("confirmPassword");
         const phone = `${formData.get("phone1")}-${formData.get("phone2")}-${formData.get("phone3")}`;
 
-        // 필수 입력값 체크
         if (!name || !email || !domain || !password || !confirmPassword) {
-            alert("모든 필드를 입력하세요.");
+            showAlertToast("모든 필드를 입력하세요.");
             return;
         }
 
-        // 비밀번호 확인 체크
         if (password !== confirmPassword) {
-            alert("비밀번호가 일치하지 않습니다.");
+            showAlertToast("비밀번호가 일치하지 않습니다.");
             return;
         }
 
         const fullEmail = `${email}@${domain}`;
+
         try {
             const response = await fetch("/api/v1/users", {
                 method: "POST",
@@ -42,16 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const result = await response.json();
 
-                if(response.ok){
+            if (!response.ok) {
+                if (result.data) {
                     showValidationErrors(result.data);
-                } else {
-                    alert(result.message);
                 }
+                return;
+            }
 
-            alert(result.message);
+            showAlertToast("회원가입이 완료되었습니다.");
+            window.location.href = "/users/login";
         } catch (error) {
-            alert("회원가입 중 오류가 발생했습니다.");
-            console.error(error);
+            showAlertToast("회원가입 중 오류가 발생했습니다.");
+            console.error("네트워크 또는 서버 오류:", error);
         }
     });
 });
@@ -59,15 +71,24 @@ document.addEventListener("DOMContentLoaded", () => {
 function showValidationErrors(errors) {
     Object.keys(errors).forEach(field => {
         const inputField = document.getElementById(field);
+        if (!inputField) return;
 
-        // 에러 메시지 요소 추가
+        clearFieldError(inputField);
+
         const errorMessage = document.createElement("div");
         errorMessage.className = "error-message";
         errorMessage.innerText = errors[field];
-        inputField.classList.add("error-border");
-        inputField.parentNode.appendChild(errorMessage);
 
+        inputField.classList.add("error-border");
+
+        const formGroup = inputField.closest(".form-group");
+        formGroup.appendChild(errorMessage);
     });
+}
+
+function clearFieldError(inputField) {
+    const errorMessages = inputField.closest(".form-group").querySelectorAll(".error-message");
+    errorMessages.forEach(el => el.remove());
 }
 
 function clearValidationErrors() {

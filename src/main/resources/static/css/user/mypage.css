@@ -1,11 +1,19 @@
-.container-mypage{
-    width: 80%;
-    height: 100%;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
+.container{
+    max-width: 1140px;
+    display: none; /* 기본적으로 숨김 */
 }
 
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #623F3F;
+    color: white;
+    padding: 10px 70px;
+    border-radius: 30px;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}
 .profile-card {
     background: #ddd;
     padding: 15px;
@@ -21,7 +29,7 @@
 }
 
 .profile-badge {
-    background: blue;
+    background: #623F3F;
     color: white;
     border-radius: 50%;
     width: 50px;
@@ -37,11 +45,14 @@
 }
 
 .btn-edit {
-    background: white;
-    border: 1px solid #333;
-    padding: 5px 10px;
-    font-size: 12px;
+    background: #623F3F;
+    color: white;
     cursor: pointer;
+}
+
+.btn-edit:hover {
+    background-color: #4e2f2f;
+    color: white;
 }
 
 .service-section {
@@ -59,15 +70,18 @@
 }
 
 .service-box {
-    border: 1px solid #333;
-    padding: 10px;
-    text-align: center;
     font-size: 14px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .count {
     display: block;
     font-size: 20px;
     margin-top: 5px;
+}
+
+.service {
+    color: #623F3F;
+    font-weight: bold;
 }

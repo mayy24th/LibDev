@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Status {
     BORROWED("대출 중"),
+    RETURN_REQUESTED("반납 신청"),
     RETURNED("반납 완료"),
     OVERDUE("연체 중");
 

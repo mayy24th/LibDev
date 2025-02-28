@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko"  data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신착 도서 목록</title>
+    <th:block layout:fragment="extraHead">
+        <link rel="stylesheet" href="/css/book/new-books.css">
+        <script src="/js/book/new-books.js"></script>
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content">
+<div class="books-container">
+    <h2 class="new-books-title" id="page-title">신착자료</h2>
+    <p class="text-center fw-bold">최근 일주일 내 등록된 도서는 총 <span id="search-result-count">0</span>권입니다.</p>
+    <div id="book-list" class="book-list"></div>
+
+    <nav>
+        <ul id="pagination" class="pagination justify-content-center mt-3"></ul>
+    </nav>
+</div>
+</main>
+</body>
+</html>

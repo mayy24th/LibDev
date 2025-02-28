@@ -1,0 +1,35 @@
+.footer {
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    width: 100vw;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.privacy-policy {
+    color: #790000;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.library-name {
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+
+.footer-copyright {
+    display: block;
+    margin-top: 5px;
+    color: #555;
+}

@@ -1,0 +1,46 @@
+.table-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.search-layer{
+    margin-right: 90px;
+}
+
+.btn {
+    border: none;
+    color: white;
+    background-color: #5B3A1E;
+}
+
+.btn:hover {
+    border: none;
+    color: white;
+    background-color: #4F2D2D;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #623F3F;
+    border-color: #623F3F;
+    color: white;
+}
+
+.pagination .page-link {
+    color: #623F3F;
+}
+
+.pagination .page-link:hover {
+    background-color: #f1e3e3;
+}
+
+.admin-user-title {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #623F3F;
+    color: white;
+    padding: 10px 70px;
+    border-radius: 30px;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}

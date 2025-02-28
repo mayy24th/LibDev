@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.LibDev.recommendation.mapper.PopularBookMapper">
+    <!-- 인기자료 페이지 인기도서 추천 -->
+    <!-- 메인페이지, 추천자료페이지에서 비로그인, 대출정보 없는 유저는 인기 도서 추천 -->
+    <select id="findPopularBooks" resultType="com.example.LibDev.recommendation.vo.RecommendedBookVO">
+        SELECT b.book_id, b.title, b.author, b.thumbnail, b.publisher, b.contents, b.published_date
+        FROM book b
+            LEFT JOIN (
+            SELECT book_id, COUNT(*) AS borrow_count
+            FROM borrow
+            GROUP BY book_id
+        ) br ON b.book_id = br.book_id
+        ORDER BY br.borrow_count DESC, b.published_date DESC  <!-- 1순위: 대출 횟수, 2순위: 최신 출판 -->
+        LIMIT #{limit};  <!-- 인기도서 상위 -->
+    </select>
+
+</mapper>

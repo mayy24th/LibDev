@@ -1,0 +1,51 @@
+.form-join {
+    display: inline-block;
+    text-align: left;
+}
+
+.form-content{
+    max-width: 500px;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.label-join {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-join {
+    width: 200px; padding: 5px;
+    cursor: pointer;
+}
+
+.btn-submit {
+    background-color: #623F3F;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: #4F2D2D;
+    color: white;
+}
+
+.container .form-content form .btn-submit:active {
+    color: white;
+    background-color: #4F2D2D;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.error-border {
+    border: 2px solid red;
+}
