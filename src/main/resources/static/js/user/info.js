@@ -3,20 +3,18 @@ import {apiRequestRetry} from "../utils/apiRequsetRetry.js";
 import {checkLoginStatus} from "../utils/auth.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    //수정코드
-    const isLoggedIn = await checkLoginStatus();
-    if (!isLoggedIn) return;
-    const result = await apiRequestRetry("/api/v1/users",{method: "GET"});
-    populateUserInfo(result.data);
+    const userInfoContainer = document.querySelector(".container");
+    if (userInfoContainer) userInfoContainer.style.display = "none"; // 초기 숨김 처리
 
-    //원래코드
-    /*const result = await apiRequestRetry("/api/v1/users",{method: "GET"});
-    if(result){
+    const isLoggedIn = await checkLoginStatus();
+    if (!isLoggedIn) return; // 로그인 안 되어 있으면 실행 종료
+
+    const result = await apiRequestRetry("/api/v1/users", { method: "GET" });
+    if (result) {
         populateUserInfo(result.data);
-    } else {
-        window.location.href = "/users/login"
-    }*/
-})
+        if (userInfoContainer) userInfoContainer.style.display = "block"; // 로그인 후 표시
+    }
+});
 
 const editBtn = document.getElementById("edit");
 

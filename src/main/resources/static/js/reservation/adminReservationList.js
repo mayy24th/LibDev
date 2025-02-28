@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function loadReservationList(page) {
     try {
-        const response = await fetch(`/api/v1/reservations?page=${page}`);
+        const response = await fetch(`/api/v1/reservations/admin?page=${page}`);
 
         if (!response.ok) {
             console.error(`예약 내역을 불러오는 데 실패했습니다. 상태 코드: ${response.status}`);
