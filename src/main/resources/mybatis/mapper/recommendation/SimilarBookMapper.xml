@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.LibDev.recommendation.mapper.SimilarBookMapper">
+    <!-- 도서 상세페이지 추천 : 해당 도서와 유사한 도서 추천 -->
+    <select id="findSimilarBooks" resultType="com.example.LibDev.recommendation.vo.RecommendedBookVO">
+        SELECT b.book_id, b.title, b.author, b.thumbnail, b.publisher, b.contents, b.published_date
+        FROM book b
+        LEFT JOIN (
+            SELECT book_id, COUNT(*) AS borrow_count
+            FROM borrow
+            GROUP BY book_id
+        ) br ON b.book_id = br.book_id
+        WHERE b.title != #{bookTitle}
+        ORDER BY
+            (CASE WHEN b.topic_id = #{topicId} THEN 100 ELSE 0 END +  -- 우선순위 1: 주제 (가중치 100)
+            CASE WHEN b.author = #{author} THEN 20 ELSE 0 END +  -- 우선순위 2: 저자 (가중치 20)
+            IFNULL(br.borrow_count, 0) * 1 - -- 우선순위 3: 대출 횟수 (가중치 +대출수)
+            DATEDIFF(NOW(), b.published_date) * 0.1  -- 우선순위 4: 출판 날짜 (가중치 -)
+            ) DESC
+        LIMIT #{limit};  -- 유사도 점수가 높은 상위 5개를 가져옴
+    </select>
+</mapper>

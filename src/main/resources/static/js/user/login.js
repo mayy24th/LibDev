@@ -1,28 +1,39 @@
-document.addEventListener("DOMContentLoaded",() => {
-    const form = document.getElementById("loginForm");
+import { showAlertToast } from "../utils/showAlertToast.js";
 
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
+const form = document.getElementById("loginForm");
 
-        const formData = new FormData(form);
-        const email = formData.get("email");
-        const password = formData.get("password");
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-        try {
-            const response = await  fetch("/api/v3/auths/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({email,password}),
-            });
+    const formData = new FormData(form);
+    const email = formData.get("email");
+    const password = formData.get("password");
 
-            const result = await response.json();
+    try {
+        const response = await fetch("/api/v3/auths/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
 
-            //추후 세부 에러 알림 표시
-            alert(result.data)
-        } catch (error){
-            alert("로그인 중 오류가 발생했습니다.");
-            console.error(error);
+        const result = await response.json();
+        if (result.code === 401) {
+            showAlertToast(result.data);
+            return;
+        }
+        showAlertToast(result.data);
+
+        const prevUrl = document.referrer || "";
+
+        if (prevUrl.includes("/users/join")) {
+            window.location.href = "/home";
+        } else {
+            window.history.back();
         }
 
-    })
-})
+    } catch (error) {
+        showAlertToast("로그인 중 오류가 발생했습니다.");
+        console.error(error);
+    }
+});
+

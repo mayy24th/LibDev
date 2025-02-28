@@ -7,7 +7,7 @@ import com.example.LibDev.book.entity.Book;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,27 +20,34 @@ public class Reservation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne
+    @Getter
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ReservationStatus status;
+    public ReservationStatus status;
 
     @Column(nullable = false)
-    private LocalDate reservedDate;
+    private LocalDateTime reservedDate;
 
-    private LocalDate expirationDate;
+    private LocalDateTime expirationDate;
 
-    public void updateExpirationDate(LocalDate expirationDate) {
+    public void updateExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 
+    public void updateQueueOrder(int newQueueOrder) {
+        this.queueOrder = newQueueOrder;
+    }
+
     @Column(nullable = false)
-    private int queueOrder; // 대기 순번
+    private int queueOrder;
+
 }

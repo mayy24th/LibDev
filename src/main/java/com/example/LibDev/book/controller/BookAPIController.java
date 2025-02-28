@@ -3,7 +3,6 @@ package com.example.LibDev.book.controller;
 import com.example.LibDev.book.dto.BookRequestDto;
 import com.example.LibDev.book.dto.BookResponseDto;
 import com.example.LibDev.book.dto.KakaoBookResponseDto;
-import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -42,8 +42,15 @@ public class BookAPIController {
     // Kakao API에서 도서 검색 (DB에 저장 X, 검색 결과 반환)
     @GetMapping("/search")
     public ResponseEntity<List<KakaoBookResponseDto>> searchKakaoBooks(@RequestParam String query) {
-        List<KakaoBookResponseDto> books = bookService.searchBooksFromKakao(query);
-        return ResponseEntity.ok(books);
+        List<KakaoBookResponseDto> books = bookService.searchBooksToRegister(query);
+
+        // 저자 또는 출판사가 빈칸이면 제외
+        List<KakaoBookResponseDto> filteredBooks = books.stream()
+                .filter(book -> book.getAuthor() != null && !book.getAuthor().trim().isEmpty())
+                .filter(book -> book.getPublisher() != null && !book.getPublisher().trim().isEmpty())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(filteredBooks);
     }
 
     // 도서 등록 API (청구기호 & 주제 ID 포함)
@@ -62,18 +69,12 @@ public class BookAPIController {
 
     // 도서 목록 조회 API
     @GetMapping
-    public ResponseEntity<List<BookResponseDto>> getBooks(@RequestParam(required = false) String query) {
-        List<BookResponseDto> books = bookService.searchBooks(query);
-        return ResponseEntity.ok(books);
-    }
-
-    public ResponseEntity<List<BookResponseDto>> searchBooks(
-            @RequestParam(value = "query") String query,
+    public ResponseEntity<List<BookResponseDto>> getBooks(
+            @RequestParam(required = false, value = "query") String query,
             @RequestParam(value = "searchType", defaultValue = "전체") String searchType) {
 
         List<BookResponseDto> books;
 
-        // 전체 검색
         if ("전체".equals(searchType)) {
             books = bookService.searchBooks(query); // 검색어로 도서 전체 조회
         } else if ("제목".equals(searchType)) {
@@ -89,4 +90,35 @@ public class BookAPIController {
         return ResponseEntity.ok(books);
     }
 
+    // 주제별 도서 목록 조회 API
+    @GetMapping("/search-topic/{topicId}")
+    public ResponseEntity<List<BookResponseDto>> searchBooksByTopic(@PathVariable int topicId) {
+        List<BookResponseDto> books = bookService.findBooksByTopic(topicId);
+        return ResponseEntity.ok(books);
+    }
+
+    // 도서 삭제 API
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
+        boolean isDeleted = bookService.deleteBook(bookId);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    // 개별 도서 정보 조회 ( 대출상태, 반납예정일, 예약가능 여부 )
+    @GetMapping("/{bookId}")
+    public ResponseEntity<BookResponseDto> getBookDetails(@PathVariable Long bookId) {
+        BookResponseDto bookResponseDto = bookService.getBookDetails(bookId);
+        return ResponseEntity.ok(bookResponseDto);
+    }
+
+    // 신착자료
+    @GetMapping("/new")
+    public ResponseEntity<List<BookResponseDto>> getNewBooks() {
+        List<BookResponseDto> newBooks = bookService.findNewBooks();
+        return ResponseEntity.ok(newBooks);
+    }
 }

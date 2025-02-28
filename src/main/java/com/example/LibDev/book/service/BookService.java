@@ -6,6 +6,7 @@ import com.example.LibDev.book.dto.KakaoBookResponseDto;
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BookService {
+    @Value("${kakao.api.key}")
+    private String KAKAO_API_KEY;
+
+    @Value("${library.api.key}")
+    private String LIBRARY_API_KEY;
+
     private final BookRepository bookRepository;
 
     /*
@@ -38,9 +45,6 @@ public class BookService {
     */
 
     private final RestTemplate restTemplate = new RestTemplate(); // API 호출을 위한 RestTemplate
-
-    private static final String KAKAO_API_KEY = "KakaoAK 77a416b84bd8bc56ccf085a8b028dce6"; // 실제 API 키로 변경
-    private static final String LIBRARY_API_KEY = "47d8bf9a7a5de436887527621acaf71b54853c2418438855dd869ffbcaf10981";
 
     // Kakao API에서 도서 정보를 가져와 DB에 저장
     public void saveBookFromKakao(String query) {
@@ -55,11 +59,8 @@ public class BookService {
         ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
         Map<String, Object> responseBody = response.getBody();
 
-        System.out.println("Kakao API Response: " + responseBody);
-
         if (responseBody != null) {
             Object documentsObj = responseBody.get("documents");
-            System.out.println("Documents Object: " + documentsObj);
 
             if (documentsObj instanceof List) {
                 List<Map<String, Object>> books = (List<Map<String, Object>>) documentsObj;
@@ -94,7 +95,6 @@ public class BookService {
 
                     // 청구기호가 "N/A"라면 저장하지 않음
                     if ("N/A".equals(callNumber)) {
-                        System.out.println("청구기호가 없으므로 저장하지 않습니다: " + title);
                         continue; // 현재 루프를 건너뛰고 다음 책으로 진행
                     }
 
@@ -136,8 +136,6 @@ public class BookService {
         Map<String, String> result = Map.of("callNumber", "N/A", "topicId", "0"); // 기본값 설정
 
         if (responseBody != null) {
-            System.out.println("Library API XML Response: " + responseBody);
-
             // 정규식으로 청구기호(call_no) 추출
             Matcher callNumberMatcher = Pattern.compile("<call_no><!\\[CDATA\\[(.*?)]]></call_no>").matcher(responseBody);
             if (callNumberMatcher.find()) {
@@ -155,7 +153,7 @@ public class BookService {
 
 
     // 도서 등록 페이지에서 도서 검색
-    public List<KakaoBookResponseDto> searchBooksFromKakao(String query) {
+    public List<KakaoBookResponseDto> searchBooksToRegister(String query) {
         String url = "https://dapi.kakao.com/v3/search/book?query=" + query;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -173,9 +171,9 @@ public class BookService {
                     ((List<String>) bookData.get("authors")).stream().collect(Collectors.joining(", ")),
                     String.valueOf(bookData.get("publisher")),
                     String.valueOf(bookData.get("thumbnail")),
-                    formatPublishedDate(String.valueOf(bookData.get("datetime"))),   // 발행일
+                    formatPublishedDate(String.valueOf(bookData.get("datetime"))),
                     extractPrimaryIsbn(String.valueOf(bookData.get("isbn"))), // ISBN 첫 번째 값만 저장
-                    String.valueOf(bookData.get("contents"))   // 도서 소개
+                    String.valueOf(bookData.get("contents"))
             )).collect(Collectors.toList());
         }
         return Collections.emptyList();
@@ -204,33 +202,96 @@ public class BookService {
     public void registerBook(BookRequestDto bookRequestDto) {
         // BookRequestDto를 Book 엔티티로 변환
         Book book = bookRequestDto.toEntity();
+        book.setAvailable(true);
 
-        // 도서 저장
+        // 기존 도서가 있으면, callNumber 뒤에 숫자 증가
+        List<Book> existingBooks = bookRepository.findByCallNumberStartingWith(book.getCallNumber());
+
+        if (!existingBooks.isEmpty()) {
+            String newCallNumber = generateNewCallNumber(book.getCallNumber(), existingBooks);
+            book.setCallNumber(newCallNumber);
+        }
+
         bookRepository.save(book);
+    }
+
+    // 새로운 청구번호 생성
+    private String generateNewCallNumber(String baseCallNumber, List<Book> existingBooks) {
+        int maxSuffix = 1;
+
+        for (Book existingBook : existingBooks) {
+            String existingCallNumber = existingBook.getCallNumber();
+            if (existingCallNumber.contains("=")) {
+                String[] parts = existingCallNumber.split("=");
+                try {
+                    int number = Integer.parseInt(parts[1]);
+                    maxSuffix = Math.max(maxSuffix, number);
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return baseCallNumber + "=" + (maxSuffix + 1);
     }
 
     public List<BookResponseDto> searchBooks(String query) {
         List<Book> books;
         if (query != null && !query.trim().isEmpty()) {
-            books = bookRepository.findByTitleContainingOrAuthorContainingOrPublisherContaining(query, query, query);
+            books = bookRepository.findByTitleContainingOrAuthorContainingOrPublisherContainingOrderByCreatedAtDesc(query, query, query);
         } else {
-            books = bookRepository.findAll();
+            books = bookRepository.findAllByOrderByCreatedAtDesc();
         }
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
 
     public List<BookResponseDto> searchByTitle(String query) {
-        List<Book> books = bookRepository.findByTitleContaining(query);
+        List<Book> books = bookRepository.findByTitleContainingOrderByCreatedAtDesc(query);
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
 
     public List<BookResponseDto> searchByAuthor(String query) {
-        List<Book> books = bookRepository.findByAuthorContaining(query);
+        List<Book> books = bookRepository.findByAuthorContainingOrderByCreatedAtDesc(query);
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
 
     public List<BookResponseDto> searchByPublisher(String query) {
-        List<Book> books = bookRepository.findByPublisherContaining(query);
+        List<Book> books = bookRepository.findByPublisherContainingOrderByCreatedAtDesc(query);
         return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
     }
+
+    public Book findBookById(Long bookId) {
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("도서를 찾을 수 없습니다."));
+    }
+
+    public List<BookResponseDto> findBooksByTopic(int topicId) {
+        List<Book> books = bookRepository.findByTopicIdOrderByCreatedAtDesc(topicId);
+        return books.stream()
+                .map(BookResponseDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // 도서 삭제
+    @Transactional
+    public boolean deleteBook(Long bookId) {
+        if (bookRepository.existsById(bookId)) {
+            bookRepository.deleteById(bookId);
+            return true;
+        }
+        return false;
+    }
+
+    // bookId 도서 정보 조회해서 반환
+    @Transactional(readOnly = true)
+    public BookResponseDto getBookDetails(Long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 도서를 찾을 수 없습니다."));
+        return BookResponseDto.fromEntity(book);
+    }
+
+    // 신착자료
+    public List<BookResponseDto> findNewBooks() {
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        List<Book> books = bookRepository.findByCreatedAtAfterOrderByCreatedAtDesc(oneWeekAgo);
+        return books.stream().map(BookResponseDto::fromEntity).collect(Collectors.toList());
+    }
+
 }

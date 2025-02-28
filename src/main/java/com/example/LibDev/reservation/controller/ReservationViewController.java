@@ -6,15 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ReservationViewController {
 
-    @GetMapping("/reservations/demo")
-    public String showReservationDemo() {
-        return "reservation/reservation-demo";
-    }
-
     @GetMapping("/reservations/list")
     public String showReservationList() {
-        return "reservation/reservationList";
+        return "reservation/reservation-list";
     }
 
-
+    @GetMapping("/admin/reservations")
+    public String reservationList() {
+        return "reservation/admin-reservation-manage";
+    }
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko"  data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <th:block layout:fragment="extraHead">
+        <link rel="stylesheet" href="/css/user/mypage.css">
+        <script type="module" src="/js/admin/info.js"></script>
+        <script type="module" src="/js/admin/linkInAdminMypage.js"></script>
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content">
+<div class="container mt-4">
+    <h2 class="title">관리자 정보</h2>
+    <div class="card p-4 shadow-sm mt-4">
+        <div class="card p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="profile-badge user-role">관리자</div>
+                    <strong class="fs-4 user-name"></strong> <strong>님, 안녕하세요</strong>
+                </div>
+                <button class="btn btn-edit" id="edit">개인정보 수정</button>
+            </div>
+        </div>
+
+        <div class="card p-3 mb-3">
+            <ul class="list-unstyled mb-0">
+                <li><strong>회원가입일:</strong> <span class="join-date">2025-01-01</span></li>
+                <li><strong>휴대폰 번호:</strong> <span class="phone-number">010-1234-1234</span></li>
+                <li><strong>이메일 주소:</strong> <span class="email-address">example@ex.com</span></li>
+            </ul>
+        </div>
+
+        <div class="card p-3">
+            <h5 class="service">서비스 관리</h5>
+            <div class="row g-2 row-cols-2">
+                <div class="col">
+                    <div class="border p-3 text-center rounded bg-white" id="userManagement">회원 관리</div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 text-center rounded bg-white" id="bookManagement">도서 관리</div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 text-center rounded bg-white" id="borrowManagement">대출/반납 관리</div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 text-center rounded bg-white" id="reservationManagement">예약 관리</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>

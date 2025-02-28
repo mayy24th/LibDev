@@ -21,6 +21,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
 
+
         String email = token.getPrincipal().toString();
         String password = token.getCredentials().toString();
 

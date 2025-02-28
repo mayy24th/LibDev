@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko"  data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>주제별검색</title>
+    <th:block layout:fragment="extraHead">
+        <link rel="stylesheet" href="/css/book/search-topic.css">
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content">
+<div class="container mt-4">
+    <h2 class="text-center">주제별검색</h2>
+    <div class="topics">
+        <div class="topic">
+            <a href="/books/search-topic/0">
+                <div class="icon icon-0"></div>
+                <p>총류</p>
+            </a>
+        </div>
+        <div class="topic">
+            <a href="/books/search-topic/1">
+                <div class="icon icon-1"></div>
+                <p>철학</p>
+            </a>
+        </div>
+        <div class="topic">
+            <a href="/books/search-topic/2">
+                <div class="icon icon-2"></div>
+                <p>종교</p>
+            </a>
+        </div>
+        <div class="topic">
+            <a href="/books/search-topic/3">
+                <div class="icon icon-3"></div>
+                <p>사회과학</p>
+            </a>
+        </div>
+        <div class="topic">
+            <a href="/books/search-topic/4">
+                <div class="icon icon-4"></div>
+                <p>자연과학</p>
+            </a>
+        </div>
+        <div class="topic">
+            <a href="/books/search-topic/5">
+                <div class="icon icon-5"></div>
+                <p>기술과학</p>
+            </a>
+        </div>
+        <div class="topic">
+            <a href="/books/search-topic/6">
+                <div class="icon icon-6"></div>
+                <p>예술</p>
+            </a>
+        </div>
+        <div class="topic">
+            <a href="/books/search-topic/7">
+                <div class="icon icon-7"></div>
+                <p>언어</p>
+            </a>
+        </div>
+        <div class="topic">
+        <a href="/books/search-topic/8">
+            <div class="icon icon-8"></div>
+            <p>문학</p>
+        </a>
+        </div>
+        <div class="topic">
+            <a href="/books/search-topic/9">
+                <div class="icon icon-9"></div>
+                <p>역사</p>
+            </a>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>

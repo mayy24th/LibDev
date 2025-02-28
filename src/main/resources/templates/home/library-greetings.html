@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엘리스도서관</title>
+  <th:block layout:fragment="extraHead">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/home/library-greetings.css">
+  </th:block>
+</head>
+
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <h2 class="title">엘리스도서관</h2>
+    <p class="lead-text" style="text-align: center;"><strong>누구나 쉽고 편하게 책을 이용할 수 있도록</strong> 만들어진 스마트 도서관 플랫폼입니다.</p>
+
+    <div class="section">
+      <h3>빠르고 간편한 도서 검색</h3>
+      <p>인기 도서, 추천 도서, 신착 도서 등 다양한 책 정보를 한눈에 확인할 수 있어요.</p>
+      <p>검색 기능을 활용하면 원하는 책을 빠르게 찾고, 상세 정보를 확인할 수 있습니다.</p>
+    </div>
+
+    <div class="section">
+      <h3>대출 연장 & 예약 기능</h3>
+      <p>다 읽지 못한 책을 반납해야 할 때, 간편하게 <strong>대출 연장</strong>을 신청할 수 있어요.</p>
+      <p>인기 도서는 <strong>예약 기능</strong>을 통해 미리 신청하고, 대출 가능 알림을 받을 수도 있습니다.</p>
+    </div>
+
+    <div class="section">
+      <h3>한줄평으로 함께하는 독서 커뮤니티</h3>
+      <p>책을 읽고 느낀 점을 짧은 한줄평으로 공유할 수 있고, 다른 이용자들의 솔직한 리뷰도 확인할 수 있어요.</p>
+      <p>서로의 한줄평을 참고하면서 새로운 책을 발견하는 재미를 경험해보세요.</p>
+    </div>
+
+    <div class="section">
+      <h3>효율적인 도서 및 대출 관리</h3>
+      <p>관리자는 도서 등록, 대출 및 반납 현황을 한눈에 확인하고, 예약된 도서를 원활하게 운영할 수 있어요.</p>
+      <p>연체 도서 목록도 쉽게 정리할 수 있어 대출 관리를 더욱 효율적으로 할 수 있습니다.</p>
+    </div>
+
+    <div class="section">
+      <h3>알림 서비스로 편리한 이용</h3>
+      <p>예약한 도서가 대출 가능할 때, 대출 기한이 다가올 때 자동으로 알림을 받을 수 있어요.</p>
+      <p>이제 연체 걱정 없이, 편리하게 도서를 관리하세요!</p>
+    </div>
+
+    <p class="text-center mt-4"><strong>엘리스도서관은 <span class="highlight">더 쉽고, 더 편리한 도서 이용 환경</span>을 제공하여 책과 가까워지는 경험을 만들어갑니다.</strong></p>
+    <p class="text-center"><strong>누구나 자유롭게 책을 찾고, 읽고, 공유하는 공간, 엘리스도서관에서 시작하세요!</strong></p>
+  </div>
+</main>
+</body>
+</html>

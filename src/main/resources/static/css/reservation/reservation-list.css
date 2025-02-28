@@ -1,0 +1,157 @@
+.info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info {
+    border: 10px solid #f3f3f3;
+    padding: 20px 40px;
+    width: 70%;
+}
+
+.info-content {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.reservation-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reservation-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+    border-bottom: 1px solid black;
+    padding: 10px;
+}
+
+.reservation-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 75%;
+}
+
+.book-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.reservation-info-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1px;
+}
+
+.reservation-item {
+    text-align: left;
+    flex: 1;
+}
+
+.reservation-item.reserved-date,
+.reservation-item.expiration-date {
+    flex: 2;
+    min-width: 215px;
+    max-width: 500px;
+}
+
+.reservation-item.queue-order {
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.reservation-item.reservation-status {
+    flex: 1;
+    min-width: 150px;
+    max-width: 200px;
+}
+
+.buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+    width: 20%;
+}
+
+.btn {
+    border: none;
+    color: white;
+    background-color: #5B3A1E;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    border: none;
+    color: white;
+    background-color: #4F2D2D;
+}
+
+.cancel-btn {
+    border: none;
+    color: white;
+    background-color: #5B3A1E;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.cancel-btn:hover {
+    border: none;
+    color: white;
+    background-color: #4F2D2D;
+}
+
+.blank-message {
+    font-size: 1.2rem;
+    margin-top: 1.2rem;
+}
+
+.info-content {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.text-center {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #623F3F;
+    color: white;
+    padding: 10px 70px;
+    border-radius: 30px;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.toast-btn {
+    border: none;
+    padding: 6px 12px;
+    margin: 5px;
+    font-size: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.toast-btn.confirm {
+    background-color: #996247;
+    color: white;
+}
+
+.toast-btn.cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.toast-btn:hover {
+    opacity: 0.8;
+}
+

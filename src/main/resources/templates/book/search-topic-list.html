@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko"  data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주제별 도서 목록</title>
+    <th:block layout:fragment="extraHead">
+    <link rel="stylesheet" href="/css/book/search-topic-list.css">
+        <script src="/js/book/search-topic-list.js"></script>
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content">
+<div class="container mt-4">
+    <h2 class="page-title">주제별검색</h2>
+
+    <p class="text-center fw-bold">주제별: "<span id="topic-name"></span>"에 대한 검색결과는 총 <span id="search-result-count"></span>건입니다.</p>
+
+    <div id="book-list" class="list-group"></div>
+
+    <nav>
+        <ul class="pagination justify-content-center pagination-mt-4" id="pagination"></ul>
+    </nav>
+</div>
+</main>
+</body>
+</html>
