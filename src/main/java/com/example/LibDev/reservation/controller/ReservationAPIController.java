@@ -44,7 +44,7 @@ public class ReservationAPIController {
     }
 
     // 전체 예약 조회
-    @GetMapping("/api/v1/reservations")
+    @GetMapping("/admin")
     public ResponseEntity<Page< ReservationResponseDto>> getReservationList(
             @RequestParam(value = "page", defaultValue = "0") int page) {
         return ResponseEntity.ok(reservationService.getAllReservations(page));
