@@ -36,7 +36,7 @@ public class ReservationCleanupService {
         }
     }
 
-    @Scheduled(cron = "0 0 9-18 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void deleteExpiredReservations() {
         try {
