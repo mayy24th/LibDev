@@ -291,7 +291,7 @@ public class ReservationService {
         });
     }
 
-    // 예약 취소
+    // 일반 사용자의 예약 취소 (자기 예약만 가능)
     @Transactional
     public void cancelReservation(Long userId, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
@@ -301,6 +301,20 @@ public class ReservationService {
             throw new CustomException(CustomErrorCode.RESERVATION_CANCELLATION_FORBIDDEN);
         }
 
+        processReservationCancellation(reservation);
+    }
+
+    // 관리자 예약 취소 (모든 예약 삭제 가능)
+    @Transactional
+    public void cancelReservationByAdmin(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.RESERVATION_NOT_FOUND));
+
+        processReservationCancellation(reservation);
+    }
+
+    // 공통 예약 취소 처리 메서드 (관리자 & 일반 사용자 공통)
+    private void processReservationCancellation(Reservation reservation) {
         Book book = reservation.getBook();
 
         // 현재 취소하는 예약자가 첫 번째 예약자인지 확인
@@ -313,15 +327,17 @@ public class ReservationService {
         // 예약 대기열 재정렬 (queueOrder 다시 1부터 부여)
         List<Reservation> updatedReservations = reservationRepository.findByBookOrderByQueueOrderAsc(book);
         for (int i = 0; i < updatedReservations.size(); i++) {
-            updatedReservations.get(i).updateQueueOrder(i + 1); // 1부터 다시 부여
+            updatedReservations.get(i).updateQueueOrder(i + 1);
             reservationRepository.save(updatedReservations.get(i));
         }
 
-        // 현재 예약이 첫 번째 예약자였던 경우에만 다음 예약자에게 만료일 설정 및 이메일 발송 및 알림발송
+        // 현재 예약이 첫 번째 예약자였던 경우에만 다음 예약자에게 만료일 설정 및 알림 발송
         if (isFirstReservation) {
             updateFirstReservationExpiration(book);
         }
     }
+
+
 
     // 도서 대출 가능 여부 업데이트
     public void updateBookIsAvailable(Book book) {

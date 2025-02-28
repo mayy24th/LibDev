@@ -1,6 +1,6 @@
 import { formatDate, statusText, statusColor } from "./utils.js";
 import { renderPagination } from "./renderPagination.js";
-import { cancelReservation } from "./cancelReservation.js";
+import {cancelReservationAdmin} from "./cancelReservationAdmin.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     loadReservationList(0);
@@ -65,7 +65,7 @@ function displayReservationList(reservationList, page) {
         const btn = document.createElement("button");
         btn.textContent = "예약 취소";
         btn.classList.add("btn", "cancel-reservation-btn");
-        btn.addEventListener("click", () => cancelReservation(reservation.reservationId));
+        btn.addEventListener("click", () => cancelReservationAdmin(reservation.reservationId));
         cancelBtn.appendChild(btn);
 
         reservationItem.appendChild(reservationNumber);
