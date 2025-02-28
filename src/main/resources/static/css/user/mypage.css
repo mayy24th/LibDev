@@ -1,5 +1,6 @@
 .container{
     max-width: 1140px;
+    display: none; /* 기본적으로 숨김 */
 }
 
 .title {
@@ -78,4 +79,9 @@
     display: block;
     font-size: 20px;
     margin-top: 5px;
+}
+
+.service {
+    color: #623F3F;
+    font-weight: bold;
 }

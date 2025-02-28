@@ -4,6 +4,12 @@ import {showAlertToast} from "../utils/showAlertToast.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const result = await apiRequestRetry("/api/admin/v1/admins",{method: "GET"});
+    const userInfoContainer = document.querySelector(".container");
+    const editBtn = document.getElementById("edit");
+
+    if(window.location.pathname === "/admin/management" && editBtn){
+        editBtn.style.display = "none";
+    }
 
     if(result.statusCode === 401){
         showAlertToast(result.message);
@@ -22,13 +28,13 @@ document.addEventListener("DOMContentLoaded", async () => {
          return;
     }
 
-
-
-    populateUserInfo(result.data);
-})
+    if (result) {
+        populateUserInfo(result.data);
+        if (userInfoContainer) userInfoContainer.style.display = "block"; // 로그인 후 표시
+    }
+});
 
 const editBtn = document.getElementById("edit");
-
 if(editBtn){
     editBtn.addEventListener("click",() => {
         window.location.href = "/users/update"
