@@ -53,8 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const result = await response.json();
 
             if (!response.ok) {
-                console.error("회원가입 실패:", result);
-                showAlertToast(result.message || "회원가입에 실패했습니다.");
                 if (result.data) {
                     showValidationErrors(result.data);
                 }
@@ -62,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             showAlertToast("회원가입이 완료되었습니다.");
-            window.location.href = "/home"; // 성공 시 로그인 페이지로 이동
+            window.location.href = "/users/login";
         } catch (error) {
             showAlertToast("회원가입 중 오류가 발생했습니다.");
             console.error("네트워크 또는 서버 오류:", error);
