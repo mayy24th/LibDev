@@ -2,16 +2,19 @@ package com.example.LibDev.review.service;
 
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.book.repository.BookRepository;
+import com.example.LibDev.global.exception.CustomErrorCode;
+import com.example.LibDev.global.exception.CustomException;
 import com.example.LibDev.review.dto.ReviewDto;
-import com.example.LibDev.review.dto.ReviewDto.Response;
 import com.example.LibDev.review.entity.Review;
+import com.example.LibDev.review.filter.ProfanityFilter;
 import com.example.LibDev.review.mapper.ReviewMapper;
 import com.example.LibDev.review.repository.ReviewRepository;
+import com.example.LibDev.user.dto.UserResDto;
 import com.example.LibDev.user.entity.User;
 import com.example.LibDev.user.repository.UserRepository;
+import com.example.LibDev.user.service.UserService;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +26,23 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final UserService userService;
+    private final ProfanityFilter profanityFilter;
 
     /** 한줄평 저장 **/
     @Transactional
     public void saveReview(ReviewDto.SaveRequest dto){
-        // TODO : 1L -> dto.getUserId(), dto.getBookId()로 수정
-        User user = userRepository.findById(1L)
-                .orElseThrow(()-> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
-        Book book = bookRepository.findById(1L)
-                .orElseThrow(()-> new IllegalArgumentException("도서 정보를 찾을 수 없습니다."));
+        UserResDto userResDto = userService.info();
+        if(userResDto == null){
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+
+        profanityFilter.checkProfanity(dto.getContent());
+
+        User user = userRepository.findByEmail(userResDto.getEmail())
+                .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+        Book book = bookRepository.findById(dto.getBookId())
+                .orElseThrow(()-> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
 
         Review review = Review.builder()
                 .content(dto.getContent())
@@ -44,13 +55,18 @@ public class ReviewService {
 
     /** 한줄평 삭제 **/
     @Transactional
-    public void deleteReview(ReviewDto.DeleteRequest dto, Long userId){
-        Review review = reviewRepository.findById(dto.getReviewId())
-                .orElseThrow(()-> new IllegalArgumentException("한줄평 정보를 찾을 수 없습니다."));
+    public void deleteReview(Long reviewId){
+        UserResDto userResDto = userService.info();
+        if(userResDto == null){
+            throw new CustomException(CustomErrorCode.AUTHENTICATION_REQUIRED);
+        }
+
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(()-> new CustomException(CustomErrorCode.REVIEW_NOT_FOUND));
 
         // 본인이 작성한 한줄평인지 확인
-        if(!review.getUser().getId().equals(userId)){
-            throw new IllegalArgumentException("본인이 작성한 한줄평만 삭제할 수 있습니다.");
+        if(!review.getUser().getEmail().equals(userResDto.getEmail())){
+            throw new CustomException(CustomErrorCode.REVIEW_DELETE_FORBIDDEN);
         }
 
         reviewRepository.delete(review);
@@ -59,42 +75,65 @@ public class ReviewService {
     /** 한줄평 수정 **/
     @Transactional
     public void updateReview(ReviewDto.UpdateRequest dto, Long reviewId){
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(()-> new IllegalArgumentException("한줄평 정보를 찾을 수 없습니다."));
+        UserResDto userResDto = userService.info();
+        if(userResDto == null){
+            throw new CustomException(CustomErrorCode.AUTHENTICATION_REQUIRED);
+        }
 
-        // TODO : 본인이 작성한 한줄평인지 확인하는 로직 추가
+        profanityFilter.checkProfanity(dto.getContent());
+
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(()-> new CustomException(CustomErrorCode.REVIEW_NOT_FOUND));
+
+        // 본인이 작성한 한줄평인지 확인
+        if(!review.getUser().getEmail().equals(userResDto.getEmail())){
+            throw new CustomException(CustomErrorCode.REVIEW_DELETE_FORBIDDEN);
+        }
 
         review.updateContent(dto.getContent());
-        review.setUpdatedAt();
     }
 
-
     /** 전체 한줄평 조회 **/
-    public List<ReviewDto.Response> getAllReviews(){
-        return reviewRepository.findAll().stream()
-                .map(reviewMapper::toDto)
-                .collect(Collectors.toList());
+    public List<ReviewDto.Response> getAllReviews() {
+        String email = userService.getUserEmail();
+        List<Review> reviews = reviewRepository.findAll();
+
+        if(email == null) {
+            return reviewMapper.toDtoList(reviews, null);
+        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+        return reviewMapper.toDtoList(reviews, user);
     }
 
     /** 도서별 한줄평 조회 **/
-    public List<ReviewDto.Response> getReviewsByBook(Long bookId){
+    public List<ReviewDto.Response> getReviewsByBook(Long bookId) {
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(()-> new IllegalArgumentException("도서 정보를 찾을 수 없습니다."));
+                .orElseThrow(()-> new CustomException(CustomErrorCode.BOOK_NOT_FOUND));
 
-        return reviewRepository.findByBook(book).stream()
-                .map(reviewMapper::toDto)
-                .collect(Collectors.toList());
+        String email = userService.getUserEmail();
+        List<Review> reviews = reviewRepository.findByBook(book);
+
+        if(email == null) {
+            return reviewMapper.toDtoList(reviews, null);
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+        return reviewMapper.toDtoList(reviews, user);
     }
 
     /** 유저별 한줄평 조회 **/
-    public List<ReviewDto.Response> getReviewsByUser(Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+    public List<ReviewDto.Response> getReviewsByUser(){
+        UserResDto userResDto = userService.info();
+        if(userResDto == null){
+            throw new CustomException(CustomErrorCode.AUTHENTICATION_REQUIRED);
+        }
 
-        // TODO : 로그인 회원 확인 로직 추가
+        User user = userRepository.findByEmail(userResDto.getEmail())
+                .orElseThrow(()-> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
-        return reviewRepository.findByUser(user).stream()
-                .map(reviewMapper::toDto)
-                .collect(Collectors.toList());
+        List<Review> reviews = reviewRepository.findByUser(user);
+        return reviewMapper.toDtoList(reviews, user);
     }
 }

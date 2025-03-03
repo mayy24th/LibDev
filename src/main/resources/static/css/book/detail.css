@@ -1,0 +1,168 @@
+/*
+body {
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+}
+*/
+
+.mt-4 {
+    width: 70%;
+}
+
+.mt-4-1 {
+    width: 100%;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #623F3F;
+    color: white;
+    padding: 10px 70px;
+    border-radius: 30px;
+    display: block; /* block 요소로 만들어야 margin: auto 적용 가능 */
+    width: fit-content; /* 내용 크기에 맞게 너비 조정 */
+    margin: 0 auto; /* 가로 가운데 정렬 */
+}
+
+.book-detail-box {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border: 2px solid #656565;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.book-detail-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.book-detail-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.book-detail-thumbnail {
+    flex: 1;
+    display: flex;
+    max-width: 100%;
+    justify-content: center;
+}
+
+.book-detail-info {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    .book-detail-thumbnail, .book-detail-info {
+        flex: 1 0 100%;
+    }
+}
+
+
+.book-thumbnail img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.fromKakao {
+    padding-top: 5px;
+    color: #9a9a9a;
+}
+
+.btns {
+    align-content: center;
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+
+.btn-custom-1 {
+    background-color: #623F3F;
+    border: none;
+    color: white;
+    width: 100px;
+    padding: 8px;
+}
+
+.btn-custom-1:hover {
+    background-color: #4e2f2f;
+    color: white;
+}
+
+.btn-custom-1:active {
+    background-color: #4e2f2f !important;
+    color: white !important;
+}
+
+.btn-custom-2 {
+    background-color: #996247;
+    border: none;
+    color: white;
+    width: 100px;
+    padding: 8px;
+}
+
+.btn-custom-2:hover {
+    background-color: #7a4e38;
+    border: none;
+    color: white;
+}
+
+.btn-custom-2:active {
+    background-color: #7a4e38 !important;
+    color: white !important;
+}
+
+.btn-custom-2 {
+    background-color: #996247;
+    border: none;
+    color: white;
+}
+
+.btn-secondary {
+    width: 100px;
+    padding: 8px;
+}
+
+td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+}
+
+.info-label {
+    font-weight: bold;
+    min-width: 70px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.info-value {
+    margin-left: 10px;
+    color: #333;
+}
+
+.small-btn {
+    font-size: 14px;
+    width: auto;
+    height: auto;
+}
+
+.brown-btn {
+    background-color: #630f0f !important;
+    color: white !important;
+}
+

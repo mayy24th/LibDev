@@ -1,28 +1,48 @@
-import { loadReviews } from "./reviewList.js";
-export let reviewToDelete = null;
+import { setupPagination, displayReviews, updatePageInfo } from "./reviewList.js";
+import { getReviewApiEndpoint } from "../utils/pathUtils.js";
+import { showAlertToast } from "../utils/showAlertToast.js"
 
 export function openDeleteModal(reviewId) {
-    reviewToDelete = reviewId;
-    document.getElementById("deleteModal").style.display = "flex";
+    const modal = document.getElementById("deleteModal");
+    modal.dataset.reviewId = reviewId; // 삭제할 reviewId를 dataset에 저장
+    modal.style.display = "flex";
 }
 
 export function closeDeleteModal() {
-    reviewToDelete = null;
-    document.getElementById("deleteModal").style.display = "none";
+    const modal = document.getElementById("deleteModal");
+    modal.style.display = "none";
+    modal.dataset.reviewId = ""; // reviewId 초기화
 }
 
 export async function confirmDelete() {
-    if (!reviewToDelete) return;
+    const modal = document.getElementById("deleteModal");
+    const reviewId = modal.dataset.reviewId; // dataset에서 reviewId 가져오기
 
-    const response = await fetch(`/api/review/${reviewToDelete}`, {
-        method: "DELETE"
-    });
+    if (!reviewId) return;
 
-    if (response.ok) {
-        alert("한줄평이 삭제되었습니다.");
-        loadReviews();
+    try {
+        const response = await fetch(`/api/review/${reviewId}`, {
+            method: "DELETE"
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+
+        showAlertToast("한줄평이 삭제되었습니다.")
+        const responseAfterDelete = await fetch(getReviewApiEndpoint());
+        let updatedReviews = await responseAfterDelete.json();
+
+        updatedReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        displayReviews(updatedReviews, 1);
+        updatePageInfo(updatedReviews, 1, 5);
+        setupPagination(updatedReviews, 1);
+
         closeDeleteModal();
-    } else {
-        alert("한줄평 삭제에 실패했습니다.");
+    } catch (error) {
+        console.error(error);
+        showAlertToast(error.message);
     }
 }

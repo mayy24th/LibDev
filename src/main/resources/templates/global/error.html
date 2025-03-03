@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오류가 발생했습니다.</title>
+    <link rel="stylesheet" href="/css/common/errorpage.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="error-title">ERROR</h1>
+    <p>죄송합니다. 요청을 처리하는 중 오류가 발생했습니다.</p>
+    <p>잘못된 요청이거나,</p>
+    <p>서버에서 문제가 발생했을 수 있습니다.</p>
+    <img src="/images/errorpage.png" alt="ERROR" class="error-image">
+    <div class="button-container">
+        <a th:href="${serverUrl} + '/home'" class="home-button">홈으로</a>
+    </div>
+</div>
+</body>
+</html>
+
+
+

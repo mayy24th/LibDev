@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko"  data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도서 관리</title>
+    <th:block layout:fragment="extraHead">
+        <link rel="stylesheet" href="/css/book/book-admin.css">
+        <script type="module" src="/js/book/book-admin.js"></script>
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content">
+<div class="container mt-4">
+    <h2 class="admin-book-title">도서 관리</h2>
+    <div class="d-flex justify-content-end">
+        <button class="btn custom-btn" id="goToRegisterBtn">도서 등록</button>
+    </div>
+    <!-- 검색창 -->
+    <div class="input-group mb-4">
+        <select id="search-type" class="form-select" style="max-width: 150px; background-color: #623F3F; color: white;">
+            <option value="전체">전체</option>
+            <option value="제목">제목</option>
+            <option value="저자">저자</option>
+            <option value="출판사">출판사</option>
+        </select>
+        <input type="text" id="search-input" class="form-control" placeholder="검색어 입력">
+        <button id="search-button" class="btn text-white search-button" style="background-color: #623F3F;">검색</button>
+    </div>
+
+    <!-- 검색 결과 -->
+    <p class="text-center fw-bold"><span id="search-result-count"></span></p>
+
+    <!-- 도서 목록 -->
+    <div id="book-list" class="list-group"></div>
+
+    <!-- 페이지네이션 -->
+    <nav>
+        <ul class="pagination justify-content-center pagination-mt-4" id="pagination"></ul>
+    </nav>
+</div>
+</main>
+</body>
+</html>

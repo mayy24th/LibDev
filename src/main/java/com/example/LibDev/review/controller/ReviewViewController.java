@@ -8,14 +8,8 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewViewController {
 
     /** 전체 한줄평 조회 **/
-    @GetMapping("/list")
+    @GetMapping({"/list", "/user", "/book/{bookId}"})
     public String getAllReviews() {
         return "review/list";
-    }
-
-    /** 한줄평 저장 **/
-    @GetMapping
-    public String saveReview(){
-        return "review/form";
     }
 }

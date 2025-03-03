@@ -4,6 +4,7 @@ package com.example.LibDev.global.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,5 +25,6 @@ public class BaseEntity {
     private LocalDateTime updatedAt; // 수정 시간
 
     // 수정 시간 갱신 메서드
+    @PreUpdate
     public void setUpdatedAt(){this.updatedAt = LocalDateTime.now();}
 }
