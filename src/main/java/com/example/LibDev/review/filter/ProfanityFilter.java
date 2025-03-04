@@ -18,8 +18,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class ProfanityFilter {
-
-    private static final String PROFANITY_API_URL = "https://api.profanity-filter.run/api/v1/filter";
+    @Value("${profanity.api.url}")
+    private String PROFANITY_API_URL;
     @Value("${profanity.api.key}")
     private String PROFANITY_API_KEY;
 
