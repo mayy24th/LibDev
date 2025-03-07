@@ -7,6 +7,7 @@ import com.example.LibDev.borrow.entity.type.Status;
 import com.example.LibDev.book.entity.Book;
 import com.example.LibDev.global.exception.CustomErrorCode;
 import com.example.LibDev.global.exception.CustomException;
+import com.example.LibDev.recommendation.service.RecommendationCacheService;
 import com.example.LibDev.reservation.entity.Reservation;
 import com.example.LibDev.reservation.entity.type.ReservationStatus;
 import com.example.LibDev.reservation.repository.ReservationRepository;
@@ -40,6 +41,7 @@ public class BorrowService {
     private final BookRepository bookRepository;
     private final ReservationRepository reservationRepository;
     private final ReservationService reservationService;
+    private final RecommendationCacheService recommendationCacheService;
 
     private static final int MAX_BORROW_LIMIT = 7;
 
@@ -126,7 +128,7 @@ public class BorrowService {
                 .build();
 
         borrowRepository.save(borrow);
-
+        recommendationCacheService.clearCache("user_base_books:" + email);
         book.updateIsAvailable(false);
 
         return BorrowDueDateResDto.builder()
