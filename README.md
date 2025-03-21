@@ -44,7 +44,7 @@
 ![LibDevWAF](./assets/LibDevWAF.png)
 <br><br>
 
-## 🔥 주요기능
+## 🔥 기능
 ### **한줄평 Review**
 
 - **한줄평 작성**
