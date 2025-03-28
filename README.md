@@ -1,6 +1,5 @@
 # LibDev
-
-![header](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=300&section=header&text=LibDev&fontSize=90&fontAlignY=40&desc=Elice%20Cloud%20Track%205기&descAlign=70)
+<img width="900" height="300" alt="스크린샷 2025-02-27 오후 7 07 17" src="https://github.com/user-attachments/assets/caec0f03-420c-46a4-8b3a-c885fd8f80ba"/>
 
 ## 💬 설명
 
@@ -43,34 +42,137 @@
 <br><br>
 
 ## 🔥 기능
-### **한줄평 Review**
+### 📌 Review API 작성
+```
+review
+├── controller
+│   ├── ReviewAPIController.java
+│   └── ReviewViewController.java
+├── dto
+│   └── ReviewDto.java
+├── entity
+│   └── Review.java
+├── filter
+│   └── ProfanityFilter.java
+├── mapper
+│   └── ReviewMapper.java
+├── repository
+│   └── ReviewRepository.java
+└── service
+    └── ReviewService.java
+```
+### 한줄평 작성/수정
+| 항목 | 내용 |
+| --- | --- |
+| URL | `POST /api/review`  `PUT /api/review/{reviewId}` |
+| 접근 조건 | 로그인 필요 |
+| 권한 조건 | 작성자 본인 OR ADMIN |
+| 위치 제한 | 도서 상세 페이지에서만 작성 가능 |
+| 입력 제한 | 100자까지 입력 가능 |
+| 비속어 필터링 | Profanity Filter API 사용, 비속어 포함 시 등록/수정 불가 |
+| 이미지 | <img width="400" alt="스크린샷 2025-02-27 오후 7 08 06" src="https://github.com/user-attachments/assets/cabfe0ea-d332-418b-ae30-3a2ed8e26cff" /> <img width="400" alt="스크린샷 2025-02-27 오후 7 07 47" src="https://github.com/user-attachments/assets/6adb13b8-39eb-44d3-ba53-90e2fd56fa4a" /> <img width="400" alt="스크린샷 2025-02-27 오후 7 07 08" src="https://github.com/user-attachments/assets/981a9c1b-7b36-4e36-af02-ed2af6693c52" /> |
 
-- **한줄평 작성**
-    - 로그인한 유저만 작성 가능
-    - 도서 별 한줄평 페이지에서만 작성 가능
-- **한줄평 수정**
-    - 본인이 작성한 한줄평만 수정 가능
-    - 관리자(ADMIN) 권한을 가진 경우 모든 한줄평 수정 가능
-- **한줄평 삭제**
-    - 본인이 작성한 한줄평만 삭제 가능
-    - 관리자(ADMIN) 권한을 가진 경우 모든 한줄평 삭제 가능
-- **한줄평 조회**
-    - 전체 한줄평, 도서 별 한줄평은 로그인 없이 조회 가능
-    - 본인이 작성한 한줄평은 로그인 후 마이페이지를 통해 조회 가능
-- **비속어 필터링**
-    - Profanity Filter API를 활용하여 필터링 수행
-        - https://github.com/Whale0928/profanity-filter-api
-    - 한줄평 작성 및 수정 시 비속어 포함 여부 검사
-    - 비속어가 포함된 경우 등록/수정 불가
+### 한줄평 삭제
+| 항목 | 내용 |
+| --- | --- |
+| URL | `DELETE /api/review/{reviewId}` |
+| 접근 조건 | 로그인 필요 |
+| 권한 조건 | 작성자 본인 OR ADMIN |
+| 이미지 | <img width="400" alt="스크린샷 2025-02-27 오후 7 07 17" src="https://github.com/user-attachments/assets/abed86ba-10aa-4850-b52d-79d452f56711" /> |
 
-### **도서 추천 Recommendation**
+### 전체 한줄평 조회
+| 항목 | 내용 |
+| --- | --- |
+| URL | `GET /api/review` |
+| 접근 조건 | 로그인 불필요 |
 
-- **유사 도서 추천**
-    - 특정 도서의 상세 페이지에서 해당 도서와 유사한 도서를 추천
-- **사용자 기반 추천**
-    - 사용자의 대출 내역을 분석하여 적합한 도서를 추천
-    - 사용자가 한 번도 대출한 적이 없는 경우, **대출 횟수가 높은 인기 도서**를 추천
-    - 새로운 대출 정보가 생길 경우 캐시 삭제
-- **인기 도서 추천**
-- **Redis를 활용하여 추천 결과를 캐싱하여 성능 최적화**
-    - 동일한 도서 또는 사용자가 반복적으로 요청할 경우 DB를 직접 조회하지 않고 캐시된 데이터를 반환
+#### 도서별 한줄평 조회
+| 항목 | 내용 |
+| --- | --- |
+| URL | `GET /api/review/book/{bookId}` |
+| 접근 조건 | 로그인 불필요 |
+
+### 유저별 한줄평 조회
+| 항목 | 내용 |
+| --- | --- |
+| URL | `GET /api/review/user` |
+| 접근 조건 | 로그인한 유저만 가능 |
+
+#
+### 📌 Recommendation API 작성
+```
+recommendation
+├── controller
+│   ├── RecommendationAPIController.java
+│   └── RecommendationViewController.java
+├── dto
+│   └── RecommendationResponseDto.java
+├── mapper
+│   ├── PopularBookMapper.java
+│   ├── SimilarBookMapper.java
+│   ├── UserActivityMapper.java
+│   └── UserBaseBookMapper.java
+├── service
+│   ├── RecommendationCacheService.java
+│   └── RecommendationService.java
+├── strategy
+│   ├── PopularBookRecommendation.java
+│   ├── RecommendationStrategy.java
+│   ├── SimilarBookRecommendation.java
+│   └── UserBaseBookRecommendation.java
+└── vo
+    ├── RecommendedBookVO.java
+    └── UserBorrowActivityVO.java
+```
+
+```
+resources
+└── mybatis
+    └── mapper
+        └── recommendation
+            ├── PopularBookMapper.xml
+            ├── SimilarBookMapper.xml
+            ├── UserActivityMapper.xml
+            └── UserBaseBookMapper.xml
+```
+            
+### 유사 도서 추천
+| 항목 | 내용 |
+| --- | --- |
+| URL | `GET /api/recommendation/similar/{bookId}` |
+| 사용 위치 | 도서 상세 페이지 |
+| 추천 로직 | 기준 요소별 가중치를 적용한 유사도 계산 |
+| 성능 최적화 | Redis 캐시 사용 |
+| 이미지 | <img width="400" alt="스크린샷 2025-02-27 오후 7 08 48" src="https://github.com/user-attachments/assets/22a5b31e-c459-4b34-8167-8bf029250b25" /> |
+
+### 사용자 기반 도서 추천
+| 항목 | 내용 |
+| --- | --- |
+| URL | `GET /api/recommendation/user` |
+| 사용 위치 | 메인 페이지, 추천 도서 페이지 |
+| 추천 로직 | 대출 이력 기반 (대출 이력이 없거나 비로그인 상태면 인기 도서 추천 |
+| 성능 최적화 | Redis 캐시 사용 (실시간성이 중요하여 새로운 대출 내역 발생 시 캐시 데이터 삭제) |
+| 이미지 | <img width="400" alt="스크린샷 2025-02-27 오후 7 08 39" src="https://github.com/user-attachments/assets/10bb6a8e-6e6e-4b8f-8274-844fcd74cbe7" /> |
+
+### 인기 도서 추천
+| 항목 | 내용 |
+| --- | --- |
+| URL | `GET /api/recommendation/popular` |
+| 사용 위치 | 사용자 기반 추천과 동일 |
+| 성능 최적화 | Redis 캐시 사용 |
+| 이미지 | <img width="400" alt="스크린샷 2025-02-27 오후 7 09 00" src="https://github.com/user-attachments/assets/67c55574-d277-4cd7-9037-abb91fd05345" /> |
+
+#
+### 📌 공통 정책
+### 비속어 필터링
+| 항목 | 내용 |
+| --- | --- |
+| 사용 API | [Profanity Filter API](https://github.com/Whale0928/profanity-filter-api) |
+| 적용 위치 | 한줄평 작성 및 수정 |
+| 필터링 동작 | 비속어 포함 시 등록/수정 불가 |
+
+### 권한 정책
+| 사용자 유형 | 권한 |
+| --- | --- |
+| USER | 본인 작성 리뷰만 수정/삭제 가능 |
+| ADMIN | 전체 리뷰 수정/삭제 가능 |
