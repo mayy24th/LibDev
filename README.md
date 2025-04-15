@@ -1,5 +1,5 @@
 # LibDev
-<img width="900" height="300" alt="스크린샷 2025-02-27 오후 7 07 17" src="https://github.com/user-attachments/assets/caec0f03-420c-46a4-8b3a-c885fd8f80ba"/>
+![header](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=300&section=header&text=LibDev&fontSize=90)
 
 ## 💬 설명
 
