@@ -86,7 +86,7 @@ review
 | URL | `GET /api/review` |
 | 접근 조건 | 로그인 불필요 |
 
-#### 도서별 한줄평 조회
+### 도서별 한줄평 조회
 | 항목 | 내용 |
 | --- | --- |
 | URL | `GET /api/review/book/{bookId}` |
